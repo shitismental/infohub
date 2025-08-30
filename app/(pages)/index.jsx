@@ -174,22 +174,6 @@ const Home = () => {
           </View>
         </View>
       </View>
-
-      {/* Test buttons */}
-      <View style={[{ flex: 1, justifyContent: "center" }, styles.paddingWrapper]}>
-        <View style={[styles.testContainer]}>
-          <Pressable onPress={() => { handleRedirect("(auth)/login") }}
-            style={({ pressed }) => [styles.testBtn, pressed && { opacity: 0.7 }]}
-          >
-            <Text style={[styles.testText]}>Login Page</Text>
-          </Pressable>
-          <Pressable onPress={() => { handleRedirect("(auth)/register") }}
-            style={({ pressed }) => [styles.testBtn, pressed && { opacity: 0.7 }]}
-          >
-            <Text style={[styles.testText]}>Register Page</Text>
-          </Pressable>
-        </View>
-      </View>
     </View>
   )
 }
@@ -197,23 +181,6 @@ const Home = () => {
 export default Home
 
 const styles = StyleSheet.create({
-  testContainer: {
-    height: 250,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    gap: 15,
-  },
-  testBtn: {
-    backgroundColor: Colors.btnsPrimary,
-    paddingVertical: 8,
-    paddingHorizontal: 25,
-    borderRadius: 8,
-  },
-  testText: {
-    color: Colors.white,
-    fontFamily: "MontserratMedium"
-  },
   container: {
     overflow: "hidden",
     flex: 1,
