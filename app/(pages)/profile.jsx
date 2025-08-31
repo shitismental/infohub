@@ -83,10 +83,7 @@ const Profile = () => {
             }>
               <Pressable
                 onPress={handleOpen}
-                style={({ pressed }) => [
-                  styles.profile__main_content_accordion_btn,
-                  pressed && { opacity: 0.9 }
-                ]}>
+                style={[styles.profile__main_content_accordion_btn,]}>
                 <View style={[styles.profile__main_content_accordion_left_container]}>
                   <Image source={BookIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
                   <Text style={[styles.profile__main_content_accordion_left_text]}>Особиста інформація</Text>

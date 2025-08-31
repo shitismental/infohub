@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     padding: 10,
     borderRadius: 50,
-    minWidth: '50%',
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: "rgba(255, 255, 255, 0.1)",
