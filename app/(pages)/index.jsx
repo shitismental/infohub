@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   header__top_container: {
-    height: 216,
+    height: 186,
     backgroundColor: "#094174",
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 15,
-    marginTop: -80,
+    marginTop: -70,
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.15)"
   },
   blurWrapper: {

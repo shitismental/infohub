@@ -3,6 +3,9 @@ import { router } from 'expo-router';
 import { useState, useRef } from 'react'
 import * as ImagePicker from "expo-image-picker";
 
+import * as Clipboard from "expo-clipboard";
+import CopyIcon from "../../assets/icons/copy_icon.png";
+
 import BlurCircle from "../../assets/icons/BlurCircle.png";
 import ArrowLeftIcon from "../../assets/icons/arrow_left_icon.png";
 import BellIcon from "../../assets/icons/bell_icon.png";
@@ -183,35 +186,68 @@ const ChatBot = () => {
           onContentSizeChange={() =>
             scrollViewRef.current?.scrollToEnd({ animated: true })}
         >
-          {messages.map((msg, index) => (
-            msg.sender === "bot" ? (
-              <View key={index} style={styles.chat__bot_bubble_container}>
-                <View style={styles.chat__bot_icon_container}>
-                  <Image source={RobotIcon} style={styles.chat__bot_icon} />
-                </View>
-                <View style={styles.chat__bot_text_container}>
-                  <Text style={styles.chat__bot_name_text}>Чат БОТ</Text>
-                  {msg.text && <Text style={styles.chat__bot_response_text}>{msg.text}</Text>}
-                  {msg.image && (
-                    <Pressable onPress={() => setSelectedImage(msg.image)}>
-                      <Image source={{ uri: msg.image }} style={{ width: 200, height: 200, borderRadius: 10 }} />
+          {messages.map((msg, index) => {
+            const isBot = msg.sender === "bot";
+            const prevIsBot = index > 0 && messages[index - 1].sender === "bot";
+
+            const showCopy =
+              msg.text?.includes("Моно:") || msg.text?.includes("Нік:");
+
+            if (isBot) {
+              return (
+                <View key={index} style={styles.chat__bot_bubble_container}>
+                  {prevIsBot ? (
+                    <View style={{ width: 50 }} />
+                  ) : (
+                    <View style={styles.chat__bot_icon_container}>
+                      <Image source={RobotIcon} style={styles.chat__bot_icon} />
+                    </View>
+                  )}
+
+                  <View style={[styles.chat__bot_text_container, { flexDirection: "row", alignItems: "center" }]}>
+                    <View style={{ flex: 1 }}>
+                      {!prevIsBot && (
+                        <Text style={styles.chat__bot_name_text}>Чат БОТ</Text>
+                      )}
+                      {msg.text && (
+                        <Text style={styles.chat__bot_response_text}>{msg.text}</Text>
+                      )}
+                    </View>
+                  </View>
+                  {showCopy && (
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.copyBtn,
+                        pressed && { opacity: 0.7 }
+                      ]}
+                      onPress={() => Clipboard.setStringAsync(msg.text.replace("Моно: ", "").replace("Нік: ", ""))}
+                    >
+                      <Image source={CopyIcon} style={{ width: 20, height: 20 }} resizeMode='contain' />
                     </Pressable>
                   )}
                 </View>
-              </View>
-            ) : (
+              );
+            }
+
+            // user bubble
+            return (
               <View key={index} style={styles.chat__user_bubble_container}>
                 <View style={styles.chat__user_text_container}>
-                  {msg.text && <Text style={styles.chat__user_response_text}>{msg.text}</Text>}
+                  {msg.text && (
+                    <Text style={styles.chat__user_response_text}>{msg.text}</Text>
+                  )}
                   {msg.image && (
                     <Pressable onPress={() => setSelectedImage(msg.image)}>
-                      <Image source={{ uri: msg.image }} style={{ width: 200, height: 200, borderRadius: 10 }} />
+                      <Image
+                        source={{ uri: msg.image }}
+                        style={{ width: 200, height: 200, borderRadius: 10 }}
+                      />
                     </Pressable>
                   )}
                 </View>
               </View>
-            )
-          ))}
+            );
+          })}
         </ScrollView>
         {options.length !== 0 && (
           <View style={[styles.paddingWrapper, { maxHeight: "40%" }]}>
@@ -268,7 +304,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#094174",
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    height: 126,
+    height: 96,
     paddingVertical: 20,
   },
   topBlurCircle: {
@@ -349,6 +385,9 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratMedium",
     fontSize: 16,
     color: "#000",
+  },
+  copyBtn: {
+    alignSelf: "center",
   },
   chat__user_bubble_container: {
     alignItems: "flex-end",

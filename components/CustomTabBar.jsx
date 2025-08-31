@@ -49,9 +49,12 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
               key={index}
               onPress={onPress}
               activeOpacity={1}
-              style={styles.tabItem}
+              style={[styles.tabItem, isFocused && styles.tabItemActive]}
             >
-              <View style={[styles.inner, isFocused && styles.innerActive]}>
+              <View style={[
+                styles.inner, 
+                isFocused && styles.innerActive,
+                ]}>
                 {options.tabBarIcon && (
                   <Image
                     source={options.tabBarIcon}
@@ -92,23 +95,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     boxShadow: "0 0 5px rgba(0,0,0,0.1)",
     zIndex: 5,
+    gap: 15,
   },
   tabItem: {
-    marginHorizontal: 8,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  tabItemActive: {
+    flex: 2,
   },
   inner: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 31,
-    maxWidth: '100%',
+    justifyContent: 'flex-start',
+    padding: 10,
+    borderRadius: 50,
+    minWidth: '50%',
     borderWidth: 1,
     borderColor: '#fff',
-    backgroundColor: "rgba(255, 255, 255, 0.1)"
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderWidth: 1,
   },
   innerActive: {
     borderWidth: 1,

@@ -89,7 +89,18 @@ const CourseCard = ({ course }) => {
       </View>
       {hasBottomBtn &&
         <View style={[styles.paddingWrapper]}>
-          <View style={[styles.card__bottom_btn_container]}>
+          <Pressable
+            onPress={() => {
+              if (!isBought) {
+                router.replace(`/courses/${course.id}`);
+              } else {
+                console.log("Sharing course access…");
+              }
+            }}
+            style={({pressed}) => [
+              styles.card__bottom_btn_container,
+              pressed && {opacity: 0.7}
+              ]}>
             <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Читати опис"}</Text>
             <Pressable
               onPress={() => {
@@ -109,7 +120,7 @@ const CourseCard = ({ course }) => {
                 resizeMode='contain'
               />
             </Pressable>
-          </View>
+          </Pressable>
         </View>
       }
     </>

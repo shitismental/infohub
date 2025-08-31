@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.white,
     boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-    padding: 5,
+    padding: 12,
     borderRadius: 10,
   },
   course__cart_icon: {
