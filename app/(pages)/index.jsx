@@ -1,5 +1,4 @@
-import { Pressable, StyleSheet, Text, View, Image, Animated } from 'react-native'
-import { useRouter } from 'expo-router'
+import { Pressable, StyleSheet, Text, View, Image, Animated, ScrollView } from 'react-native'
 import { useRef } from 'react'
 
 import CourseCard from '../../components/CourseCard'
@@ -16,12 +15,6 @@ const CARD_WIDTH = 345;
 const CARD_SPACING = 16;
 
 const Home = () => {
-
-  const router = useRouter();
-
-  const handleRedirect = (redirect) => {
-    router.replace(redirect)
-  }
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -102,7 +95,7 @@ const Home = () => {
       </View>
 
       {/* Courses */}
-      <View style={[styles.paddingWrapper]}>
+      <ScrollView style={[styles.paddingWrapper]}>
         <View style={[styles.our__courses_container]}>
           <View style={[styles.our__courses_title_container]}>
             <Text style={[styles.our__courses_title_text]}>Наші курси</Text>
@@ -173,7 +166,7 @@ const Home = () => {
             })}
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -321,6 +314,7 @@ const styles = StyleSheet.create({
   },
   our__courses_container: {
     marginTop: 40,
+    marginBottom: 110
   },
   our__courses_title_container: {
     flexDirection: "row",

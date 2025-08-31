@@ -12,22 +12,23 @@ import { Colors } from "../constants/Colors"
 
 const CourseCard = ({ course }) => {
 
-  const courseCardInfo = course.courseCardInfo
-  const mainCourseInfo = course.mainCourseInfo
+  const { bgImg, isNew, hasDiscount, discountAmount, heroImg, heroTextTop, heroTextBottom, isBought, hasInfoBtn, isAvailable, hasBottomBtn } = course.courseCardInfo
+
+  const { price } = course.mainCourseInfo
 
   return (
     <>
       <View style={styles.card__container}>
-        <Image source={courseCardInfo.bgImg} style={[styles.bgImage, StyleSheet.absoluteFillObject]} />
+        <Image source={bgImg} style={[styles.bgImage, StyleSheet.absoluteFillObject]} />
         {
-          courseCardInfo.isNew ?
+          isNew ?
             <View style={[styles.card__info_isnew_container]}>
               <Text style={[styles.card__info_isnew_text]}>
                 Новинка
               </Text>
             </View>
             :
-            courseCardInfo.hasDiscount &&
+            hasDiscount &&
             <View style={[styles.card__info_discount_container]}>
               <Image
                 style={[styles.card__info_discount_image]}
@@ -35,19 +36,19 @@ const CourseCard = ({ course }) => {
                 resizeMode='contain'
               />
               <Text style={[styles.card__info_discount_text]}>
-                -{courseCardInfo.discountAmount}%
+                -{discountAmount}%
               </Text>
             </View>
         }
         <View style={[styles.card__content_container]}>
           <View style={[styles.card__content_hero_container]}>
-            <Image style={[styles.card__hero_img]} source={courseCardInfo.heroImg} />
+            <Image style={[styles.card__hero_img]} source={heroImg} />
             <View style={[styles.card__content_hero_text_container]}>
               <Text style={[styles.card__content_hero_text]}>
-                {courseCardInfo.heroTextTop}
+                {heroTextTop}
               </Text>
               <Text style={[styles.card__content_hero_text]}>
-                {courseCardInfo.heroTextBottom}
+                {heroTextBottom}
               </Text>
             </View>
           </View>
@@ -55,7 +56,7 @@ const CourseCard = ({ course }) => {
             <View style={[styles.card__content_footer_btns_container]}>
               <Pressable
                 onPress={() => {
-                  courseCardInfo.isBought && router.replace(`/courses/${course.id}`)
+                  isBought && router.replace(`/courses/${course.id}`)
                 }}
                 style={({ pressed }) => [
                   pressed && { opacity: 0.7 }
@@ -63,13 +64,13 @@ const CourseCard = ({ course }) => {
                 <BlurView experimentalBlurMethod='dimezisBlurView' style={[styles.card__content_footer_buy_btn]} intensity={10} tint='light'>
                   <Image
                     style={[styles.card__content_footer_buy_btn_img]}
-                    source={courseCardInfo.isBought ? ViewIcon : CartIcon}
+                    source={isBought ? ViewIcon : CartIcon}
                     resizeMode='contain'
                   />
-                  <Text style={[styles.card__content_footer_btn_text]}>{courseCardInfo.isBought ? "Перегляд" : "Купити"}</Text>
+                  <Text style={[styles.card__content_footer_btn_text]}>{isBought ? "Перегляд" : "Купити"}</Text>
                 </BlurView>
               </Pressable>
-              {courseCardInfo.hasInfoBtn &&
+              {hasInfoBtn &&
                 <Pressable
                   onPress={() => router.replace(`/courses/${course.id}`)}
                   style={({ pressed }) => [
@@ -81,18 +82,18 @@ const CourseCard = ({ course }) => {
                 </Pressable>}
             </View>
             <Text style={[styles.card__content_footer_text]}>
-              {!courseCardInfo.isAvailable ? "Недоступно" : !courseCardInfo.isBought ? `Ціна ${mainCourseInfo.price}₴` : courseCardInfo.isBought && "Відкрито"}
+              {!isAvailable ? "Недоступно" : !isBought ? `Ціна ${price}₴` : isBought && "Відкрито"}
             </Text>
           </View>
         </View>
       </View>
-      {courseCardInfo.hasBottomBtn &&
+      {hasBottomBtn &&
         <View style={[styles.paddingWrapper]}>
           <View style={[styles.card__bottom_btn_container]}>
-            <Text style={[styles.card__bottom_btn_text]}>{courseCardInfo.isBought ? "Поширити доступ?" : "Читати опис"}</Text>
+            <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Читати опис"}</Text>
             <Pressable
               onPress={() => {
-                if (!courseCardInfo.isBought) {
+                if (!isBought) {
                   router.replace(`/courses/${course.id}`);
                 } else {
                   console.log("Sharing course access…");
@@ -104,7 +105,7 @@ const CourseCard = ({ course }) => {
               <Image
                 tintColor={"#000"}
                 style={[styles.card__bottom_btn_icon]}
-                source={courseCardInfo.isBought ? ShareIcon : ArrowRight}
+                source={isBought ? ShareIcon : ArrowRight}
                 resizeMode='contain'
               />
             </Pressable>

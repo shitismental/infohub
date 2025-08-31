@@ -28,6 +28,8 @@ export const coursesData = [
           description: "БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ",
           videoURL: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
           videoPreviewImg: "https://i.pinimg.com/736x/1f/9b/c1/1f9bc1a5255a3a53339aee690d8acace.jpg",
+          isUnlocked: true,
+
         },
         {
           id: 3,
@@ -36,6 +38,8 @@ export const coursesData = [
           length: "49",
           videoURL: "https://www.w3schools.com/html/mov_bbb.mp4",
           videoPreviewImg: "https://i.pinimg.com/736x/11/e7/b6/11e7b652bafa8d01b2d0dc971b509db5.jpg",
+          isUnlocked: true,
+
         },
         {
           id: 4,
@@ -44,6 +48,8 @@ export const coursesData = [
           description: "БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ БІЛЬШЕ ПРО СФЕРУ РОБОТИ",
           videoURL: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
           videoPreviewImg: "https://i.pinimg.com/736x/1f/9b/c1/1f9bc1a5255a3a53339aee690d8acace.jpg",
+          isUnlocked: true,
+
         },
       ],
     },
