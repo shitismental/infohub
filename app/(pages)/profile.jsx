@@ -88,7 +88,10 @@ const Profile = () => {
         </View>
       </View>
 
-      <ScrollView style={[styles.paddingWrapper, styles.profile__main_content_wrapper]}>
+      <ScrollView 
+      bounces={false}
+      showsVerticalScrollIndicator={false}
+      style={[styles.paddingWrapper, styles.profile__main_content_wrapper]}>
         <View style={[styles.profile__main_content_container]}>
           <View style={[styles.profile__main_content_accordions_container]}>
             <View style={[
