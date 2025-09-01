@@ -102,10 +102,12 @@ const Profile = () => {
                   <Image source={BookIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
                   <Text style={[styles.profile__main_content_accordion_left_text]}>Особиста інформація</Text>
                 </View>
-                <Pressable style={({ pressed }) => [
-                  styles.profile__main_content_accordion_arrow_icon_container,
-                  pressed && { opacity: 0.7 },
-                ]}>
+                <Pressable
+                  onPress={handleOpenInfoAccordion}
+                  style={({ pressed }) => [
+                    styles.profile__main_content_accordion_arrow_icon_container,
+                    pressed && { opacity: 0.7 },
+                  ]}>
                   <Image tintColor={"#B3B3B3"} source={ArrowIcon} resizeMode='contain' style={[
                     styles.profile__main_content_accordion_arrow_icon,
                     { transform: [{ rotate: openInfoAccordion ? "90deg" : "-90deg" }] }
@@ -208,10 +210,12 @@ const Profile = () => {
                   <Image source={CertificatsIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
                   <Text style={[styles.profile__main_content_accordion_left_text]}>Мої сертифікати</Text>
                 </View>
-                <Pressable style={({ pressed }) => [
-                  styles.profile__main_content_accordion_arrow_icon_container,
-                  pressed && { opacity: 0.7 },
-                ]}>
+                <Pressable
+                  onPress={handleOpenCertificatsAccordion}
+                  style={({ pressed }) => [
+                    styles.profile__main_content_accordion_arrow_icon_container,
+                    pressed && { opacity: 0.7 },
+                  ]}>
                   <Image tintColor={"#B3B3B3"} source={ArrowIcon} resizeMode='contain' style={[
                     styles.profile__main_content_accordion_arrow_icon,
                     { transform: [{ rotate: openCertificatsAccordion ? "90deg" : "-90deg" }] }
