@@ -130,6 +130,7 @@ const Courses = () => {
         showsVerticalScrollIndicator={false}
         style={[styles.paddingWrapper, styles.courses__container]}
         contentContainerStyle={{ paddingBottom: 120, gap: 30 }}
+        scrollEventThrottle={5}
       >
         <View style={[styles.courses__info_card_container]}>
           <View style={[styles.courses_info_card_content_container]}>

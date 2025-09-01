@@ -1,14 +1,12 @@
 import { View, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BlurView } from 'expo-blur';
-
 import BlurCircle from "../assets/icons/BlurCircle.png"
 
 const { width, height } = Dimensions.get("window");
 
 const BASE_WIDTH = 414;
-const BASE_HEIGHT = 896;
+const BASE_HEIGHT = 846;
 
 const scale = Math.min(width / BASE_WIDTH, height / BASE_HEIGHT);
 
@@ -20,7 +18,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
   return (
     <View style={[styles.tabBarWrapper]}>
       <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.blurCircle]} />
-      <BlurView style={[{ marginBottom: insets.bottom || 16 }, styles.tabBarContainer]} intensity={100} tint='light' experimentalBlurMethod='dimezisBlurView'>
+      <View style={[{ marginBottom: insets.bottom || 16 }, styles.tabBarContainer]}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const label =
@@ -58,7 +56,8 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                 {options.tabBarIcon && (
                   <Image
                     source={options.tabBarIcon}
-                    style={[styles.icon, { tintColor: "#0A0A0A" }]}
+                    tintColor={"#0A0A0A"}
+                    style={[styles.icon]}
                     resizeMode='contain'
                   />
                 )}
@@ -71,14 +70,13 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             </TouchableOpacity>
           );
         })}
-      </BlurView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   tabBarWrapper: {
-    overflow: "hidden",
     position: "absolute",
     bottom: 0,
     width: "100%",
@@ -88,9 +86,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 16,
     overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.7)",
     flexDirection: "row",
+    backgroundImage: "linear-gradient(0deg, #FFFFFF 0%, #E6E6E6 100%)",
     alignItems: "center",
     justifyContent: "space-between",
     boxShadow: "0 0 5px rgba(0,0,0,0.1)",

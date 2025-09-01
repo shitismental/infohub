@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image, TextInput, ScrollView } from 'react-native'
 import { router } from 'expo-router';
 import { useState } from 'react';
 
@@ -9,18 +9,32 @@ import BellIcon from "../../assets/icons/bell_icon.png";
 import ProfileIcon from "../../assets/icons/profile_icon.png"
 import BookIcon from "../../assets/icons/book_icon.png"
 
+import EditIcon from "../../assets/icons/edit_icon.png"
+import CertificatsIcon from "../../assets/icons/two_people_icon.png"
+
+import rounderCartIcon from "../../assets/icons/rounded_cart_icon.png"
+import PlaneIcon from "../../assets/icons/plane_icon.png"
+
+import InfoIcon from "../../assets/icons/info_icon.png"
+import LogoutIcon from "../../assets/icons/logout_icon.png"
+
 import { Colors } from "../../constants/Colors";
 
 const Profile = () => {
 
-  const [open, setOpen] = useState(false);
+  const [openInfoAccordion, setOpenInfoAccordion] = useState(false);
+  const [openCertificatsAccordion, setOpenCertificatsAccordion] = useState(false);
 
   const handleGoBack = () => {
     router.replace("/chatbot")
   }
 
-  const handleOpen = () => {
-    setOpen(prev => !prev)
+  const handleOpenInfoAccordion = () => {
+    setOpenInfoAccordion(prev => !prev)
+  }
+
+  const handleOpenCertificatsAccordion = () => {
+    setOpenCertificatsAccordion(prev => !prev)
   }
 
   return (
@@ -74,7 +88,7 @@ const Profile = () => {
         </View>
       </View>
 
-      <View style={[styles.paddingWrapper, styles.profile__main_content_wrapper]}>
+      <ScrollView style={[styles.paddingWrapper, styles.profile__main_content_wrapper]}>
         <View style={[styles.profile__main_content_container]}>
           <View style={[styles.profile__main_content_accordions_container]}>
             <View style={[
@@ -82,7 +96,7 @@ const Profile = () => {
             ]
             }>
               <Pressable
-                onPress={handleOpen}
+                onPress={handleOpenInfoAccordion}
                 style={[styles.profile__main_content_accordion_btn,]}>
                 <View style={[styles.profile__main_content_accordion_left_container]}>
                   <Image source={BookIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
@@ -94,20 +108,159 @@ const Profile = () => {
                 ]}>
                   <Image tintColor={"#B3B3B3"} source={ArrowIcon} resizeMode='contain' style={[
                     styles.profile__main_content_accordion_arrow_icon,
-                    { transform: [{ rotate: open ? "90deg" : "-90deg" }] }
+                    { transform: [{ rotate: openInfoAccordion ? "90deg" : "-90deg" }] }
                   ]} />
                 </Pressable>
               </Pressable>
-              {open && <View style={{ height: 200, backgroundColor: "orange" }}>
+              {openInfoAccordion && <View style={[styles.accordion__info_container]}>
+                <View style={[styles.accordion__info_field_container]}>
+                  <Text style={[styles.accordion__info_field_text]}>Ім'я</Text>
+                  <View style={[styles.accordion__info_field_input_container]}>
+                    <TextInput
+                      editable={false}
+                      style={[styles.accordion__info_field_input]}
+                      placeholder='Анастасія Лужко'
+                    />
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.accordion__edit_icon_container,
+                        pressed && { opacity: 0.7 }
+                      ]}>
+                      <Image
+                        source={EditIcon}
+                        resizeMode='contain'
+                        style={[styles.accordion__edit_icon]} />
+                    </Pressable>
+                  </View>
+                </View>
+                <View style={[styles.accordion__info_field_container]}>
+                  <Text style={[styles.accordion__info_field_text]}>Пошта</Text>
+                  <View style={[styles.accordion__info_field_input_container]}>
+                    <TextInput
+                      editable={false}
 
+                      style={[styles.accordion__info_field_input]}
+                      placeholder='anastitest@gmail.com'
+                    />
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.accordion__edit_icon_container,
+                        pressed && { opacity: 0.7 }
+                      ]}>
+                      <Image
+                        source={EditIcon}
+                        resizeMode='contain'
+                        style={[styles.accordion__edit_icon]} />
+                    </Pressable>
+                  </View>
+                </View>
+                <View style={[styles.accordion__info_field_container]}>
+                  <Text style={[styles.accordion__info_field_text]}>Нік телеграм</Text>
+                  <View style={[styles.accordion__info_field_input_container]}>
+                    <TextInput
+                      editable={false}
+
+                      style={[styles.accordion__info_field_input]}
+                      placeholder='@ananasik'
+                    />
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.accordion__edit_icon_container,
+                        pressed && { opacity: 0.7 }
+                      ]}>
+                      <Image
+                        source={EditIcon}
+                        resizeMode='contain'
+                        style={[styles.accordion__edit_icon]} />
+                    </Pressable>
+                  </View>
+                </View>
+                <View style={[styles.accordion__info_field_container]}>
+                  <Text style={[styles.accordion__info_field_text]}>Пароль</Text>
+                  <View style={[styles.accordion__info_field_input_container]}>
+                    <Pressable style={({ pressed }) => [
+                      styles.accordion__info_field_forgot_password_btn,
+                      pressed && { opacity: 0.7 }
+                    ]}>
+                      <Text style={[styles.accordion__info_field_forgot_password_btn_text]}>Забули пароль?</Text>
+                    </Pressable>
+                    <Pressable
+                      style={({ pressed }) => [
+                        styles.accordion__edit_icon_container,
+                        pressed && { opacity: 0.7 }
+                      ]}>
+                      <Image
+                        source={EditIcon}
+                        resizeMode='contain'
+                        style={[styles.accordion__edit_icon]} />
+                    </Pressable>
+                  </View>
+                </View>
+              </View>}
+            </View>
+            <View style={[styles.profile__main_content_accordion_container,
+            ]
+            }>
+              <Pressable
+                onPress={handleOpenCertificatsAccordion}
+                style={[styles.profile__main_content_accordion_btn,]}>
+                <View style={[styles.profile__main_content_accordion_left_container]}>
+                  <Image source={CertificatsIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
+                  <Text style={[styles.profile__main_content_accordion_left_text]}>Мої сертифікати</Text>
+                </View>
+                <Pressable style={({ pressed }) => [
+                  styles.profile__main_content_accordion_arrow_icon_container,
+                  pressed && { opacity: 0.7 },
+                ]}>
+                  <Image tintColor={"#B3B3B3"} source={ArrowIcon} resizeMode='contain' style={[
+                    styles.profile__main_content_accordion_arrow_icon,
+                    { transform: [{ rotate: openCertificatsAccordion ? "90deg" : "-90deg" }] }
+                  ]} />
+                </Pressable>
+              </Pressable>
+              {openCertificatsAccordion && <View style={[styles.accordion__info_container]}>
+                <View style={[styles.accordion__info_field_container]}>
+                  <Text style={[styles.accordion__certificats_field_text]}>У вас немає сертифікатів</Text>
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.accordion__edit_icon_container,
+                      pressed && { opacity: 0.7 }
+                    ]}>
+                    <Image
+                      source={rounderCartIcon}
+                      tintColor={"#B3B3B3"}
+                      resizeMode='contain'
+                      style={[styles.accordion__cart_icon]} />
+                  </Pressable>
+                </View>
               </View>}
             </View>
           </View>
-          <View>
-
+          <View style={[styles.profile__main_content_help_buttons_container]}>
+            <Pressable style={({ pressed }) => [
+              styles.profile__main_content_help_button, { borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
+              pressed && { opacity: 0.7 }
+            ]}>
+              <Image style={[styles.profile__main_content_help_button_icon]} source={PlaneIcon} resizeMode='contain' tintColor={"#094174"} />
+              <Text style={[styles.profile__main_content_help_button_text]}>Тех підтримка</Text>
+            </Pressable>
+            <Pressable style={({ pressed }) => [
+              styles.profile__main_content_help_button, { borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
+              pressed && { opacity: 0.7 }
+            ]}>
+              <Image style={[styles.profile__main_content_help_button_icon]} source={InfoIcon} resizeMode='contain' tintColor={"#094174"} />
+              <Text style={[styles.profile__main_content_help_button_text]}>Як поділитися курсом ?</Text>
+            </Pressable>
+            <Pressable style={({ pressed }) => [
+              styles.profile__main_content_help_button, { borderBottomLeftRadius: 10, borderBottomRightRadius: 10 },
+              pressed && { opacity: 0.7 }
+            ]}>
+              <Image style={[styles.profile__main_content_help_button_icon]} source={LogoutIcon} resizeMode='contain' tintColor={"#B3B3B3"} />
+              <Text style={[styles.profile__main_content_help_button_text, { color: "#B3B3B3" }]}>Вийти</Text>
+            </Pressable>
           </View>
         </View>
-      </View>
+      </ScrollView>
 
     </View>
   )
@@ -122,6 +275,10 @@ const styles = StyleSheet.create({
   },
   paddingWrapper: {
     paddingHorizontal: 15,
+  },
+  profile__main_content_wrapper: {
+    marginTop: -30,
+    paddingBottom: 110,
   },
   header__container: {
     backgroundColor: "#094174",
@@ -193,21 +350,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   profile__main_content_container: {
-    marginTop: -30,
+    gap: 20,
   },
   profile__main_content_accordions_container: {
-    boxShadow: "0 2px 15px rgba(0,0,0,0.05)"
+    boxShadow: "0 2px 15px rgba(0,0,0,0.1)",
+    backgroundColor: "transparent",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    overflow: "hidden",
   },
   profile__main_content_accordion_container: {
-    overflow: "hidden"
+    overflow: "hidden",
   },
   profile__main_content_accordion_btn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: Colors.white,
     paddingVertical: 15,
     paddingHorizontal: 14,
+    backgroundColor: Colors.white
   },
   profile__main_content_accordion_left_container: {
     flexDirection: "row",
@@ -228,6 +389,81 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   profile__main_content_accordion_arrow_icon: {
+    width: 20,
+    height: 20,
+  },
+  accordion__info_field_container: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    backgroundColor: Colors.white,
+    justifyContent: "space-between"
+  },
+  accordion__info_container: {
+    overflow: "hidden",
+  },
+  accordion__info_field_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 13,
+    color: "#0A0A0A",
+  },
+  accordion__info_field_input_container: {
+    flexDirection: "row",
+    gap: 5,
+    alignItems: "center",
+  },
+  accordion__info_field_input: {
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    fontSize: 12,
+    color: "#0A0A0A",
+    fontFamily: "MontserratMedium",
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "#B3B3B3",
+    outlineStyle: "none",
+  },
+  accordion__edit_icon_container: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  accordion__edit_icon: {
+    width: 25,
+    height: 25,
+  },
+  accordion__cart_icon: {
+    width: 20,
+    height: 20,
+  },
+  accordion__info_field_forgot_password_btn_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 12,
+    color: "#0A0A0A"
+  },
+  accordion__certificats_field_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 13,
+    color: "#B3B3B3",
+  },
+  profile__main_content_help_buttons_container: {
+    borderRadius: 10,
+    overflow: "hidden",
+    boxShadow: "0 3px 5px rgba(0,0,0,0.05)",
+  },
+  profile__main_content_help_button: {
+    paddingHorizontal: 14,
+    paddingVertical: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  profile__main_content_help_button_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 13,
+    color: "#0A0A0A"
+  },
+  profile__main_content_help_button_icon: {
     width: 20,
     height: 20,
   }
