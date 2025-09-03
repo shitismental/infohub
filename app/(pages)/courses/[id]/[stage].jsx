@@ -384,8 +384,6 @@ const styles = StyleSheet.create({
     marginBottom: 110,
   },
   tasks__tab_container: {
-    borderWidth: 1,
-    borderColor: "red",
     flex: 1,
     width: "100%",
     alignItems: "center",
