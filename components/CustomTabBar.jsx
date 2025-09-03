@@ -51,7 +51,6 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             >
               <View style={[
                 styles.inner, 
-                isFocused && styles.innerActive,
                 ]}>
                 {options.tabBarIcon && (
                   <Image
@@ -111,12 +110,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     borderColor: '#fff',
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "rgba(247, 247, 247, 0.1)",
     borderWidth: 1,
-  },
-  innerActive: {
-    borderWidth: 1,
-    borderColor: "#001E3A",
+    boxShadow: "0 0 5px rgba(0,0,0,0.1)"
   },
   icon: {
     width: 22,
