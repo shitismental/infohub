@@ -33,10 +33,12 @@ const ChatBot = () => {
   const telegramUsername = "yehor_rt"
 
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
-
   const [options, setOptions] = useState(INITIAL_OPTIONS);
 
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const [copied, setCopied] = useState(false);
+  const timeoutId = useRef(null);
 
   const scrollViewRef = useRef(null);
 
@@ -145,6 +147,23 @@ const ChatBot = () => {
     router.replace("/courses")
   }
 
+  const handleCopy = async (msg) => {
+    await Clipboard.setStringAsync(
+      msg.text.replace("Моно: ", "").replace("Нік: ", "")
+    );
+
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+    }
+
+    setCopied(true);
+
+    timeoutId.current = setTimeout(() => {
+      setCopied(false);
+      timeoutId.current = null;
+    }, 2000);
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -230,7 +249,7 @@ const ChatBot = () => {
                         styles.copyBtn,
                         pressed && { opacity: 0.7 }
                       ]}
-                      onPress={() => Clipboard.setStringAsync(msg.text.replace("Моно: ", "").replace("Нік: ", ""))}
+                      onPress={() => handleCopy(msg)}
                     >
                       <Image source={CopyIcon} style={{ width: 20, height: 20 }} resizeMode='contain' />
                     </Pressable>
@@ -239,7 +258,6 @@ const ChatBot = () => {
               );
             }
 
-            // user bubble
             return (
               <View key={index} style={styles.chat__user_bubble_container}>
                 <View style={styles.chat__user_text_container}>
@@ -326,6 +344,11 @@ const ChatBot = () => {
             )}
           </View>
         </Modal>
+        {copied && (
+          <View style={styles.toast}>
+            <Text style={styles.toastText}>Скопійовано!</Text>
+          </View>
+        )}
       </View>
     </View>
   )
@@ -468,5 +491,18 @@ const styles = StyleSheet.create({
   options__btn_icon: {
     width: 20,
     height: 20,
+  },
+  toast: {
+    position: "absolute",
+    bottom: 210,
+    alignSelf: "center",
+    backgroundColor: "rgba(0,0,0,0.7)",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  toastText: {
+    color: "#fff",
+    fontSize: 14,
   }
 })
