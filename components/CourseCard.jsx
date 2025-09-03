@@ -65,14 +65,14 @@ const CourseCard = ({ course }) => {
                 style={({ pressed }) => [
                   pressed && { opacity: 0.7 }
                 ]}>
-                <BlurView experimentalBlurMethod='dimezisBlurView' style={[styles.card__content_footer_buy_btn]} intensity={10} tint='light'>
+                <View style={[styles.card__content_footer_buy_btn]} >
                   <Image
                     style={[styles.card__content_footer_buy_btn_img]}
                     source={isBought ? ViewIcon : CartIcon}
                     resizeMode='contain'
                   />
                   <Text style={[styles.card__content_footer_btn_text]}>{isBought ? "Перегляд" : "Купити"}</Text>
-                </BlurView>
+                </View>
               </Pressable>
               {hasInfoBtn &&
                 <Pressable
@@ -189,12 +189,11 @@ const styles = StyleSheet.create({
     gap: 5,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: "rgba(251, 251, 251, 0.2)",
+    backgroundColor: "rgba(0,0,0,0.1)",
     overflow: "hidden",
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "#777777ff",
-    boxShadow: "-1px 0 2px rgba(255, 255, 255, 0.5)"
+    borderColor: "rgba(255,255,255,0.5)",
   },
   card__content_footer_buy_btn_img: {
     width: 23,
@@ -206,17 +205,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   card__content_footer_info_btn: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: "rgba(32, 32, 32, 0.5)",
+    backgroundColor: "rgba(0,0,0,0.1)",
     overflow: "hidden",
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: "#5f5f5fff",
-    boxShadow: "-1px 0 2px rgba(88, 88, 88, 0.55)"
+    borderColor: "rgba(255,255,255,0.5)",
   },
   card__info_isnew_container: {
     position: "absolute",

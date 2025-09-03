@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
   start__earning_text: {
     fontSize: 17,
     fontFamily: "MontserratMedium",
+    whiteSpace: "pre",
     color: Colors.textSecondary,
   },
   start__earning_btn: {
@@ -280,11 +281,15 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   start__earning_img: {
-    width: 170,
-    height: 150,
+    width: "35%",
+    maxWidth: 170,
+    aspectRatio: 170 / 150,
+    height: "auto",
+
     position: "absolute",
     right: 0,
-    top: -22,
+    top: "50%",
+    transform: [{ translateY: "-50%" }],
     zIndex: 2,
   },
   courses__completed_container: {

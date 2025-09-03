@@ -35,6 +35,7 @@ const Courses = () => {
   const [enteredCode, setEnteredCode] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleGoBack = () => {
     router.replace("/");
@@ -55,9 +56,11 @@ const Courses = () => {
     if (validCodes.includes(enteredCode)) {
       setModalTitle("Код активован");
       setModalDescription("Вам відкрит доступ до всіх курсів\nКуратор з вами 24/7")
+      setIsError(false)
     } else {
       setModalTitle("Невірний код");
       setModalDescription("Ви ввели неправильний код, перевірте його і спробуйте ще раз.")
+      setIsError(true)
     }
 
     setIsModalVisible(true);
@@ -183,7 +186,11 @@ const Courses = () => {
         transparent={true}
       >
         <View style={[styles.paddingWrapper, styles.modal__container]}>
-          <View style={[styles.modal__content_container]}>
+          <View style={[
+            styles.modal__content_container,
+            isError && {borderColor: "#ff0000ff"},
+            !isError && {borderColor: "#2FC254"}
+            ]}>
             <View style={[styles.modal__top_icon_container]}>
               <Image
                 style={[styles.modal_top_icon]}
@@ -192,7 +199,11 @@ const Courses = () => {
               />
             </View>
             <View style={[styles.modal__text_container]}>
-              <Text style={[styles.modal__text_title]}>{modalTitle}</Text>
+              <Text style={[
+                styles.modal__text_title,
+                isError && {color: "#ff0000ff"},
+                !isError && {color: "#2FC254"}
+                ]}>{modalTitle}</Text>
               <Text style={[styles.modal__text_desc]}>{modalDescription}</Text>
             </View>
             <Pressable onPress={() => setIsModalVisible(false)} style={[styles.modal__close_btn]}>

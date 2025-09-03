@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     backgroundColor: "rgba(247, 247, 247, 0.1)",
     borderWidth: 1,
-    boxShadow: "0 0 5px rgba(0,0,0,0.1)"
+    boxShadow: "0 0 5px rgba(0,0,0,0.2), inset 0 5px 10px rgba(0,0,0,0.2), inset -2px -2px 6px rgba(255,255,255,0.7)"
   },
   icon: {
     width: 22,

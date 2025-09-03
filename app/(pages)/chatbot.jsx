@@ -19,18 +19,22 @@ import { coursesData, homeDisplayCourses } from '../../constants/coursesData';
 
 import { Colors } from "../../constants/Colors";
 
+const INITIAL_MESSAGES = [
+  { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
+];
+
+const INITIAL_OPTIONS = [
+  { label: "Хочу купити код доступу", action: "buy", hasArrow: true },
+  { label: "Мені потрібен адмін", action: "admin", hasArrow: true, hasSpecialStyle: true }
+];
+
 const ChatBot = () => {
 
   const telegramUsername = "yehor_rt"
 
-  const [messages, setMessages] = useState([
-    { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
-  ]);
+  const [messages, setMessages] = useState(INITIAL_MESSAGES);
 
-  const [options, setOptions] = useState([
-    { label: "Хочу купити код доступу", action: "buy", hasArrow: true },
-    { label: "Мені потрібен адмін", action: "admin", hasArrow: true, hasSpecialStyle: true }
-  ]);
+  const [options, setOptions] = useState(INITIAL_OPTIONS);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -58,7 +62,13 @@ const ChatBot = () => {
         };
       });
 
-      setOptions(courseOptions);
+      const manualOption = {
+        label: "Завершити сеанс",
+        action: "end",
+        hasSpecialStyle: true
+      };
+
+      setOptions([...courseOptions, manualOption]);
     }
 
     else if (option.action === "course") {
@@ -91,11 +101,8 @@ const ChatBot = () => {
     }
 
     else if (option.action === "end") {
-      setMessages(prev => [
-        ...prev,
-        { sender: "bot", text: "До зустрічі!" }
-      ])
-      setOptions([])
+      setMessages(INITIAL_MESSAGES);
+      setOptions(INITIAL_OPTIONS)
     }
 
     else if (option.action === "paid") {
@@ -267,10 +274,10 @@ const ChatBot = () => {
                   key={index}
                   style={({ pressed }) => [
                     styles.options__btn_container,
-                    option.hasArrow && {justifyContent: "space-between" },
+                    option.hasArrow && { justifyContent: "space-between" },
                     option.hasSpecialStyle && { backgroundImage: "none", backgroundColor: Colors.white, borderWidth: 1, borderColor: "#31699C" },
                     pressed && { opacity: 0.7 },
-                    option.hasFileIcon && {gap: 5}
+                    option.hasFileIcon && { gap: 5 }
                   ]
                   }
                   onPress={() => handleOptionPress(option)}
@@ -292,7 +299,7 @@ const ChatBot = () => {
                     />
                   }
                   {
-                    option.hasFileIcon && 
+                    option.hasFileIcon &&
                     <Image
                       style={[styles.options__btn_icon]}
                       source={FileIcon}

@@ -211,7 +211,7 @@ const Profile = () => {
                 style={[styles.profile__main_content_accordion_btn,]}>
                 <View style={[styles.profile__main_content_accordion_left_container]}>
                   <Image source={CertificatsIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
-                  <Text style={[styles.profile__main_content_accordion_left_text]}>Мої сертифікати</Text>
+                  <Text style={[styles.profile__main_content_accordion_left_text]}>Сертифікати</Text>
                 </View>
                 <Pressable
                   onPress={handleOpenCertificatsAccordion}
@@ -249,7 +249,7 @@ const Profile = () => {
               pressed && { opacity: 0.7 }
             ]}>
               <Image style={[styles.profile__main_content_help_button_icon]} source={PlaneIcon} resizeMode='contain' tintColor={"#094174"} />
-              <Text style={[styles.profile__main_content_help_button_text]}>Тех підтримка</Text>
+              <Text style={[styles.profile__main_content_help_button_text]}>Тех. підтримка</Text>
             </Pressable>
             <Pressable style={({ pressed }) => [
               styles.profile__main_content_help_button, { borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
