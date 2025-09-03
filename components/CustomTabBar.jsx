@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
     paddingHorizontal: 15,
+    overflow: "hidden",
   },
   tabBarContainer: {
     borderRadius: 50,

@@ -10,6 +10,9 @@ import BlurCircle from "../../assets/icons/BlurCircle.png";
 import ArrowLeftIcon from "../../assets/icons/arrow_left_icon.png";
 import BellIcon from "../../assets/icons/bell_icon.png";
 
+import ArrowIcon from "../../assets/icons/arrow_right_icon.png"
+import FileIcon from "../../assets/icons/file_icon.png"
+
 import RobotIcon from "../../assets/icons/robot_icon.png"
 
 import { coursesData, homeDisplayCourses } from '../../constants/coursesData';
@@ -25,8 +28,8 @@ const ChatBot = () => {
   ]);
 
   const [options, setOptions] = useState([
-    { label: "Хочу купити код доступу", action: "buy" },
-    { label: "Мені потрібен адмін", action: "admin" }
+    { label: "Хочу купити код доступу", action: "buy", hasArrow: true },
+    { label: "Мені потрібен адмін", action: "admin", hasArrow: true, hasSpecialStyle: true }
   ]);
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -75,7 +78,7 @@ const ChatBot = () => {
       ]);
       setOptions([
         { label: "Відкрити телеграм", action: "openTelegram" },
-        { label: "Завершити сеанс", action: "end" }
+        { label: "Завершити сеанс", action: "end", hasSpecialStyle: true, }
       ]);
     }
 
@@ -101,7 +104,7 @@ const ChatBot = () => {
         { sender: "bot", text: "Дякую! Ми перевіряємо твій платіж ⏳" },
         { sender: "bot", text: "Щоб прискорити процес, прикріпи квитанцію про оплату." }
       ]);
-      setOptions([{ label: "Прикріпити квитанцію", action: "uploadReceipt" }
+      setOptions([{ label: "Квитанція", action: "uploadReceipt", hasFileIcon: true, hasSpecialStyle: true }
       ]);
     }
 
@@ -262,10 +265,41 @@ const ChatBot = () => {
               {options.map((option, index) => (
                 <Pressable
                   key={index}
-                  style={styles.options__btn_container}
+                  style={({ pressed }) => [
+                    styles.options__btn_container,
+                    option.hasArrow && {justifyContent: "space-between" },
+                    option.hasSpecialStyle && { backgroundImage: "none", backgroundColor: Colors.white, borderWidth: 1, borderColor: "#31699C" },
+                    pressed && { opacity: 0.7 },
+                    option.hasFileIcon && {gap: 5}
+                  ]
+                  }
                   onPress={() => handleOptionPress(option)}
                 >
-                  <Text style={styles.options__btn_text}>{option.label}</Text>
+                  <Text
+                    style={[
+                      styles.options__btn_text,
+                      option.hasSpecialStyle && { color: "#1D5588" }
+                    ]}
+                  >{option.label}</Text>
+                  {
+                    option.hasArrow
+                    &&
+                    <Image
+                      style={[styles.options__btn_icon]}
+                      source={ArrowIcon}
+                      resizeMode='contain'
+                      tintColor={option.hasSpecialStyle ? "#1D5588" : Colors.white}
+                    />
+                  }
+                  {
+                    option.hasFileIcon && 
+                    <Image
+                      style={[styles.options__btn_icon]}
+                      source={FileIcon}
+                      resizeMode='contain'
+                      tintColor={option.hasSpecialStyle ? "#1D5588" : Colors.white}
+                    />
+                  }
                 </Pressable>
               ))}
             </ScrollView>
@@ -409,7 +443,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   options__btn_container: {
-    backgroundColor: "#094174",
+    flexDirection: "row",
+    backgroundImage: "linear-gradient(90deg, #1D5588 0%, #3B73A6 100%)",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -423,4 +458,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "center",
   },
+  options__btn_icon: {
+    width: 20,
+    height: 20,
+  }
 })

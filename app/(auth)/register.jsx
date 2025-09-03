@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Pressable } from 'react-native'
 import { useRouter } from "expo-router";
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
@@ -8,12 +8,9 @@ import LockIcon from "../../assets/icons/lock_blue.png"
 import PlaneIcon from "../../assets/icons/plane_icon.png"
 import RepeatIcon from "../../assets/icons/repeat_icon.png"
 
-import AppleLogo from "../../assets/icons/apple_logo.png"
-import GoogleLogo from "../../assets/icons/google_logo.png"
-
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 
-const Login = () => {
+const Register = () => {
 
   const [selected, setSelected] = useState(null);
 
@@ -43,6 +40,19 @@ const Login = () => {
                   <Image style={styles.image} source={PersonIcon} />
                 </View>
                 <TextInput placeholder='Логін' placeholderTextColor="#0A0A0A" style={styles.input} />
+              </View>
+              <View style={styles.register__form_input_container}>
+                <View style={styles.image__container}>
+                  <Image style={styles.image} source={PersonIcon} />
+                </View>
+                <TextInput
+                  placeholder='Ел. пошта'
+                  placeholderTextColor="#0A0A0A"
+                  style={styles.input}
+                  inputMode="email"
+                  textContentType="emailAddress"
+                  autoComplete="email"
+                />
               </View>
               <View style={styles.register__form_input_container}>
                 <View style={styles.image__container}>
@@ -90,29 +100,11 @@ const Login = () => {
           </Pressable>
         </View>
       </View>
-
-      <View style={styles.other__methods_container}>
-        <View style={styles.other__methods_wrapper}>
-          <View style={styles.divider__with_text}>
-            <View style={styles.divider__line} />
-            <Text style={styles.divider__text}>Вхід за допомогою</Text>
-            <View style={styles.divider__line} />
-          </View>
-          <View style={styles.other__methods_btns_container}>
-            <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
-              <Image style={styles.other__methods_img} source={AppleLogo} />
-            </Pressable>
-            <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
-              <Image style={styles.other__methods_img} source={GoogleLogo} />
-            </Pressable>
-          </View>
-        </View>
-      </View>
     </View>
   )
 }
 
-export default Login
+export default Register
 
 const styles = StyleSheet.create({
   main__container: {

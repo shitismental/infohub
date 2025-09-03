@@ -456,6 +456,7 @@ const styles = StyleSheet.create({
   profile__main_content_help_buttons_container: {
     borderRadius: 10,
     overflow: "hidden",
+    backgroundColor: Colors.white,
     boxShadow: "0 3px 5px rgba(0,0,0,0.05)",
   },
   profile__main_content_help_button: {

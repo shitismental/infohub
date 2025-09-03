@@ -118,6 +118,24 @@ export default function StageDetails() {
             </Text>
           </Pressable>
           <Pressable
+            onPress={() => setActiveTab("tasks")}
+            style={[
+              styles.tabs__tab_btn_container,
+              activeTab === "tasks" && styles.tabs__tab_btn_active,
+            ]}
+          >
+            <Text
+              style={[
+                styles.tabs__tab_text,
+                activeTab === "tasks"
+                  ? styles.tabs__tab_text_active
+                  : styles.tabs__tab_text_inactive,
+              ]}
+            >
+              Завдання
+            </Text>
+          </Pressable>
+          <Pressable
             onPress={() => setActiveTab("scripts")}
             style={[
               styles.tabs__tab_btn_container,
@@ -177,25 +195,34 @@ export default function StageDetails() {
           </View>
         </ScrollView>
         :
-        <View
-          style={[styles.paddingWrapper, styles.scripts__tab_wrapper]}
-        >
-          <View style={[styles.scripts__tab_container]}>
-            <Text style={[styles.scripts__tab_title]}>Упс!</Text>
-            <View style={[styles.scripts__tab_text_container]}>
-              <Text style={[styles.scripts__tab_text_title]}>Скрипти недоступні</Text>
-              <Text style={[styles.scripts__tab_text_description]}>{"Доступ до скриптів відкривається\nлише після придбання курсу."}</Text>
+        activeTab === "scripts" ?
+          <View
+            style={[styles.paddingWrapper, styles.scripts__tab_wrapper]}
+          >
+            <View style={[styles.scripts__tab_container]}>
+              <Text style={[styles.scripts__tab_title]}>Упс!</Text>
+              <View style={[styles.scripts__tab_text_container]}>
+                <Text style={[styles.scripts__tab_text_title]}>Скрипти недоступні</Text>
+                <Text style={[styles.scripts__tab_text_description]}>{"Доступ до скриптів відкривається\nлише після придбання курсу."}</Text>
+              </View>
+              <Pressable
+                onPress={handleGoBackToCourses}
+                style={({ pressed }) => [
+                  styles.scripts__tab_btn_container,
+                  pressed && { opacity: 0.7 }
+                ]}>
+                <Text style={[styles.scripts__tab_btn_text]}>До покупки</Text>
+              </Pressable>
             </View>
-            <Pressable 
-            onPress={handleGoBackToCourses}
-            style={({ pressed }) => [
-              styles.scripts__tab_btn_container,
-              pressed && { opacity: 0.7 }
-            ]}>
-              <Text style={[styles.scripts__tab_btn_text]}>До покупки</Text>
-            </Pressable>
           </View>
-        </View>
+          :
+          <View
+            style={[styles.paddingWrapper, styles.tasks__tab_wrapper]}
+          >
+            <View style={[styles.tasks__tab_container]}>
+              <Text style={[styles.tasks__tab_title]}>ЗАВДАННЯ</Text>
+            </View>
+          </View>
       }
     </View>
   );
@@ -348,5 +375,28 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontFamily: "MontserratMedium",
     fontSize: 15,
+  },
+  tasks__tab_wrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 110,
+  },
+  tasks__tab_container: {
+    borderWidth: 1,
+    borderColor: "red",
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tasks__tab_title: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: 60,
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
   }
 });

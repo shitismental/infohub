@@ -60,7 +60,7 @@ const CourseCard = ({ course }) => {
             <View style={[styles.card__content_footer_btns_container]}>
               <Pressable
                 onPress={() => {
-                  isBought && router.replace(`/courses/${course.id}`)
+                  router.replace(`/courses/${course.id}`)
                 }}
                 style={({ pressed }) => [
                   pressed && { opacity: 0.7 }

@@ -85,13 +85,6 @@ const Home = () => {
             resizeMode='contain'
           />
         </View>
-
-        <View style={styles.paddingWrapper}>
-          <View style={[styles.courses__completed_container]}>
-            <Text style={[styles.courses__completed_text]}>Пройдено курсів...</Text>
-            <Text style={[styles.courses__completed_amnt_text]}>0 із 3</Text>
-          </View>
-        </View>
       </View>
 
       {/* Courses */}
@@ -313,7 +306,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   our__courses_container: {
-    marginTop: 40,
+    marginTop: 30,
     marginBottom: 110
   },
   our__courses_title_container: {

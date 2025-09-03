@@ -101,26 +101,6 @@ const Courses = () => {
               />
             </Pressable>
           </View>
-          <View style={[styles.header__bottom_content]}>
-            <TextInput
-              style={[styles.header__input]}
-              placeholder='Є код доступу?'
-              placeholderTextColor={Colors.white}
-              value={enteredCode}
-              onChangeText={(text) => setEnteredCode(text)}
-              autoFocus={false}
-            />
-            <Pressable onPress={handleCheckCode} style={({ pressed }) => [
-              styles.header__btn_container,
-              pressed && { opacity: 0.7 }
-            ]}>
-              <Image
-                style={[styles.header__btn_icon]}
-                source={PlusIcom}
-                resizeMode='contain'
-              />
-            </Pressable>
-          </View>
         </View>
       </View>
 
@@ -132,6 +112,27 @@ const Courses = () => {
         contentContainerStyle={{ paddingBottom: 120, gap: 30 }}
         scrollEventThrottle={5}
       >
+        <View style={[styles.header__bottom_content]}>
+          <TextInput
+            style={[styles.header__input]}
+            placeholder='Є код доступу?'
+            placeholderTextColor={"#0A0A0A"}
+            value={enteredCode}
+            onChangeText={(text) => setEnteredCode(text)}
+            autoFocus={false}
+          />
+          <Pressable onPress={handleCheckCode} style={({ pressed }) => [
+            styles.header__btn_container,
+            pressed && { opacity: 0.7 }
+          ]}>
+            <Image
+              style={[styles.header__btn_icon]}
+              source={PlusIcom}
+              resizeMode='contain'
+              tintColor={"#0A0A0A"}
+            />
+          </Pressable>
+        </View>
         <View style={[styles.courses__info_card_container]}>
           <View style={[styles.courses_info_card_content_container]}>
             <View style={[styles.courses_info_card_text_container]}>
@@ -238,9 +239,11 @@ const styles = StyleSheet.create({
   },
   header__btn_container: {
     padding: 10,
-    borderRadius: 31,
+    borderRadius: 41,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.2)",
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#1D5588",
   },
   topBlurCircle: {
     pointerEvents: "none",
@@ -261,12 +264,12 @@ const styles = StyleSheet.create({
   header__input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#31699C",
+    borderColor: "#1D5588",
     paddingVertical: 15,
     paddingHorizontal: 14,
-    backgroundColor: "#1D5588",
+    backgroundColor: Colors.white,
     borderRadius: 41,
-    color: Colors.white,
+    color: "#0A0A0A",
     fontFamily: "MontserratMedium",
     fontSize: 16,
     boxShadow: "0 3px 5px rgba(0,0,0,0.05)",
