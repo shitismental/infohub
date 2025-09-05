@@ -19,7 +19,7 @@ const CourseCard = ({ course }) => {
   return (
     <>
       <Pressable
-        onPress={() => {  
+        onPress={() => {
           router.replace(`/courses/${course.id}`);
         }}
         style={styles.card__container}>
@@ -63,26 +63,24 @@ const CourseCard = ({ course }) => {
                   router.replace(`/courses/${course.id}`)
                 }}
                 style={({ pressed }) => [
+                  styles.card__content_footer_buy_btn,
                   pressed && { opacity: 0.7 }
                 ]}>
-                <View style={[styles.card__content_footer_buy_btn]} >
-                  <Image
-                    style={[styles.card__content_footer_buy_btn_img]}
-                    source={isBought ? ViewIcon : CartIcon}
-                    resizeMode='contain'
-                  />
-                  <Text style={[styles.card__content_footer_btn_text]}>{isBought ? "Перегляд" : "Купити"}</Text>
-                </View>
+                <Image
+                  style={[styles.card__content_footer_buy_btn_img]}
+                  source={isBought ? ViewIcon : CartIcon}
+                  resizeMode='contain'
+                />
+                <Text style={[styles.card__content_footer_btn_text]}>{isBought ? "Перегляд" : "Купити"}</Text>
               </Pressable>
               {hasInfoBtn &&
                 <Pressable
                   onPress={() => router.replace(`/courses/${course.id}`)}
                   style={({ pressed }) => [
+                    styles.card__content_footer_info_btn,
                     pressed && { opacity: 0.7 }
                   ]}>
-                  <BlurView intensity={10} tint='dark' style={[styles.card__content_footer_info_btn]}>
-                    <Text style={[styles.card__content_footer_btn_text]}>Інфо</Text>
-                  </BlurView>
+                  <Text style={[styles.card__content_footer_btn_text]}>Інфо</Text>
                 </Pressable>}
             </View>
             <Text style={[styles.card__content_footer_text]}>

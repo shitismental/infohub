@@ -18,12 +18,24 @@ import PlaneIcon from "../../assets/icons/plane_icon.png"
 import InfoIcon from "../../assets/icons/info_icon.png"
 import LogoutIcon from "../../assets/icons/logout_icon.png"
 
+import BellModal from '../../components/BellModal';
+
 import { Colors } from "../../constants/Colors";
 
 const Profile = () => {
 
   const [openInfoAccordion, setOpenInfoAccordion] = useState(false);
   const [openCertificatsAccordion, setOpenCertificatsAccordion] = useState(false);
+
+  const [isBellModalVisible, setBellModalVisible] = useState(false);
+
+  const handleOpenBellModal = () => {
+    setBellModalVisible(true);
+  }
+
+  const handleCloseBellModal = () => {
+    setBellModalVisible(false);
+  }
 
   const handleGoBack = () => {
     router.replace("/chatbot")
@@ -62,6 +74,7 @@ const Profile = () => {
           </Pressable>
           <Text style={[styles.header__top_content_title]}>Профіль</Text>
           <Pressable
+          onPress={handleOpenBellModal}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -88,10 +101,10 @@ const Profile = () => {
         </View>
       </View>
 
-      <ScrollView 
-      bounces={false}
-      showsVerticalScrollIndicator={false}
-      style={[styles.paddingWrapper, styles.profile__main_content_wrapper]}>
+      <ScrollView
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        style={[styles.paddingWrapper, styles.profile__main_content_wrapper]}>
         <View style={[styles.profile__main_content_container]}>
           <View style={[styles.profile__main_content_accordions_container]}>
             <View style={[
@@ -268,6 +281,8 @@ const Profile = () => {
           </View>
         </View>
       </ScrollView>
+
+      <BellModal isBellModalOpen={isBellModalVisible} handleCloseBellModal={handleCloseBellModal} />
 
     </View>
   )

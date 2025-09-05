@@ -1,6 +1,5 @@
 {/* Imports */ }
 import { Pressable, StyleSheet, Text, View, Image, ScrollView, Modal, TextInput } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import { useState } from 'react'
 
@@ -27,6 +26,8 @@ import { coursesData } from "../../../constants/coursesData"
 
 import { Colors } from "../../../constants/Colors"
 
+import BellModal from "../../../components/BellModal"
+
 {/* Code */ }
 
 const Courses = () => {
@@ -36,6 +37,16 @@ const Courses = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
   const [isError, setIsError] = useState(false);
+
+  const [isBellModalVisible, setBellModalVisible] = useState(false);
+
+  const handleOpenBellModal = () => {
+    setBellModalVisible(true);
+  }
+
+  const handleCloseBellModal = () => {
+    setBellModalVisible(false);
+  }
 
   const handleGoBack = () => {
     router.replace("/");
@@ -92,8 +103,10 @@ const Courses = () => {
             <Text style={[styles.header__title_text]}>
               Наші курси
             </Text>
-            <Pressable style={({ pressed }) => [
-              { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.1)" },
+            <Pressable 
+            onPress={handleOpenBellModal}
+            style={({ pressed }) => [
+              { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)" },
               styles.header__btn_container,
               pressed && { opacity: 0.7 }
             ]}>
@@ -125,6 +138,7 @@ const Courses = () => {
             autoFocus={false}
           />
           <Pressable onPress={handleCheckCode} style={({ pressed }) => [
+            {borderColor: "#1D5588"},
             styles.header__btn_container,
             pressed && { opacity: 0.7 }
           ]}>
@@ -178,7 +192,7 @@ const Courses = () => {
         ))}
       </ScrollView>
 
-      {/* Modal */}
+      {/* Code Modal */}
       <Modal
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}
@@ -212,6 +226,9 @@ const Courses = () => {
           </View>
         </View>
       </Modal>
+
+      {/* Bell Modal */}
+      <BellModal isBellModalOpen={isBellModalVisible} handleCloseBellModal={handleCloseBellModal} />
     </View>
   )
 }
@@ -250,11 +267,10 @@ const styles = StyleSheet.create({
   },
   header__btn_container: {
     padding: 10,
-    borderRadius: 41,
     borderWidth: 1,
+    borderRadius: 41,
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "#1D5588",
   },
   topBlurCircle: {
     pointerEvents: "none",

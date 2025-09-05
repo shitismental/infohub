@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View, Image, Animated, ScrollView } from 'react-native'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 import CourseCard from '../../components/CourseCard'
 
@@ -11,10 +11,22 @@ import { Colors } from "../../constants/Colors"
 
 import { homeDisplayCourses } from '../../constants/coursesData'
 
+import BellModal from '../../components/BellModal'
+
 const CARD_WIDTH = 345;
 const CARD_SPACING = 16;
 
 const Home = () => {
+
+  const [isBellModalOpen, setBellModalOpen] = useState(false);
+
+  const handleOpenBellModal = () => {
+    setBellModalOpen(true);
+  }
+
+  const handleCloseBellModal = () => {
+    setBellModalOpen(false);
+  }
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -34,11 +46,13 @@ const Home = () => {
             <Text style={[styles.header__name_text]}>Анастасія Лужко</Text>
           </View>
           <View style={[styles.header__btns_container]}>
-            <Pressable style={({ pressed }) => [
-              { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.1)" },
-              styles.header__btn_container,
-              pressed && { opacity: 0.7 }
-            ]}>
+            <Pressable
+              onPress={handleOpenBellModal}
+              style={({ pressed }) => [
+                { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.1)" },
+                styles.header__btn_container,
+                pressed && { opacity: 0.7 }
+              ]}>
               <Image
                 style={[styles.header__btn_image]}
                 source={BellIcon}
@@ -160,6 +174,11 @@ const Home = () => {
           </View>
         </View>
       </ScrollView>
+
+      <BellModal
+        isBellModalOpen={isBellModalOpen}
+        handleCloseBellModal={handleCloseBellModal}
+      />
     </View>
   )
 }
@@ -336,5 +355,5 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 6,
-  },
+  }
 })
