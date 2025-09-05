@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   course__info_container: {
-    marginTop: -45,
+    marginTop: -65,
   },
   course__info_card_container: {
     flexDirection: "row",
