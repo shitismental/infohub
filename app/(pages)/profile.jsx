@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import BlurCircle from "../../assets/icons/BlurCircle.png";
 import ArrowIcon from "../../assets/icons/arrow_left_icon.png";
-import BellIcon from "../../assets/icons/bell_icon.png";
+import BellIcon from "../../assets/icons/question_mark_icon.png";
 
 import ProfileIcon from "../../assets/icons/profile_icon.png"
 import BookIcon from "../../assets/icons/book_icon.png"
@@ -18,24 +18,12 @@ import PlaneIcon from "../../assets/icons/plane_icon.png"
 import InfoIcon from "../../assets/icons/info_icon.png"
 import LogoutIcon from "../../assets/icons/logout_icon.png"
 
-import BellModal from '../../components/BellModal';
-
 import { Colors } from "../../constants/Colors";
 
 const Profile = () => {
 
   const [openInfoAccordion, setOpenInfoAccordion] = useState(false);
   const [openCertificatsAccordion, setOpenCertificatsAccordion] = useState(false);
-
-  const [isBellModalVisible, setBellModalVisible] = useState(false);
-
-  const handleOpenBellModal = () => {
-    setBellModalVisible(true);
-  }
-
-  const handleCloseBellModal = () => {
-    setBellModalVisible(false);
-  }
 
   const handleGoBack = () => {
     router.replace("/chatbot")
@@ -74,7 +62,6 @@ const Profile = () => {
           </Pressable>
           <Text style={[styles.header__top_content_title]}>Профіль</Text>
           <Pressable
-          onPress={handleOpenBellModal}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -194,23 +181,13 @@ const Profile = () => {
                   </View>
                 </View>
                 <View style={[styles.accordion__info_field_container]}>
-                  <Text style={[styles.accordion__info_field_text]}>Пароль</Text>
+                  <Text style={[styles.accordion__info_field_text]}>Забули пароль?</Text>
                   <View style={[styles.accordion__info_field_input_container]}>
                     <Pressable style={({ pressed }) => [
                       styles.accordion__info_field_forgot_password_btn,
                       pressed && { opacity: 0.7 }
                     ]}>
-                      <Text style={[styles.accordion__info_field_forgot_password_btn_text]}>Забули пароль?</Text>
-                    </Pressable>
-                    <Pressable
-                      style={({ pressed }) => [
-                        styles.accordion__edit_icon_container,
-                        pressed && { opacity: 0.7 }
-                      ]}>
-                      <Image
-                        source={EditIcon}
-                        resizeMode='contain'
-                        style={[styles.accordion__edit_icon]} />
+                      <Text style={[styles.accordion__info_field_forgot_password_btn_text]}>Написати менеджеру</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -223,8 +200,8 @@ const Profile = () => {
                 onPress={handleOpenCertificatsAccordion}
                 style={[styles.profile__main_content_accordion_btn,]}>
                 <View style={[styles.profile__main_content_accordion_left_container]}>
-                  <Image source={CertificatsIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
-                  <Text style={[styles.profile__main_content_accordion_left_text]}>Сертифікати</Text>
+                  <Image source={InfoIcon} resizeMode='contain' style={[styles.profile__main_content_accordion_left_icon]} />
+                  <Text style={[styles.profile__main_content_accordion_left_text]}>Як поділитися курсом ?</Text>
                 </View>
                 <Pressable
                   onPress={handleOpenCertificatsAccordion}
@@ -240,23 +217,10 @@ const Profile = () => {
               </Pressable>
               {openCertificatsAccordion && <View style={[styles.accordion__info_container]}>
                 <View style={[styles.accordion__info_field_container]}>
-                  <Text style={[styles.accordion__certificats_field_text]}>У вас немає сертифікатів</Text>
-                  <Pressable
-                    style={({ pressed }) => [
-                      styles.accordion__edit_icon_container,
-                      pressed && { opacity: 0.7 }
-                    ]}>
-                    <Image
-                      source={rounderCartIcon}
-                      tintColor={"#B3B3B3"}
-                      resizeMode='contain'
-                      style={[styles.accordion__cart_icon]} />
-                  </Pressable>
+                  <Text style={[styles.accordion__certificats_field_text]}>А хуй знает...</Text>
                 </View>
               </View>}
             </View>
-          </View>
-          <View style={[styles.profile__main_content_help_buttons_container]}>
             <Pressable style={({ pressed }) => [
               styles.profile__main_content_help_button, { borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
               pressed && { opacity: 0.7 }
@@ -264,13 +228,8 @@ const Profile = () => {
               <Image style={[styles.profile__main_content_help_button_icon]} source={PlaneIcon} resizeMode='contain' tintColor={"#094174"} />
               <Text style={[styles.profile__main_content_help_button_text]}>Тех. підтримка</Text>
             </Pressable>
-            <Pressable style={({ pressed }) => [
-              styles.profile__main_content_help_button, { borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
-              pressed && { opacity: 0.7 }
-            ]}>
-              <Image style={[styles.profile__main_content_help_button_icon]} source={InfoIcon} resizeMode='contain' tintColor={"#094174"} />
-              <Text style={[styles.profile__main_content_help_button_text]}>Як поділитися курсом ?</Text>
-            </Pressable>
+          </View>
+          <View style={[styles.profile__main_content_help_buttons_container]}>
             <Pressable style={({ pressed }) => [
               styles.profile__main_content_help_button, { borderBottomLeftRadius: 10, borderBottomRightRadius: 10 },
               pressed && { opacity: 0.7 }
@@ -281,8 +240,6 @@ const Profile = () => {
           </View>
         </View>
       </ScrollView>
-
-      <BellModal isBellModalOpen={isBellModalVisible} handleCloseBellModal={handleCloseBellModal} />
 
     </View>
   )

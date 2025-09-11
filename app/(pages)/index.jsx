@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, Text, View, Image, Animated, ScrollView } from 'react-native'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import CourseCard from '../../components/CourseCard'
 
-import BellIcon from "../../assets/icons/bell_icon.png"
+import BellIcon from "../../assets/icons/question_mark_icon.png"
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 import StartEarningImg from "../../assets/imgs/start_earning_img.png"
 
@@ -11,22 +11,10 @@ import { Colors } from "../../constants/Colors"
 
 import { homeDisplayCourses } from '../../constants/coursesData'
 
-import BellModal from '../../components/BellModal'
-
-const CARD_WIDTH = 345;
+const CARD_WIDTH = 305;
 const CARD_SPACING = 16;
 
 const Home = () => {
-
-  const [isBellModalOpen, setBellModalOpen] = useState(false);
-
-  const handleOpenBellModal = () => {
-    setBellModalOpen(true);
-  }
-
-  const handleCloseBellModal = () => {
-    setBellModalOpen(false);
-  }
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -47,7 +35,6 @@ const Home = () => {
           </View>
           <View style={[styles.header__btns_container]}>
             <Pressable
-              onPress={handleOpenBellModal}
               style={({ pressed }) => [
                 { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.1)" },
                 styles.header__btn_container,
@@ -174,11 +161,6 @@ const Home = () => {
           </View>
         </View>
       </ScrollView>
-
-      <BellModal
-        isBellModalOpen={isBellModalOpen}
-        handleCloseBellModal={handleCloseBellModal}
-      />
     </View>
   )
 }

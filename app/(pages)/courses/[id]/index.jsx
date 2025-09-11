@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, ScrollView, Image, Pressable } from "react-native";
 import { useLocalSearchParams, router, } from "expo-router";
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import BlurCircle from "../../../../assets/icons/BlurCircle.png"
 import ArrowLeftIcon from "../../../../assets/icons/arrow_left_icon.png"
-import BellIcon from "../../../../assets/icons/bell_icon.png"
+import BellIcon from "../../../../assets/icons/question_mark_icon.png"
 import CartIcon from "../../../../assets/icons/rounded_cart_icon.png"
 
 import TestCardImg from "../../../../assets/imgs/card_img_2.png"
@@ -15,21 +15,9 @@ import { Colors } from "../../../../constants/Colors";
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 import { coursesData, homeDisplayCourses } from "../../../../constants/coursesData";
 
-import BellModal from "../../../../components/BellModal"
-
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
   const courseId = Number(id);
-
-  const [isBellModalVisible, setBellModalVisible] = useState(false);
-
-  const handleOpenBellModal = () => {
-    setBellModalVisible(true);
-  }
-
-  const handleCloseBellModal = () => {
-    setBellModalVisible(false);
-  }
 
   const allCourses = [...coursesData, ...homeDisplayCourses];
   const course = allCourses.find(c => c.id === courseId);
@@ -75,7 +63,6 @@ export default function CourseDetails() {
           </Pressable>
           <Text style={[styles.header__content_title]}>Сторінка курсу</Text>
           <Pressable 
-          onPress={handleOpenBellModal}
           style={({ pressed }) => [
             { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)", borderWidth: 1 },
             styles.header__bell_icon_btn,
@@ -153,9 +140,6 @@ export default function CourseDetails() {
           })}
         </View>
       </ScrollView>
-
-      {/* Bell Modal */}
-      <BellModal isBellModalOpen={isBellModalVisible} handleCloseBellModal={handleCloseBellModal} />
 
     </View >
   );

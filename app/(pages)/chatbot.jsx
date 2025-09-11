@@ -8,7 +8,7 @@ import CopyIcon from "../../assets/icons/copy_icon.png";
 
 import BlurCircle from "../../assets/icons/BlurCircle.png";
 import ArrowLeftIcon from "../../assets/icons/arrow_left_icon.png";
-import BellIcon from "../../assets/icons/bell_icon.png";
+import BellIcon from "../../assets/icons/question_mark_icon.png";
 
 import ArrowIcon from "../../assets/icons/arrow_right_icon.png"
 import FileIcon from "../../assets/icons/file_icon.png"
@@ -18,8 +18,6 @@ import RobotIcon from "../../assets/icons/robot_icon.png"
 import { coursesData, homeDisplayCourses } from '../../constants/coursesData';
 
 import { Colors } from "../../constants/Colors";
-
-import BellModal from "../../components/BellModal"
 
 const INITIAL_MESSAGES = [
   { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
@@ -43,16 +41,6 @@ const ChatBot = () => {
   const timeoutId = useRef(null);
 
   const scrollViewRef = useRef(null);
-
-  const [isBellModalVisible, setBellModalVisible] = useState(false);
-
-  const handleOpenBellModal = () => {
-    setBellModalVisible(true);
-  }
-
-  const handleCloseBellModal = () => {
-    setBellModalVisible(false);
-  }
 
   const handleOptionPress = (option) => {
     if (option.action !== "uploadReceipt") {
@@ -199,7 +187,6 @@ const ChatBot = () => {
           </Pressable>
           <Text style={[styles.header__content_title]}>ЧатБОТ</Text>
           <Pressable
-          onPress={handleOpenBellModal}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -363,8 +350,6 @@ const ChatBot = () => {
           </View>
         )}
       </View>
-
-      <BellModal isBellModalOpen={isBellModalVisible} handleCloseBellModal={handleCloseBellModal} />
 
     </View>
   )

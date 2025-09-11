@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { Colors } from '../constants/Colors'
 
 import LockIcon from "../assets/icons/lock_icon.png"
+import CheckmarkIcon from "../assets/icons/checkmark_icon.png"
 
 const CourseProgressCard = ({ stage, onPress }) => {
   return (
@@ -24,15 +25,22 @@ const CourseProgressCard = ({ stage, onPress }) => {
           <Text style={[styles.course__progress_card_stage_name]}>{stage.name}</Text>
           <Text style={[styles.course__progress_card_stage_length]}>{stage.length} хвилин</Text>
         </View>
-        {stage.isFree && <View style={[styles.course__progress_card_isFree]}>
+        {(stage.isFree && !stage.isCompleted) && <View style={[styles.course__progress_card_isFree]}>
           <Text style={[styles.course__progress_card_isFree_text]}>
             Безкоштовно
           </Text>
         </View>}
       </Pressable>
-      {!stage.isUnlocked && <View style={[styles.lock__icon_container]}>
+      {!stage.isUnlocked 
+      && 
+      <View style={[styles.lock__icon_container]}>
         <Image style={[styles.lock__icon]} source={LockIcon} resizeMode='contain' />
-      </View>}
+      </View>
+      ||
+      stage.isCompleted && <View style={[styles.lock__icon_container]}>
+        <Image style={[styles.lock__icon]} source={CheckmarkIcon} resizeMode='contain' />
+      </View>
+      }
     </View>
   )
 }

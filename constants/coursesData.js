@@ -19,7 +19,8 @@ export const coursesData = [
           videoURL: "https://www.w3schools.com/html/mov_bbb.mp4",
           videoPreviewImg: "https://i.pinimg.com/736x/11/e7/b6/11e7b652bafa8d01b2d0dc971b509db5.jpg",
           isUnlocked: true,
-          isFree: true
+          isFree: true,
+          isCompleted: true
         },
         {
           id: 2,
@@ -54,11 +55,10 @@ export const coursesData = [
       ],
     },
     courseCardInfo: {
-      bgImg: BgCardImg2,
-      heroImg: HeroCardImg2,
       heroTextTop: "Дропшипінг",
       heroTextBottom: "Магазин з нуля",
       hasBottomBtn: true,
+      isBought: true,
     },
   },
   {
@@ -216,7 +216,7 @@ export const homeDisplayCourses = [
           videoURL: "https://www.w3schools.com/html/mov_bbb.mp4",
           videoPreviewImg: "https://i.pinimg.com/736x/11/e7/b6/11e7b652bafa8d01b2d0dc971b509db5.jpg",
           isUnlocked: true,
-          isFree: true
+          isFree: true,
         },
         {
           id: 2,
@@ -245,13 +245,10 @@ export const homeDisplayCourses = [
       ],
     },
     courseCardInfo: {
-      bgImg: BgCardImg,
-      heroImg: HeroCardImg,
       heroTextTop: "Арбітраж трафіку",
       heroTextBottom: "з TikTok на телеграм",
-      isNew: true,
       hasInfoBtn: true,
-      isAvailable: true,
+      isBought: true,
     }
   },
   {

@@ -1,20 +1,16 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
-import { BlurView } from 'expo-blur'
-import { router, useRouter } from 'expo-router'
+import { router } from 'expo-router'
 
-import CartIcon from "../assets/icons/cart_icon.png"
-import DiscountIcon from "../assets/icons/discount_icon.png"
+import CardCartIcon from "../assets/icons/card_cart_icon.png"
 import ArrowRight from "../assets/icons/arrow_right_icon.png"
 import ShareIcon from "../assets/icons/share_icon.png"
-import ViewIcon from "../assets/icons/view_icon.png"
+import RoundedCartIcon from "../assets/icons/rounded_cart_icon.png"
 
 import { Colors } from "../constants/Colors"
 
 const CourseCard = ({ course }) => {
 
-  const { bgImg, isNew, hasDiscount, discountAmount, heroImg, heroTextTop, heroTextBottom, isBought, hasInfoBtn, isAvailable, hasBottomBtn } = course.courseCardInfo
-
-  const { price } = course.mainCourseInfo
+  const { heroTextTop, heroTextBottom, isBought, hasBottomBtn } = course.courseCardInfo
 
   return (
     <>
@@ -23,30 +19,11 @@ const CourseCard = ({ course }) => {
           router.replace(`/courses/${course.id}`);
         }}
         style={styles.card__container}>
-        <Image source={bgImg} style={[styles.bgImage, StyleSheet.absoluteFillObject]} />
-        {
-          isNew ?
-            <View style={[styles.card__info_isnew_container]}>
-              <Text style={[styles.card__info_isnew_text]}>
-                Новинка
-              </Text>
-            </View>
-            :
-            hasDiscount &&
-            <View style={[styles.card__info_discount_container]}>
-              <Image
-                style={[styles.card__info_discount_image]}
-                source={DiscountIcon}
-                resizeMode='contain'
-              />
-              <Text style={[styles.card__info_discount_text]}>
-                -{discountAmount}%
-              </Text>
-            </View>
-        }
         <View style={[styles.card__content_container]}>
           <View style={[styles.card__content_hero_container]}>
-            <Image style={[styles.card__hero_img]} source={heroImg} />
+            <View style={[styles.card__hero_img_container]}>
+              <Image style={[styles.card__hero_img]} source={CardCartIcon} />
+            </View>
             <View style={[styles.card__content_hero_text_container]}>
               <Text style={[styles.card__content_hero_text]}>
                 {heroTextTop}
@@ -56,38 +33,15 @@ const CourseCard = ({ course }) => {
               </Text>
             </View>
           </View>
-          <View style={[styles.card__content_footer_container]}>
-            <View style={[styles.card__content_footer_btns_container]}>
-              <Pressable
-                onPress={() => {
-                  router.replace(`/courses/${course.id}`)
-                }}
-                style={({ pressed }) => [
-                  styles.card__content_footer_buy_btn,
-                  pressed && { opacity: 0.7 }
-                ]}>
-                <Image
-                  style={[styles.card__content_footer_buy_btn_img]}
-                  source={isBought ? ViewIcon : CartIcon}
-                  resizeMode='contain'
-                />
-                <Text style={[styles.card__content_footer_btn_text]}>{isBought ? "Перегляд" : "Купити"}</Text>
-              </Pressable>
-              {hasInfoBtn &&
-                <Pressable
-                  onPress={() => router.replace(`/courses/${course.id}`)}
-                  style={({ pressed }) => [
-                    styles.card__content_footer_info_btn,
-                    pressed && { opacity: 0.7 }
-                  ]}>
-                  <Text style={[styles.card__content_footer_btn_text]}>Інфо</Text>
-                </Pressable>}
-            </View>
-            <Text style={[styles.card__content_footer_text]}>
-              {!isAvailable ? "Недоступно" : !isBought ? `Ціна ${price}₴` : isBought && "Відкрито"}
-            </Text>
-          </View>
         </View>
+        <View style={[
+          styles.card__top_info_container,
+          isBought ? {backgroundColor: "#2B6BF1"} : {backgroundColor: "#002D61"}
+          ]}>
+          <Text style={[styles.card__top_info_text]}>{isBought ? "Відкрито" : "Заблоковано"}</Text>
+        </View>
+        <View style={[styles.big__circle]}></View>
+        <View style={[styles.small__circle]}></View>
       </Pressable>
       {hasBottomBtn &&
         <View style={[styles.paddingWrapper]}>
@@ -103,7 +57,7 @@ const CourseCard = ({ course }) => {
               styles.card__bottom_btn_container,
               pressed && { opacity: 0.7 }
             ]}>
-            <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Читати опис"}</Text>
+            <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Купити зараз"}</Text>
             <Pressable
               onPress={() => {
                 if (!isBought) {
@@ -118,7 +72,7 @@ const CourseCard = ({ course }) => {
               <Image
                 tintColor={"#000"}
                 style={[styles.card__bottom_btn_icon]}
-                source={isBought ? ShareIcon : ArrowRight}
+                source={isBought ? ShareIcon : RoundedCartIcon}
                 resizeMode='contain'
               />
             </Pressable>
@@ -136,18 +90,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   card__container: {
-    height: 170,
+    height: 110,
     borderRadius: 10,
+    backgroundColor: "#094175",
     overflow: "hidden",
     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)"
   },
-  bgImage: {
-    height: "100%",
-    width: "100%",
-  },
   card__content_container: {
     gap: 15,
-    paddingHorizontal: 15,
+    paddingHorizontal: 25,
     justifyContent: "center",
     height: "100%",
   },
@@ -157,8 +108,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   card__hero_img: {
-    height: 90,
-    width: 90,
+    height: 60,
+    width: 60,
   },
   card__content_hero_text_container: {
     flex: 1,
@@ -262,7 +213,7 @@ const styles = StyleSheet.create({
   },
   card__bottom_btn_container: {
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingVertical: 16,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -278,4 +229,44 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  card__top_info_container: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    backgroundColor: "#2B6BF1"
+  },
+  card__top_info_text: {
+    fontFamily: "MontserratMedium",
+    color: "#fff",
+  },
+  card__hero_img_container: {
+    padding: 5,
+    borderRadius: 10,
+    backgroundColor: "#000058"
+  },
+  big__circle: {
+    position: "absolute",
+    left: -83,
+    top: "50%",
+    transform: "translateY(-50%)",
+    borderRadius: 1000,
+    height: 195,
+    width: 195,
+    backgroundColor: "#275F93",
+    zIndex: -2
+  },
+  small__circle: {
+    position: "absolute",
+    left: -60,
+    top: "50%",
+    transform: "translateY(-50%)",
+    borderRadius: 1000,
+    height: 147,
+    width: 147,
+    backgroundColor: "#3B73A7",
+    zIndex: -2
+  }
 })

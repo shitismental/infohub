@@ -8,7 +8,7 @@ import CourseProgressCard from "../../../../components/CourseProgressCard";
 
 import BlurCircle from "../../../../assets/icons/BlurCircle.png";
 import ArrowLeftIcon from "../../../../assets/icons/arrow_left_icon.png";
-import BellIcon from "../../../../assets/icons/bell_icon.png";
+import BellIcon from "../../../../assets/icons/question_mark_icon.png";
 
 import { Colors } from "../../../../constants/Colors";
 

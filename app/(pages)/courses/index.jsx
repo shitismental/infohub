@@ -13,7 +13,7 @@ import CoursesInfoCardImg from "../../../assets/imgs/courses_info_card_img.png"
 
 {/* Icons */ }
 
-import BellIcon from "../../../assets/icons/bell_icon.png"
+import BellIcon from "../../../assets/icons/question_mark_icon.png"
 import BlurCircle from "../../../assets/icons/BlurCircle.png"
 import ArrowBackIcon from "../../../assets/icons/arrow_left_icon.png"
 import PlusIcom from "../../../assets/icons/plus_icon.png"
@@ -26,8 +26,6 @@ import { coursesData } from "../../../constants/coursesData"
 
 import { Colors } from "../../../constants/Colors"
 
-import BellModal from "../../../components/BellModal"
-
 {/* Code */ }
 
 const Courses = () => {
@@ -37,16 +35,6 @@ const Courses = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
   const [isError, setIsError] = useState(false);
-
-  const [isBellModalVisible, setBellModalVisible] = useState(false);
-
-  const handleOpenBellModal = () => {
-    setBellModalVisible(true);
-  }
-
-  const handleCloseBellModal = () => {
-    setBellModalVisible(false);
-  }
 
   const handleGoBack = () => {
     router.replace("/");
@@ -104,7 +92,6 @@ const Courses = () => {
               Наші курси
             </Text>
             <Pressable 
-            onPress={handleOpenBellModal}
             style={({ pressed }) => [
               { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)" },
               styles.header__btn_container,
@@ -150,41 +137,6 @@ const Courses = () => {
             />
           </Pressable>
         </View>
-        <View style={[styles.courses__info_card_container]}>
-          <View style={[styles.courses_info_card_content_container]}>
-            <View style={[styles.courses_info_card_text_container]}>
-              <Text style={[styles.course_info_card_text]}>{"Всі курси разом\nза ціною"} <Text style={{ fontFamily: "MontserratBold" }}>1900₴</Text></Text>
-            </View>
-            <View style={[styles.courses_info_card_btns_container]}>
-              <Pressable style={({ pressed }) => [
-                styles.courses_info_card_btn_container,
-                pressed && { opacity: 0.7 }
-              ]}>
-                <Text style={[styles.courses_info_card_btn_text]}>Купити зараз</Text>
-              </Pressable>
-              <Pressable style={({ pressed }) => [
-                styles.courses_info_card_cart_btn_container,
-                pressed && { opacity: 0.7 }
-              ]}>
-                <Image
-                  tintColor={"#094174"}
-                  style={[styles.courses_info_card_btn_img]}
-                  source={CartIcon}
-                  resizeMode='contain'
-                />
-              </Pressable>
-            </View>
-          </View>
-          <View style={[styles.courses__image_container]}>
-            <View style={[styles.courses__image_circle_big]}></View>
-            <View style={[styles.courses__image_circle_small]}></View>
-            <Image
-              source={CoursesInfoCardImg}
-              style={[styles.courses_info_card_img]}
-              resizeMode='contain'
-            />
-          </View>
-        </View>
         {coursesData.map((item, index) => (
           <View key={index}>
             <CourseCard course={item} />
@@ -226,9 +178,6 @@ const Courses = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Bell Modal */}
-      <BellModal isBellModalOpen={isBellModalVisible} handleCloseBellModal={handleCloseBellModal} />
     </View>
   )
 }
