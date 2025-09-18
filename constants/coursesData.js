@@ -20,7 +20,14 @@ export const coursesData = [
           videoPreviewImg: "https://i.pinimg.com/736x/11/e7/b6/11e7b652bafa8d01b2d0dc971b509db5.jpg",
           isUnlocked: true,
           isFree: true,
-          isCompleted: true
+          isCompleted: true,
+          tasks: [
+            {
+              id: 1,
+              description: "Пройди будь ласка тестування відповівши на всі запитання відштовхувавшись від інформації яка була на уроці",
+              taskLink: "https://www.youtube.com",
+            }
+          ]
         },
         {
           id: 2,

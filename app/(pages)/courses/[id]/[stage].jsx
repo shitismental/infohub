@@ -12,6 +12,8 @@ import BellIcon from "../../../../assets/icons/question_mark_icon.png";
 
 import { Colors } from "../../../../constants/Colors";
 
+import TaskTab from "../../../../components/TaskTab";
+
 export default function StageDetails() {
   const [activeTab, setActiveTab] = useState("description");
 
@@ -33,15 +35,14 @@ export default function StageDetails() {
     s => s.name === decodeURIComponent(stage)
   );
 
+  const currentTask = currentStage?.tasks?.[0] ?? {}
+  const taskDescription = currentTask?.description ?? null
+
   const remainingStages = stages.slice(currentIndex + 1);
 
   const handleGoBack = () => {
     router.push(`/courses/${courseId}`);
   };
-
-  const handleGoBackToCourses = () => {
-    router.push("/courses/");
-  }
 
   const videoRef = useRef(null);
 
@@ -135,24 +136,6 @@ export default function StageDetails() {
               Завдання
             </Text>
           </Pressable>
-          <Pressable
-            onPress={() => setActiveTab("scripts")}
-            style={[
-              styles.tabs__tab_btn_container,
-              activeTab === "scripts" && styles.tabs__tab_btn_active,
-            ]}
-          >
-            <Text
-              style={[
-                styles.tabs__tab_text,
-                activeTab === "scripts"
-                  ? styles.tabs__tab_text_active
-                  : styles.tabs__tab_text_inactive,
-              ]}
-            >
-              Скрипти
-            </Text>
-          </Pressable>
         </View>
       </View>
 
@@ -195,34 +178,7 @@ export default function StageDetails() {
           </View>
         </ScrollView>
         :
-        activeTab === "scripts" ?
-          <View
-            style={[styles.paddingWrapper, styles.scripts__tab_wrapper]}
-          >
-            <View style={[styles.scripts__tab_container]}>
-              <Text style={[styles.scripts__tab_title]}>Упс!</Text>
-              <View style={[styles.scripts__tab_text_container]}>
-                <Text style={[styles.scripts__tab_text_title]}>Скрипти недоступні</Text>
-                <Text style={[styles.scripts__tab_text_description]}>{"Доступ до скриптів відкривається\nлише після придбання курсу."}</Text>
-              </View>
-              <Pressable
-                onPress={handleGoBackToCourses}
-                style={({ pressed }) => [
-                  styles.scripts__tab_btn_container,
-                  pressed && { opacity: 0.7 }
-                ]}>
-                <Text style={[styles.scripts__tab_btn_text]}>До покупки</Text>
-              </Pressable>
-            </View>
-          </View>
-          :
-          <View
-            style={[styles.paddingWrapper, styles.tasks__tab_wrapper]}
-          >
-            <View style={[styles.tasks__tab_container]}>
-              <Text style={[styles.tasks__tab_title]}>ЗАВДАННЯ</Text>
-            </View>
-          </View>
+        <TaskTab stageIndex={currentIndex} taskDescription={taskDescription} />
       }
     </View>
   );
