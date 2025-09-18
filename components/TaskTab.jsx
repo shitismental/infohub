@@ -119,7 +119,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     padding: 5,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)"
+    borderColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: 7,
   },
   task__link_icon: {
     width: 20,
