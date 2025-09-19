@@ -90,13 +90,13 @@ const Courses = () => {
             <Text style={[styles.header__title_text]}>
               Наші курси
             </Text>
-            <Pressable 
-            onPress={redirectToTelegram}
-            style={({ pressed }) => [
-              { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)" },
-              styles.header__btn_container,
-              pressed && { opacity: 0.7 }
-            ]}>
+            <Pressable
+              onPress={redirectToTelegram}
+              style={({ pressed }) => [
+                { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)" },
+                styles.header__btn_container,
+                pressed && { opacity: 0.7 }
+              ]}>
               <Image
                 style={[styles.header__btn_icon]}
                 source={BellIcon}
@@ -125,7 +125,7 @@ const Courses = () => {
             autoFocus={false}
           />
           <Pressable onPress={handleCheckCode} style={({ pressed }) => [
-            {borderColor: "#1D5588"},
+            { borderColor: "#1D5588" },
             styles.header__btn_container,
             pressed && { opacity: 0.7 }
           ]}>
@@ -154,9 +154,9 @@ const Courses = () => {
         <View style={[styles.paddingWrapper, styles.modal__container]}>
           <View style={[
             styles.modal__content_container,
-            isError && {borderColor: "#ff0000ff"},
-            !isError && {borderColor: "#2FC254"}
-            ]}>
+            isError && { borderColor: "#ff0000ff" },
+            !isError && { borderColor: "#2FC254" }
+          ]}>
             <View style={[styles.modal__top_icon_container]}>
               <Image
                 style={[styles.modal_top_icon]}
@@ -167,9 +167,9 @@ const Courses = () => {
             <View style={[styles.modal__text_container]}>
               <Text style={[
                 styles.modal__text_title,
-                isError && {color: "#ff0000ff"},
-                !isError && {color: "#2FC254"}
-                ]}>{modalTitle}</Text>
+                isError && { color: "#ff0000ff" },
+                !isError && { color: "#2FC254" }
+              ]}>{modalTitle}</Text>
               <Text style={[styles.modal__text_desc]}>{modalDescription}</Text>
             </View>
             <Pressable onPress={() => setIsModalVisible(false)} style={[styles.modal__close_btn]}>
@@ -215,9 +215,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   header__btn_container: {
-    padding: 10,
+    height: "100%",
+    aspectRatio: 1,
     borderWidth: 1,
-    borderRadius: 41,
+    borderColor: "#1D5588",
+    borderRadius: 9999,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -234,7 +236,6 @@ const styles = StyleSheet.create({
   },
   header__bottom_content: {
     flexDirection: "row",
-    alignItems: "center",
     gap: 10,
   },
   header__input: {

@@ -13,14 +13,13 @@ import TestCardImg from "../../../../assets/imgs/card_img_2.png"
 import { Colors } from "../../../../constants/Colors";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
-import { coursesData, homeDisplayCourses } from "../../../../constants/coursesData";
+import { coursesData } from "../../../../constants/coursesData";
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
   const courseId = Number(id);
 
-  const allCourses = [...coursesData, ...homeDisplayCourses];
-  const course = allCourses.find(c => c.id === courseId);
+  const course = coursesData.find(c => c.id === courseId);
 
   const { name, description, price, stages } = course.mainCourseInfo || course
 
