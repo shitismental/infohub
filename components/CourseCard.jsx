@@ -20,7 +20,7 @@ const CourseCard = ({ course }) => {
         style={styles.card__container}>
         <View style={[styles.card__content_container]}>
           <View style={[styles.card__content_hero_container]}>
-              <Image style={[styles.card__hero_img]} source={cardIcon || CardCartIcon} resizeMode='contain' />
+              <Image style={[styles.card__hero_img]} source={cardIcon || "https://placehold.co/60x60"} resizeMode='contain' />
             <View style={[styles.card__content_hero_text_container]}>
               <Text style={[styles.card__content_hero_text]}>
                 {heroTextTop}
