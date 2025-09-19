@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image, Pressable } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image, Pressable, Linking } from "react-native";
 import { useLocalSearchParams, router, } from "expo-router";
 import { useRef, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -40,6 +40,10 @@ export default function CourseDetails() {
     }, [])
   );
 
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me/liora_innovation`);
+  }
+
   return (
     <View style={[styles.container]}>
       <View style={[styles.paddingWrapper, styles.header__container]}>
@@ -63,6 +67,7 @@ export default function CourseDetails() {
           </Pressable>
           <Text style={[styles.header__content_title]}>Сторінка курсу</Text>
           <Pressable 
+          onPress={redirectToTelegram}
           style={({ pressed }) => [
             { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)", borderWidth: 1 },
             styles.header__bell_icon_btn,

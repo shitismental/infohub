@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image, ScrollView, Linking } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { useRef, useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -29,14 +29,15 @@ export default function StageDetails() {
     s => s.name === decodeURIComponent(stage)
   );
 
-  const { name, description, videoURL, videoPreviewImg } = currentStage;
+  const { name, description, videoURL, videoPreviewImg } = currentStage || {};
 
   const currentIndex = stages.findIndex(
     s => s.name === decodeURIComponent(stage)
   );
 
-  const currentTask = currentStage?.tasks?.[0] ?? {}
+  const currentTask = currentStage?.tasks?.[0] ?? null
   const taskDescription = currentTask?.description ?? null
+  const taskLink = currentTask?.taskLink ?? null
 
   const remainingStages = stages.slice(currentIndex + 1);
 
@@ -55,6 +56,10 @@ export default function StageDetails() {
       };
     }, [])
   );
+
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me/liora_innovation`);
+  }
 
   return (
     <View style={[styles.container]}>
@@ -79,6 +84,7 @@ export default function StageDetails() {
           </Pressable>
           <Text style={[styles.header__content_title]}>Сторінка курсу</Text>
           <Pressable
+          onPress={redirectToTelegram}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -178,7 +184,12 @@ export default function StageDetails() {
           </View>
         </ScrollView>
         :
-        <TaskTab stageIndex={currentIndex} taskDescription={taskDescription} />
+        (activeTab === "tasks" && currentTask) ?
+        <TaskTab stageIndex={currentIndex} taskDescription={taskDescription} taskLink={taskLink} />
+        :
+        <View style={[styles.empty__tasks_container]}>
+          <Text style={[styles.empty__tasks_text]}>Завдань немає...</Text>
+        </View>
       }
     </View>
   );
@@ -348,6 +359,20 @@ const styles = StyleSheet.create({
   tasks__tab_title: {
     fontFamily: "MontserratAlternatesBold",
     fontSize: 60,
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+  },
+  empty__tasks_container: {
+    flex: 1,
+    paddingBottom: 110,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  empty__tasks_text: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: "10vw",
     backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
     backgroundClip: "text",
     WebkitBackgroundClip: "text",

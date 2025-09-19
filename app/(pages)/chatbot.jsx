@@ -164,6 +164,10 @@ const ChatBot = () => {
     }, 2000);
   };
 
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me/liora_innovation`);
+  }
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -187,6 +191,7 @@ const ChatBot = () => {
           </Pressable>
           <Text style={[styles.header__content_title]}>ЧатБОТ</Text>
           <Pressable
+          onPress={redirectToTelegram}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, Image, Animated, ScrollView } from 'react-native'
+import { Pressable, StyleSheet, Text, View, Image, Animated, ScrollView, Linking } from 'react-native'
 import { useRef } from 'react'
 
 import CourseCard from '../../components/CourseCard'
@@ -18,6 +18,10 @@ const Home = () => {
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me/liora_innovation`);
+  }
+
   return (
     <View style={[styles.container]}>
       {/* Header */}
@@ -35,6 +39,7 @@ const Home = () => {
           </View>
           <View style={[styles.header__btns_container]}>
             <Pressable
+            onPress={redirectToTelegram}
               style={({ pressed }) => [
                 { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.1)" },
                 styles.header__btn_container,

@@ -25,7 +25,7 @@ export const coursesData = [
             {
               id: 1,
               description: "Пройди будь ласка тестування відповівши на всі запитання відштовхувавшись від інформації яка була на уроці",
-              taskLink: "https://www.youtube.com",
+              taskLink: "youtube.com",
             }
           ]
         },

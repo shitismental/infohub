@@ -1,5 +1,5 @@
 {/* Imports */ }
-import { Pressable, StyleSheet, Text, View, Image, ScrollView, Modal, TextInput } from 'react-native'
+import { Pressable, StyleSheet, Text, View, Image, ScrollView, Modal, TextInput, Linking } from 'react-native'
 import { router } from 'expo-router'
 import { useState } from 'react'
 
@@ -7,17 +7,12 @@ import { useState } from 'react'
 
 import CourseCard from '../../../components/CourseCard'
 
-{/* Images */ }
-
-import CoursesInfoCardImg from "../../../assets/imgs/courses_info_card_img.png"
-
 {/* Icons */ }
 
 import BellIcon from "../../../assets/icons/question_mark_icon.png"
 import BlurCircle from "../../../assets/icons/BlurCircle.png"
 import ArrowBackIcon from "../../../assets/icons/arrow_left_icon.png"
 import PlusIcom from "../../../assets/icons/plus_icon.png"
-import CartIcon from "../../../assets/icons/cart_icon.png"
 import RobotIcom from "../../../assets/icons/robot_icon.png"
 
 import { coursesData } from "../../../constants/coursesData"
@@ -66,6 +61,10 @@ const Courses = () => {
     setEnteredCode("");
   };
 
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me/liora_innovation`);
+  }
+
   return (
     <View style={[styles.container]}>
 
@@ -92,6 +91,7 @@ const Courses = () => {
               Наші курси
             </Text>
             <Pressable 
+            onPress={redirectToTelegram}
             style={({ pressed }) => [
               { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)" },
               styles.header__btn_container,

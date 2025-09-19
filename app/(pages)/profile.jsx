@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image, TextInput, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image, TextInput, ScrollView, Linking } from 'react-native'
 import { router } from 'expo-router';
 import { useState } from 'react';
 
@@ -10,9 +10,7 @@ import ProfileIcon from "../../assets/icons/profile_icon.png"
 import BookIcon from "../../assets/icons/book_icon.png"
 
 import EditIcon from "../../assets/icons/edit_icon.png"
-import CertificatsIcon from "../../assets/icons/two_people_icon.png"
 
-import rounderCartIcon from "../../assets/icons/rounded_cart_icon.png"
 import PlaneIcon from "../../assets/icons/plane_icon.png"
 
 import InfoIcon from "../../assets/icons/info_icon.png"
@@ -35,6 +33,10 @@ const Profile = () => {
 
   const handleOpenCertificatsAccordion = () => {
     setOpenCertificatsAccordion(prev => !prev)
+  }
+
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me/liora_innovation`);
   }
 
   return (
@@ -62,6 +64,7 @@ const Profile = () => {
           </Pressable>
           <Text style={[styles.header__top_content_title]}>Профіль</Text>
           <Pressable
+            onPress={redirectToTelegram}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -221,10 +224,12 @@ const Profile = () => {
                 </View>
               </View>}
             </View>
-            <Pressable style={({ pressed }) => [
-              styles.profile__main_content_help_button, { borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
-              pressed && { opacity: 0.7 }
-            ]}>
+            <Pressable
+              onPress={redirectToTelegram}
+              style={({ pressed }) => [
+                styles.profile__main_content_help_button, { borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
+                pressed && { opacity: 0.7 }
+              ]}>
               <Image style={[styles.profile__main_content_help_button_icon]} source={PlaneIcon} resizeMode='contain' tintColor={"#094174"} />
               <Text style={[styles.profile__main_content_help_button_text]}>Тех. підтримка</Text>
             </Pressable>
