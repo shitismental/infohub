@@ -9,7 +9,7 @@ import StartEarningImg from "../../assets/imgs/start_earning_img.png"
 
 import { Colors } from "../../constants/Colors"
 
-import { homeDisplayCourses } from '../../constants/coursesData'
+import { coursesData } from '../../constants/coursesData'
 
 const CARD_WIDTH = 305;
 const CARD_SPACING = 16;
@@ -105,7 +105,7 @@ const Home = () => {
 
           {/* Carousel */}
           <Animated.FlatList
-            data={homeDisplayCourses}
+            data={coursesData}
             style={{ paddingVertical: 15, }}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
@@ -131,7 +131,7 @@ const Home = () => {
 
           {/* Dots */}
           <View style={styles.dotsContainer}>
-            {homeDisplayCourses.map((_, i) => {
+            {coursesData.map((_, i) => {
               const inputRange = [
                 (i - 1) * (CARD_WIDTH + CARD_SPACING),
                 i * (CARD_WIDTH + CARD_SPACING),

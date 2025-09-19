@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import { router } from 'expo-router'
 
 import CardCartIcon from "../assets/icons/card_cart_icon.png"
-import ArrowRight from "../assets/icons/arrow_right_icon.png"
 import ShareIcon from "../assets/icons/share_icon.png"
 import RoundedCartIcon from "../assets/icons/rounded_cart_icon.png"
 
@@ -10,7 +9,7 @@ import { Colors } from "../constants/Colors"
 
 const CourseCard = ({ course }) => {
 
-  const { heroTextTop, heroTextBottom, isBought, hasBottomBtn } = course.courseCardInfo
+  const { heroTextTop, heroTextBottom, cardIcon, isBought, hasBottomBtn } = course.courseCardInfo
 
   return (
     <>
@@ -21,9 +20,7 @@ const CourseCard = ({ course }) => {
         style={styles.card__container}>
         <View style={[styles.card__content_container]}>
           <View style={[styles.card__content_hero_container]}>
-            <View style={[styles.card__hero_img_container]}>
-              <Image style={[styles.card__hero_img]} source={CardCartIcon} />
-            </View>
+              <Image style={[styles.card__hero_img]} source={cardIcon || CardCartIcon} resizeMode='contain' />
             <View style={[styles.card__content_hero_text_container]}>
               <Text style={[styles.card__content_hero_text]}>
                 {heroTextTop}
@@ -110,6 +107,7 @@ const styles = StyleSheet.create({
   card__hero_img: {
     height: 60,
     width: 60,
+    borderRadius: 10,
   },
   card__content_hero_text_container: {
     flex: 1,
@@ -245,7 +243,9 @@ const styles = StyleSheet.create({
   card__hero_img_container: {
     padding: 5,
     borderRadius: 10,
-    backgroundColor: "#000058"
+    backgroundColor: "#000058",
+    alignItems: "center",
+    justifyContent: "center",
   },
   big__circle: {
     position: "absolute",
