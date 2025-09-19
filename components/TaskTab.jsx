@@ -91,10 +91,7 @@ const TaskTab = ({ stageIndex, taskDescription, taskLink }) => {
         </View>
         <View style={[styles.task__btns_container]}>
           <Pressable
-          onPress={() => {
-            setIsModalVisible(true)
-            router.push("/courses")
-          }}
+          onPress={() => setIsModalVisible(true)}
             style={({ pressed }) => [
               styles.task__btn,
               styles.task__btn_completed,
