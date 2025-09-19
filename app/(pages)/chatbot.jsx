@@ -15,7 +15,7 @@ import FileIcon from "../../assets/icons/file_icon.png"
 
 import RobotIcon from "../../assets/icons/robot_icon.png"
 
-import { coursesData, homeDisplayCourses } from '../../constants/coursesData';
+import { coursesData } from '../../constants/coursesData';
 
 import { Colors } from "../../constants/Colors";
 
@@ -54,8 +54,7 @@ const ChatBot = () => {
         { sender: "bot", text: "До якого курсу потрібен код?" }
       ]);
 
-      const allCourses = [...coursesData, ...homeDisplayCourses];
-      const courseOptions = allCourses.map(c => {
+      const courseOptions = coursesData.map(c => {
         const { name } = c.mainCourseInfo || c;
         return {
           label: name,

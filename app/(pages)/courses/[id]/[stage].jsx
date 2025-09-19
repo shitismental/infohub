@@ -3,7 +3,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import { useRef, useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { coursesData, homeDisplayCourses } from "../../../../constants/coursesData";
+import { coursesData } from "../../../../constants/coursesData";
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 
 import BlurCircle from "../../../../assets/icons/BlurCircle.png";
@@ -20,8 +20,7 @@ export default function StageDetails() {
   const { id, stage } = useLocalSearchParams();
   const courseId = Number(id);
 
-  const allCourses = [...coursesData, ...homeDisplayCourses];
-  const course = allCourses.find(c => c.id === courseId);
+  const course = coursesData.find(c => c.id === courseId);
 
   const { stages } = course.mainCourseInfo || course;
 

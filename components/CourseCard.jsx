@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   card__content_hero_text: {
     fontFamily: "MontserratSemiBold",
-    fontSize: 16,
+    fontSize: 15,
     color: Colors.white,
   },
   card__content_footer_container: {

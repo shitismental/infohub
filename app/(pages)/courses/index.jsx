@@ -126,7 +126,7 @@ const Courses = () => {
           />
           <Pressable onPress={handleCheckCode} style={({ pressed }) => [
             { borderColor: "#1D5588" },
-            styles.header__btn_container,
+            styles.header__input_btn_container,
             pressed && { opacity: 0.7 }
           ]}>
             <Image
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratSemiBold",
     fontSize: 20,
   },
-  header__btn_container: {
+  header__input_btn_container: {
     height: "100%",
     aspectRatio: 1,
     borderWidth: 1,

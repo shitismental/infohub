@@ -90,7 +90,7 @@ export const coursesData = [
       ],
     },
     courseCardInfo: {
-      heroTextTop: "Профіль",
+      heroTextTop: "Оформлення профілю",
       heroTextBottom: "Лице куратора",
       cardIcon: cardIcon2,
       hasBottomBtn: true,
