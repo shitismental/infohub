@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable, Image, ScrollView, Linking, Modal } from 'react-native'
 import { router } from 'expo-router';
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import * as ImagePicker from "expo-image-picker";
 
 import * as Clipboard from "expo-clipboard";
@@ -18,6 +18,7 @@ import RobotIcon from "../../assets/icons/robot_icon.png"
 import { coursesData } from '../../constants/coursesData';
 
 import { Colors } from "../../constants/Colors";
+import { useLocalSearchParams } from 'expo-router';
 
 const INITIAL_MESSAGES = [
   { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
@@ -32,6 +33,8 @@ const ChatBot = () => {
 
   const telegramUsername = "yehor_rt"
 
+  const {action, courseId} = useLocalSearchParams();
+
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [options, setOptions] = useState(INITIAL_OPTIONS);
 
@@ -41,6 +44,27 @@ const ChatBot = () => {
   const timeoutId = useRef(null);
 
   const scrollViewRef = useRef(null);
+
+  useEffect(() => {
+    if (action === "buy" && courseId) {
+      const course = coursesData.find(c => String(c.id) === String(courseId));
+      const courseName = course?.mainCourseInfo?.name || course?.name || "курс";
+
+      setMessages(prev => [
+        ...prev,
+        { sender: "user", text: `Хочу купити код доступу до "${courseName}"` },
+        { sender: "bot", text: "Добре! Я надішлю код після сплати, він діє один раз", hasBotIcon: true },
+        { sender: "bot", text: "Моно: 5375 4115 9012 5097", hasBotIcon: true }
+      ]);
+
+      setOptions([
+        { label: "Я оплатив(ла)", action: "paid" },
+        { label: "Завершити сеанс", action: "end", hasSpecialStyle: true, }
+      ]);
+      
+      router.replace("/chatbot");
+    }
+  }, [action, courseId]);
 
   const handleOptionPress = (option) => {
     if (option.action !== "uploadReceipt") {
@@ -78,7 +102,10 @@ const ChatBot = () => {
         { sender: "bot", text: "Добре! Я надішлю код після сплати, він діє один раз." },
         { sender: "bot", text: "Моно: 5375 4115 9012 5097" }
       ]);
-      setOptions([{ label: "Я оплатив(ла)", action: "paid" }]);
+      setOptions([
+        { label: "Я оплатив(ла)", action: "paid" },
+        { label: "Завершити сеанс", action: "end", hasSpecialStyle: true, }
+      ]);
     }
 
     else if (option.action === "admin") {
@@ -238,7 +265,7 @@ const ChatBot = () => {
                   )}
 
                   <View style={[styles.chat__bot_text_container, { flexDirection: "row", alignItems: "center" }]}>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, gap: 5 }}>
                       {!prevIsBot && (
                         <Text style={styles.chat__bot_name_text}>Чат БОТ</Text>
                       )}
@@ -442,7 +469,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    gap: 5,
     flexShrink: 1,
   },
   chat__bot_name_text: {

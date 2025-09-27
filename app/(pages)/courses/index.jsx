@@ -31,9 +31,19 @@ const Courses = () => {
   const [modalDescription, setModalDescription] = useState("");
   const [isError, setIsError] = useState(false);
 
-  const handleGoBack = () => {
-    router.replace("/");
-  };
+  const hasBoughtCourses = coursesData.some(c => c.courseCardInfo?.isBought);
+
+  const sortedCourses = hasBoughtCourses
+    ? [...coursesData].sort((a, b) => {
+      const aBought = a.courseCardInfo?.isBought;
+      const bBought = b.courseCardInfo?.isBought;
+
+      if (aBought && !bBought) return -1;
+      if (!aBought && bBought) return 1;
+
+      return 0;
+    })
+    : coursesData;
 
   const courseCodes = [
     {
@@ -43,6 +53,10 @@ const Courses = () => {
       name: "Fake Code"
     },
   ]
+
+  const handleGoBack = () => {
+    router.replace("/");
+  };
 
   const handleCheckCode = () => {
     const validCodes = courseCodes.map(c => c.name);
@@ -94,7 +108,6 @@ const Courses = () => {
               onPress={redirectToTelegram}
               style={({ pressed }) => [
                 { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)" },
-                styles.header__btn_container,
                 pressed && { opacity: 0.7 }
               ]}>
               <Image
@@ -137,7 +150,7 @@ const Courses = () => {
             />
           </Pressable>
         </View>
-        {coursesData.map((item, index) => (
+        {sortedCourses.map((item, index) => (
           <View key={index}>
             <CourseCard course={item} />
           </View>

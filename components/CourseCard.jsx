@@ -20,7 +20,7 @@ const CourseCard = ({ course }) => {
         style={styles.card__container}>
         <View style={[styles.card__content_container]}>
           <View style={[styles.card__content_hero_container]}>
-              <Image style={[styles.card__hero_img]} source={cardIcon || "https://placehold.co/60x60"} resizeMode='contain' />
+            <Image style={[styles.card__hero_img]} source={cardIcon || "https://placehold.co/60x60"} resizeMode='contain' />
             <View style={[styles.card__content_hero_text_container]}>
               <Text style={[styles.card__content_hero_text]}>
                 {heroTextTop}
@@ -33,8 +33,8 @@ const CourseCard = ({ course }) => {
         </View>
         <View style={[
           styles.card__top_info_container,
-          isBought ? {backgroundColor: "#2B6BF1"} : {backgroundColor: "#002D61"}
-          ]}>
+          isBought ? { backgroundColor: "#2B6BF1" } : { backgroundColor: "#002D61" }
+        ]}>
           <Text style={[styles.card__top_info_text]}>{isBought ? "Відкрито" : "Заблоковано"}</Text>
         </View>
         <View style={[styles.big__circle]}></View>
@@ -60,7 +60,10 @@ const CourseCard = ({ course }) => {
                 if (!isBought) {
                   router.replace(`/courses/${course.id}`);
                 } else {
-                  console.log("Sharing course access…");
+                  router.push({
+                    pathname: "/chatbot",
+                    params: { action: "buy", courseId: course.id }
+                  });
                 }
               }}
               style={({ pressed }) => [
@@ -73,6 +76,7 @@ const CourseCard = ({ course }) => {
                 resizeMode='contain'
               />
             </Pressable>
+
           </Pressable>
         </View>
       }
