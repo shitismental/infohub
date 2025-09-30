@@ -33,9 +33,14 @@ const ChatBot = () => {
 
   const telegramUsername = "yehor_rt"
 
-  const {action, courseId} = useLocalSearchParams();
+  const { action, courseId } = useLocalSearchParams();
 
-  const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState(() => {
+    if (!action && !courseId) {
+      return INITIAL_MESSAGES;
+    }
+    return [];
+  });
   const [options, setOptions] = useState(INITIAL_OPTIONS);
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -61,7 +66,7 @@ const ChatBot = () => {
         { label: "Я оплатив(ла)", action: "paid" },
         { label: "Завершити сеанс", action: "end", hasSpecialStyle: true, }
       ]);
-      
+
       router.replace("/chatbot");
     }
   }, [action, courseId]);
@@ -139,7 +144,8 @@ const ChatBot = () => {
         { sender: "bot", text: "Дякую! Ми перевіряємо твій платіж ⏳" },
         { sender: "bot", text: "Щоб прискорити процес, прикріпи квитанцію про оплату." }
       ]);
-      setOptions([{ label: "Квитанція", action: "uploadReceipt", hasFileIcon: true, hasSpecialStyle: true }
+      setOptions([
+        { label: "Квитанція", action: "uploadReceipt", hasFileIcon: true, hasSpecialStyle: true },
       ]);
     }
 
@@ -217,7 +223,7 @@ const ChatBot = () => {
           </Pressable>
           <Text style={[styles.header__content_title]}>ЧатБОТ</Text>
           <Pressable
-          onPress={redirectToTelegram}
+            onPress={redirectToTelegram}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",

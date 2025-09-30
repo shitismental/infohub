@@ -47,7 +47,10 @@ const CourseCard = ({ course }) => {
               if (!isBought) {
                 router.replace(`/courses/${course.id}`);
               } else {
-                console.log("Sharing course access…");
+                router.push({
+                  pathname: "/chatbot",
+                  params: { action: "buy", courseId: course.id }
+                });
               }
             }}
             style={({ pressed }) => [
