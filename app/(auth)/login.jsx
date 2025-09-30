@@ -35,7 +35,7 @@ const Login = () => {
                   <View style={styles.image__container}>
                     <Image style={styles.image} source={PersonIcon} />
                   </View>
-                  <TextInput placeholder='Логін' placeholderTextColor="#0A0A0A" style={styles.input} />
+                  <TextInput placeholder='Ел. пошта' placeholderTextColor="#0A0A0A" style={styles.input} />
                 </View>
                 <View style={styles.login__form_input_container}>
                   <View style={styles.image__container}>

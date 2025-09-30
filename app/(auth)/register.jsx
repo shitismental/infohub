@@ -12,7 +12,7 @@ import BlurCircle from "../../assets/icons/BlurCircle.png"
 
 const Register = () => {
 
-  const [selected, setSelected] = useState(null);
+  // const [selected, setSelected] = useState(null);
 
   const router = useRouter()
 
@@ -58,22 +58,10 @@ const Register = () => {
                 <View style={styles.image__container}>
                   <Image style={styles.image} source={PlaneIcon} />
                 </View>
-                <TextInput placeholder='Нік телеграм (за наявності)' placeholderTextColor="#0A0A0A" style={styles.input} />
-              </View>
-              <View style={styles.register__form_input_container}>
-                <View style={styles.image__container}>
-                  <Image style={styles.image} source={LockIcon} />
-                </View>
-                <TextInput placeholder='Створіть пароль' placeholderTextColor="#0A0A0A" secureTextEntry={true} style={styles.input} />
-              </View>
-              <View style={styles.register__form_input_container}>
-                <View style={styles.image__container}>
-                  <Image style={styles.image} source={RepeatIcon} />
-                </View>
-                <TextInput placeholder='Повторіть пароль' placeholderTextColor="#0A0A0A" secureTextEntry={true} style={styles.input} />
+                <TextInput placeholder='Номер/нік телеграм' placeholderTextColor="#0A0A0A" style={styles.input} />
               </View>
             </View>
-            <View style={[styles.choose__gender_container]}>
+            {/* <View style={[styles.choose__gender_container]}>
               {["Чоловік", "Жінка"].map((option, index) => (
                 <Pressable
                   key={index}
@@ -86,7 +74,7 @@ const Register = () => {
                   <Text style={styles.radioLabel}>{option}</Text>
                 </Pressable>
               ))}
-            </View>
+            </View> */}
             <View style={styles.btns__container}>
               <Pressable style={({ pressed }) => [styles.register__btn, pressed && { opacity: 0.7 }]} onPress={handleRegister}>
                 <Text style={styles.register__btn_text}>Реєструвати</Text>

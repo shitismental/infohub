@@ -12,6 +12,9 @@ import BookIcon from "../../assets/icons/book_icon.png"
 import EditIcon from "../../assets/icons/edit_icon.png"
 
 import PlaneIcon from "../../assets/icons/plane_icon.png"
+import PersonIcon from "../../assets/icons/person_icon.png"
+import EnvelopeIcon from "../../assets/icons/envelope_icon.png"
+import PaperPlaneIcon from "../../assets/icons/paper_plane_icon.png"
 
 import InfoIcon from "../../assets/icons/info_icon.png"
 import LogoutIcon from "../../assets/icons/logout_icon.png"
@@ -122,27 +125,17 @@ const Profile = () => {
               </Pressable>
               {openInfoAccordion && <View style={[styles.accordion__info_container]}>
                 <View style={[styles.accordion__info_field_container]}>
-                  <Text style={[styles.accordion__info_field_text]}>Ім'я</Text>
+                  <Image source={PersonIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
                   <View style={[styles.accordion__info_field_input_container]}>
                     <TextInput
                       editable={false}
                       style={[styles.accordion__info_field_input]}
                       placeholder='Анастасія Лужко'
                     />
-                    <Pressable
-                      style={({ pressed }) => [
-                        styles.accordion__edit_icon_container,
-                        pressed && { opacity: 0.7 }
-                      ]}>
-                      <Image
-                        source={EditIcon}
-                        resizeMode='contain'
-                        style={[styles.accordion__edit_icon]} />
-                    </Pressable>
                   </View>
                 </View>
                 <View style={[styles.accordion__info_field_container]}>
-                  <Text style={[styles.accordion__info_field_text]}>Пошта</Text>
+                  <Image source={EnvelopeIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
                   <View style={[styles.accordion__info_field_input_container]}>
                     <TextInput
                       editable={false}
@@ -150,24 +143,13 @@ const Profile = () => {
                       style={[styles.accordion__info_field_input]}
                       placeholder='anastitest@gmail.com'
                     />
-                    <Pressable
-                      style={({ pressed }) => [
-                        styles.accordion__edit_icon_container,
-                        pressed && { opacity: 0.7 }
-                      ]}>
-                      <Image
-                        source={EditIcon}
-                        resizeMode='contain'
-                        style={[styles.accordion__edit_icon]} />
-                    </Pressable>
                   </View>
                 </View>
                 <View style={[styles.accordion__info_field_container]}>
-                  <Text style={[styles.accordion__info_field_text]}>Нік телеграм</Text>
+                  <Image source={PaperPlaneIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
                   <View style={[styles.accordion__info_field_input_container]}>
                     <TextInput
                       editable={false}
-
                       style={[styles.accordion__info_field_input]}
                       placeholder='@ananasik'
                     />
@@ -180,17 +162,6 @@ const Profile = () => {
                         source={EditIcon}
                         resizeMode='contain'
                         style={[styles.accordion__edit_icon]} />
-                    </Pressable>
-                  </View>
-                </View>
-                <View style={[styles.accordion__info_field_container]}>
-                  <Text style={[styles.accordion__info_field_text]}>Забули пароль?</Text>
-                  <View style={[styles.accordion__info_field_input_container]}>
-                    <Pressable style={({ pressed }) => [
-                      styles.accordion__info_field_forgot_password_btn,
-                      pressed && { opacity: 0.7 }
-                    ]}>
-                      <Text style={[styles.accordion__info_field_forgot_password_btn_text]}>Написати менеджеру</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -382,20 +353,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 7,
     backgroundColor: Colors.white,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    gap: 24,
   },
   accordion__info_container: {
     overflow: "hidden",
   },
-  accordion__info_field_text: {
-    fontFamily: "MontserratMedium",
-    fontSize: 13,
-    color: "#0A0A0A",
+  accordion__info_field_icon: {
+    width: 20,
+    height: 20,
   },
   accordion__info_field_input_container: {
     flexDirection: "row",
     gap: 5,
     alignItems: "center",
+    flex: 1,
   },
   accordion__info_field_input: {
     paddingHorizontal: 16,
@@ -407,6 +379,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#B3B3B3",
     outlineStyle: "none",
+    flex: 1,
   },
   accordion__edit_icon_container: {
     alignItems: "center",
