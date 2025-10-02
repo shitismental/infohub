@@ -8,7 +8,7 @@ import ArrowLeftIcon from "../../../../assets/icons/arrow_left_icon.png"
 import BellIcon from "../../../../assets/icons/question_mark_icon.png"
 import CartIcon from "../../../../assets/icons/rounded_cart_icon.png"
 
-import TestCardImg from "../../../../assets/imgs/card_img_2.png"
+import TestCardImg from "../../../../assets/imgs/card_img.png"
 
 import { Colors } from "../../../../constants/Colors";
 
