@@ -1,6 +1,10 @@
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from 'react-native'
 import { useRouter } from "expo-router";
 import { BlurView } from 'expo-blur';
+import { useState } from 'react';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from "../../services/api"
 
 import PersonIcon from "../../assets/icons/person_blue.png"
 import LockIcon from "../../assets/icons/lock_blue.png"
@@ -10,10 +14,34 @@ import GoogleLogo from "../../assets/icons/google_logo.png"
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 
 const Login = () => {
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   const router = useRouter()
 
-  const handleLogin = () => {
-    router.replace("(pages)/")
+  const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert("Помилка", "Будь ласка, введіть ел. пошту та пароль");
+      return;
+    }
+
+    try {
+      const res = await API.post("/users/login/", {
+        username,
+        password
+      });
+
+      const { access, refresh } = res.data;
+      await AsyncStorage.setItem("access_token", access);
+      await AsyncStorage.setItem("refresh_token", refresh);
+
+      router.replace("(pages)/");
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      Alert.alert("Помилка", "Невірний логін або пароль");
+    } finally {
+    }
   }
 
   const handleRegister = () => {
@@ -21,64 +49,75 @@ const Login = () => {
   }
 
   return (
-      <View style={styles.main__container}>
-        <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.topBlurCircle]} />
-        <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.bottomBlurCircle]} />
-        <View style={styles.login__wrapper}>
-          <Image tintColor={"#094174"} source={BlurCircle} style={[styles.blurCircle, styles.leftCircle]} />
-          <Image tintColor={"#094174"} source={BlurCircle} style={[styles.blurCircle, styles.rightCircle]} />
-          <Text style={styles.title}>Вхід</Text>
-          <BlurView style={styles.login__form_container} intensity={900} tint='light' experimentalBlurMethod='dimezisBlurView'>
-            <View style={styles.login__form}>
-              <View style={styles.login__form_inputs_container}>
-                <View style={styles.login__form_input_container}>
-                  <View style={styles.image__container}>
-                    <Image style={styles.image} source={PersonIcon} />
-                  </View>
-                  <TextInput placeholder='Ел. пошта' placeholderTextColor="#0A0A0A" style={styles.input} />
+    <View style={styles.main__container}>
+      <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.topBlurCircle]} />
+      <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.bottomBlurCircle]} />
+      <View style={styles.login__wrapper}>
+        <Image tintColor={"#094174"} source={BlurCircle} style={[styles.blurCircle, styles.leftCircle]} />
+        <Image tintColor={"#094174"} source={BlurCircle} style={[styles.blurCircle, styles.rightCircle]} />
+        <Text style={styles.title}>Вхід</Text>
+        <BlurView style={styles.login__form_container} intensity={900} tint='light' experimentalBlurMethod='dimezisBlurView'>
+          <View style={styles.login__form}>
+            <View style={styles.login__form_inputs_container}>
+              <View style={styles.login__form_input_container}>
+                <View style={styles.image__container}>
+                  <Image style={styles.image} source={PersonIcon} />
                 </View>
-                <View style={styles.login__form_input_container}>
-                  <View style={styles.image__container}>
-                    <Image style={styles.image} source={LockIcon} />
-                  </View>
-                  <TextInput placeholder='Пароль' placeholderTextColor="#0A0A0A" secureTextEntry={true} style={styles.input} />
-                </View>
+                <TextInput
+                  value={username}
+                  onChangeText={setUsername}
+                  placeholder='Логін'
+                  placeholderTextColor="#0A0A0A"
+                  style={styles.input} />
               </View>
-              <View style={styles.btns__container}>
-                <Pressable style={({ pressed }) => [styles.login__btn, pressed && { opacity: 0.7 }]} onPress={handleLogin}>
-                  <Text style={styles.login__btn_text}>Увійти</Text>
-                </Pressable>
-                <Pressable style={({ pressed }) => [styles.forgot__btn, pressed && { opacity: 0.7 }]}>
-                  <Text style={styles.forgot__btn_text}>Забули пароль?</Text>
-                </Pressable>
+              <View style={styles.login__form_input_container}>
+                <View style={styles.image__container}>
+                  <Image style={styles.image} source={LockIcon} />
+                </View>
+                <TextInput
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder='Пароль'
+                  placeholderTextColor="#0A0A0A"
+                  secureTextEntry
+                  style={styles.input} />
               </View>
             </View>
-          </BlurView>
-          <View style={styles.reg__redirect_container}>
-            <Pressable onPress={handleRegister} style={({ pressed }) => [styles.reg__redirect_btn, pressed && { opacity: 0.7 }]}>
-              <Text style={styles.reg__redirect_text}>Реєстрація</Text>
+            <View style={styles.btns__container}>
+              <Pressable style={({ pressed }) => [styles.login__btn, pressed && { opacity: 0.7 }]} onPress={handleLogin}>
+                <Text style={styles.login__btn_text}>Увійти</Text>
+              </Pressable>
+              <Pressable style={({ pressed }) => [styles.forgot__btn, pressed && { opacity: 0.7 }]}>
+                <Text style={styles.forgot__btn_text}>Забули пароль?</Text>
+              </Pressable>
+            </View>
+          </View>
+        </BlurView>
+        <View style={styles.reg__redirect_container}>
+          <Pressable onPress={handleRegister} style={({ pressed }) => [styles.reg__redirect_btn, pressed && { opacity: 0.7 }]}>
+            <Text style={styles.reg__redirect_text}>Реєстрація</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      <View style={styles.other__methods_container}>
+        <View style={styles.other__methods_wrapper}>
+          <View style={styles.divider__with_text}>
+            <View style={styles.divider__line} />
+            <Text style={styles.divider__text}>Вхід за допомогою</Text>
+            <View style={styles.divider__line} />
+          </View>
+          <View style={styles.other__methods_btns_container}>
+            <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
+              <Image style={styles.other__methods_img} source={AppleLogo} />
+            </Pressable>
+            <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
+              <Image style={styles.other__methods_img} source={GoogleLogo} />
             </Pressable>
           </View>
         </View>
-
-        <View style={styles.other__methods_container}>
-          <View style={styles.other__methods_wrapper}>
-            <View style={styles.divider__with_text}>
-              <View style={styles.divider__line} />
-              <Text style={styles.divider__text}>Вхід за допомогою</Text>
-              <View style={styles.divider__line} />
-            </View>
-            <View style={styles.other__methods_btns_container}>
-              <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
-                <Image style={styles.other__methods_img} source={AppleLogo} />
-              </Pressable>
-              <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
-                <Image style={styles.other__methods_img} source={GoogleLogo} />
-              </Pressable>
-            </View>
-          </View>
-        </View>
       </View>
+    </View>
   )
 }
 

@@ -1,23 +1,57 @@
-import { StyleSheet, Text, View, TextInput, Image, Pressable } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from 'react-native'
 import { useRouter } from "expo-router";
 import { BlurView } from 'expo-blur';
-import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import API from "../../services/api"
 
 import PersonIcon from "../../assets/icons/person_blue.png"
-import LockIcon from "../../assets/icons/lock_blue.png"
 import PlaneIcon from "../../assets/icons/plane_icon.png"
-import RepeatIcon from "../../assets/icons/repeat_icon.png"
+import LockIcon from "../../assets/icons/lock_icon.png"
 
 import BlurCircle from "../../assets/icons/BlurCircle.png"
+import { useState } from 'react';
 
 const Register = () => {
 
-  // const [selected, setSelected] = useState(null);
-
   const router = useRouter()
 
-  const handleRegister = () => {
-    router.replace("(pages)/")
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeatedPassword, setRepeatedPassword] = useState("");
+  const [telegramUser, setTelegramUser] = useState("");
+
+  const handleRegister = async () => {
+    if (!username || !email || !password) {
+      Alert.alert("Помилка", "Заповніть усі обовʼязкові поля");
+      return;
+    }
+
+    try {
+      await API.post("/users/register/", {
+        username,
+        email,
+        telegram: telegramUser,
+        password,
+      });
+
+      // 2. Login to get tokens
+      const loginRes = await API.post("/users/login/", {
+        username,
+        password,
+      });
+
+      const { access, refresh } = loginRes.data;
+      await AsyncStorage.setItem("access_token", access);
+      await AsyncStorage.setItem("refresh_token", refresh);
+
+      Alert.alert("Успіх!", "Акаунт створено і ви увійшли 🎉");
+      router.replace("(pages)/");
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      Alert.alert("Помилка", err.response?.data?.detail || "Щось пішло не так");
+    }
   }
 
   const handleRedirectLogin = () => {
@@ -39,13 +73,20 @@ const Register = () => {
                 <View style={styles.image__container}>
                   <Image style={styles.image} source={PersonIcon} />
                 </View>
-                <TextInput placeholder='Логін' placeholderTextColor="#0A0A0A" style={styles.input} />
+                <TextInput 
+                onChangeText={setUsername} 
+                value={username}
+                placeholder='Логін' 
+                placeholderTextColor="#0A0A0A" 
+                style={styles.input} />
               </View>
               <View style={styles.register__form_input_container}>
                 <View style={styles.image__container}>
                   <Image style={styles.image} source={PersonIcon} />
                 </View>
                 <TextInput
+                  value={email}
+                  onChangeText={setEmail}
                   placeholder='Ел. пошта'
                   placeholderTextColor="#0A0A0A"
                   style={styles.input}
@@ -56,25 +97,43 @@ const Register = () => {
               </View>
               <View style={styles.register__form_input_container}>
                 <View style={styles.image__container}>
+                  <Image style={styles.image} source={LockIcon} />
+                </View>
+                <TextInput
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder='Пароль'
+                  placeholderTextColor="#0A0A0A"
+                  style={styles.input}
+                  secureTextEntry
+                  textContentType="password"
+                />
+              </View>
+              <View style={styles.register__form_input_container}>
+                <View style={styles.image__container}>
+                  <Image style={styles.image} source={LockIcon} />
+                </View>
+                <TextInput
+                  value={repeatedPassword}
+                  onChangeText={setRepeatedPassword}
+                  placeholder='Повторіть пароль'
+                  placeholderTextColor="#0A0A0A"
+                  style={styles.input}
+                  secureTextEntry
+                  textContentType="password"
+                />
+              </View>
+              <View style={styles.register__form_input_container}>
+                <View style={styles.image__container}>
                   <Image style={styles.image} source={PlaneIcon} />
                 </View>
-                <TextInput placeholder='Номер/нік телеграм' placeholderTextColor="#0A0A0A" style={styles.input} />
+                <TextInput 
+                value={telegramUser}
+                onChangeText={setTelegramUser}
+                placeholder='Номер/нік телеграм' placeholderTextColor="#0A0A0A" 
+                style={styles.input} />
               </View>
             </View>
-            {/* <View style={[styles.choose__gender_container]}>
-              {["Чоловік", "Жінка"].map((option, index) => (
-                <Pressable
-                  key={index}
-                  style={styles.radioOption}
-                  onPress={() => setSelected(option)}
-                >
-                  <View style={styles.outerCircle}>
-                    {selected === option && <View style={styles.innerCircle} />}
-                  </View>
-                  <Text style={styles.radioLabel}>{option}</Text>
-                </Pressable>
-              ))}
-            </View> */}
             <View style={styles.btns__container}>
               <Pressable style={({ pressed }) => [styles.register__btn, pressed && { opacity: 0.7 }]} onPress={handleRegister}>
                 <Text style={styles.register__btn_text}>Реєструвати</Text>

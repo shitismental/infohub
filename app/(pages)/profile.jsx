@@ -1,6 +1,9 @@
 import { StyleSheet, Text, View, Pressable, Image, TextInput, ScrollView, Linking } from 'react-native'
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+import { logoutUser } from '../../services/auth';
+import { getUser } from '../../services/auth';
 
 import BlurCircle from "../../assets/icons/BlurCircle.png";
 import ArrowIcon from "../../assets/icons/arrow_left_icon.png";
@@ -26,12 +29,37 @@ const Profile = () => {
   const [openInfoAccordion, setOpenInfoAccordion] = useState(false);
   const [openCertificatsAccordion, setOpenCertificatsAccordion] = useState(false);
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me);
+      } catch (err) {
+        console.log("Failed to fetch user:", err);
+      }
+    };
+
+    fetchUser();
+  }, [])
+
   const handleGoBack = () => {
     router.replace("/chatbot")
   }
 
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      router.replace("/login");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   const handleOpenInfoAccordion = () => {
     setOpenInfoAccordion(prev => !prev)
+    console.log(user)
   }
 
   const handleOpenCertificatsAccordion = () => {
@@ -89,7 +117,7 @@ const Profile = () => {
             <View style={[styles.header__bottom_profile_icon_container]}>
               <Image style={[styles.header__bottom_profile_icon]} tintColor={Colors.white} source={ProfileIcon} resizeMode='contain' />
             </View>
-            <Text style={[styles.header__bottom_profile_name]}>Анастасія Лужко</Text>
+            <Text style={[styles.header__bottom_profile_name]}>{user?.username}</Text>
           </View>
         </View>
       </View>
@@ -206,10 +234,12 @@ const Profile = () => {
             </Pressable>
           </View>
           <View style={[styles.profile__main_content_help_buttons_container]}>
-            <Pressable style={({ pressed }) => [
-              styles.profile__main_content_help_button, { borderBottomLeftRadius: 10, borderBottomRightRadius: 10 },
-              pressed && { opacity: 0.7 }
-            ]}>
+            <Pressable
+              onPress={() => handleLogout()}
+              style={({ pressed }) => [
+                styles.profile__main_content_help_button, { borderBottomLeftRadius: 10, borderBottomRightRadius: 10 },
+                pressed && { opacity: 0.7 }
+              ]}>
               <Image style={[styles.profile__main_content_help_button_icon]} source={LogoutIcon} resizeMode='contain' tintColor={"#B3B3B3"} />
               <Text style={[styles.profile__main_content_help_button_text, { color: "#B3B3B3" }]}>Вийти</Text>
             </Pressable>

@@ -10,6 +10,7 @@ import StartEarningImg from "../../assets/imgs/start_earning_img.png"
 import { Colors } from "../../constants/Colors"
 
 import { coursesData } from '../../constants/coursesData'
+import { router } from 'expo-router'
 
 const CARD_WIDTH = 305;
 const CARD_SPACING = 16;
@@ -39,7 +40,7 @@ const Home = () => {
           </View>
           <View style={[styles.header__btns_container]}>
             <Pressable
-            onPress={redirectToTelegram}
+              onPress={redirectToTelegram}
               style={({ pressed }) => [
                 { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.1)" },
                 styles.header__btn_container,
@@ -72,15 +73,18 @@ const Home = () => {
               resizeMode='contain'
             />
           </View>
-
           <View style={styles.start__earning_content}>
             <Text style={styles.start__earning_text}>
               Почни <Text style={{ fontFamily: "MontserratBold" }}>{"заробляти\n"}</Text>з телефону ЗАРАЗ!
             </Text>
-            <Pressable style={({ pressed }) => [
-              styles.start__earning_btn,
-              pressed && { opacity: 0.7 }
-            ]}>
+            <Pressable
+              onPress={() => {
+                router.replace("/courses")
+              }}
+              style={({ pressed }) => [
+                styles.start__earning_btn,
+                pressed && { opacity: 0.7 }
+              ]}>
               <Text style={[styles.start__earning_btn_text]}>Почати</Text>
             </Pressable>
           </View>
