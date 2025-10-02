@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://152.53.18.199/api/:path*"
+    }
+  ],
   "builds": [
     {
       "src": "package.json",
