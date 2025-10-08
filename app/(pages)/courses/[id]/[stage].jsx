@@ -28,15 +28,11 @@ export default function StageDetails() {
   const lessons = course.lessons || [];
   const homework = lesson.homework || [];
 
-  console.log(lesson)
-
   const { title: lessonTitle, description: lessonDesc, video_url } = lesson
 
   const currentLessonIndex = lessons.findIndex(l => l.id === lesson.id);
 
   const remainingLessons = currentLessonIndex >= 0 ? lessons.slice(currentLessonIndex + 1) : [];
-
-  console.log(remainingLessons)
 
   const handleGoBack = () => {
     router.push(`/courses/${courseId}`);
@@ -55,7 +51,7 @@ export default function StageDetails() {
   );
 
   const redirectToTelegram = () => {
-    Linking.openURL(`https://t.me/liora_innovation`);
+    Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
   return (

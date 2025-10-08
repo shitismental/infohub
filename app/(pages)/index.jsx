@@ -22,7 +22,7 @@ const Home = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const redirectToTelegram = () => {
-    Linking.openURL(`https://t.me/liora_innovation`);
+    Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
   const [user, setUser] = useState(null);
@@ -108,7 +108,7 @@ const Home = () => {
             </Text>
             <Pressable
               onPress={() => {
-                router.replace("/courses")
+                Linking.openURL("https://t.me/+iSzACcR5xxtiOTg8")
               }}
               style={({ pressed }) => [
                 styles.start__earning_btn,

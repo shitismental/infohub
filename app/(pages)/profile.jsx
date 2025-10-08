@@ -69,7 +69,6 @@ const Profile = () => {
 
   const handleOpenInfoAccordion = () => {
     setOpenInfoAccordion(prev => !prev)
-    console.log(user)
   }
 
   const handleOpenCertificatsAccordion = () => {
@@ -77,7 +76,7 @@ const Profile = () => {
   }
 
   const redirectToTelegram = () => {
-    Linking.openURL(`https://t.me/liora_innovation`);
+    Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
   return (

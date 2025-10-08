@@ -65,7 +65,7 @@ const Courses = () => {
   };
 
   const redirectToTelegram = () => {
-    Linking.openURL(`https://t.me/liora_innovation`);
+    Linking.openURL(`https://t.me//Yehor_liora`);
   }
   
   return (

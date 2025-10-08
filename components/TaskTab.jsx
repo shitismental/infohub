@@ -10,8 +10,6 @@ const TaskTab = ({ homework }) => {
 
   const { id, description, link } = homework;
 
-  console.log("id:", id)
-
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const normalizeURL = (url) => {

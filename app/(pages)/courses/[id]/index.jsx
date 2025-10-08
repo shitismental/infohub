@@ -22,8 +22,6 @@ export default function CourseDetails() {
   const { course, courseError } = getCourse(courseId);
   const lessons = course?.lessons || []
 
-  console.log(lessons)
-
   const { title, description, price } = course
 
   const handleGoBack = () => {
@@ -43,7 +41,7 @@ export default function CourseDetails() {
   );
 
   const redirectToTelegram = () => {
-    Linking.openURL(`https://t.me/liora_innovation`);
+    Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
   return (
@@ -99,9 +97,6 @@ export default function CourseDetails() {
             </View>
           </View>
           <Pressable
-            onPress={() => {
-              console.log(course.price)
-            }}
             style={({ pressed }) => [
               styles.course__buy_btn,
               pressed && { opacity: 0.7 }
@@ -137,7 +132,6 @@ export default function CourseDetails() {
         </View>
         <View style={{ gap: 10, }}>
           {lessons.map(lesson => {
-            console.log(lesson.id)
             return (
               <CourseProgressCard
                 key={lesson.id}
