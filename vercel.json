@@ -26,12 +26,12 @@
       "dest": "http://152.53.18.199/api/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    },
-    {
       "src": "/media/(.*)",
       "dest": "http://152.53.18.199/media/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }

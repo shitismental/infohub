@@ -9,7 +9,6 @@ import StartEarningImg from "../../assets/imgs/start_earning_img.png"
 
 import { Colors } from "../../constants/Colors"
 
-import { router } from 'expo-router'
 import { getCourses } from '../../hooks/getCourses'
 
 import { getUser } from '../../services/auth'
