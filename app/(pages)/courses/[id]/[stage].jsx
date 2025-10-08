@@ -15,6 +15,8 @@ import TaskTab from "../../../../components/TaskTab";
 import { getLesson } from "../../../../hooks/getLesson";
 import { getCourse } from "../../../../hooks/getCourse";
 
+import { getMediaUrl } from "../../../../utils/media";
+
 export default function StageDetails() {
   const [activeTab, setActiveTab] = useState("description");
 
@@ -155,7 +157,7 @@ export default function StageDetails() {
               poster="https://placehold.co/400"
               style={{ objectFit: "cover" }}
             >
-              <source src={video_url} type="video/mp4" />
+              <source src={getMediaUrl(video_url)} type="video/mp4" />
             </video>}
           </View>
           <View style={[styles.stage__info_description_container]}>
