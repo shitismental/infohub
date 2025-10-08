@@ -6,83 +6,67 @@ import ShareIcon from "../assets/icons/share_icon.png"
 import RoundedCartIcon from "../assets/icons/rounded_cart_icon.png"
 
 import { Colors } from "../constants/Colors"
+import { getCourse } from '../hooks/getCourse'
 
-const CourseCard = ({ course }) => {
+const CourseCard = ({ courseId }) => {
 
-  const { heroTextTop, heroTextBottom, cardIcon, isBought, hasBottomBtn } = course.courseCardInfo
+  const { course, courseError } = getCourse(courseId);
+
+  const { id, title, preview_url } = course
 
   return (
     <>
       <Pressable
         onPress={() => {
-          router.replace(`/courses/${course.id}`);
+          router.replace(`/courses/${id}`);
         }}
         style={styles.card__container}>
         <View style={[styles.card__content_container]}>
           <View style={[styles.card__content_hero_container]}>
-            <Image style={[styles.card__hero_img]} source={cardIcon || "https://placehold.co/60x60"} resizeMode='contain' />
+            <Image style={[styles.card__hero_img]} source={preview_url || "https://placehold.co/60x60"} resizeMode='contain' />
             <View style={[styles.card__content_hero_text_container]}>
               <Text style={[styles.card__content_hero_text]}>
-                {heroTextTop}
-              </Text>
-              <Text style={[styles.card__content_hero_text]}>
-                {heroTextBottom}
+                {title}
               </Text>
             </View>
           </View>
         </View>
         <View style={[
           styles.card__top_info_container,
-          isBought ? { backgroundColor: "#2B6BF1" } : { backgroundColor: "#002D61" }
+          { backgroundColor: "#002D61" }
         ]}>
-          <Text style={[styles.card__top_info_text]}>{isBought ? "Відкрито" : "Заблоковано"}</Text>
+          <Text style={[styles.card__top_info_text]}>{"Заблоковано"}</Text>
         </View>
         <View style={[styles.big__circle]}></View>
         <View style={[styles.small__circle]}></View>
       </Pressable>
-      {hasBottomBtn &&
-        <View style={[styles.paddingWrapper]}>
+      <View style={[styles.paddingWrapper]}>
+        <Pressable
+          onPress={() => {
+            router.replace(`/courses/${id}`)
+          }}
+          style={({ pressed }) => [
+            styles.card__bottom_btn_container,
+            pressed && { opacity: 0.7 }
+          ]}>
+          <Text style={[styles.card__bottom_btn_text]}>{"Купити зараз"}</Text>
           <Pressable
             onPress={() => {
-              if (!isBought) {
-                router.replace(`/courses/${course.id}`);
-              } else {
-                router.push({
-                  pathname: "/chatbot",
-                  params: { action: "buy", courseId: course.id }
-                });
-              }
+              router.replace(`/courses/${id}`)
             }}
             style={({ pressed }) => [
-              styles.card__bottom_btn_container,
               pressed && { opacity: 0.7 }
             ]}>
-            <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Купити зараз"}</Text>
-            <Pressable
-              onPress={() => {
-                if (!isBought) {
-                  router.replace(`/courses/${course.id}`);
-                } else {
-                  router.push({
-                    pathname: "/chatbot",
-                    params: { action: "buy", courseId: course.id }
-                  });
-                }
-              }}
-              style={({ pressed }) => [
-                pressed && { opacity: 0.7 }
-              ]}>
-              <Image
-                tintColor={"#000"}
-                style={[styles.card__bottom_btn_icon]}
-                source={isBought ? ShareIcon : RoundedCartIcon}
-                resizeMode='contain'
-              />
-            </Pressable>
-
+            <Image
+              tintColor={"#000"}
+              style={[styles.card__bottom_btn_icon]}
+              source={RoundedCartIcon}
+              resizeMode='contain'
+            />
           </Pressable>
-        </View>
-      }
+
+        </Pressable>
+      </View>
     </>
   )
 }

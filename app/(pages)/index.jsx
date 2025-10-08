@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View, Image, Animated, ScrollView, Linking } from 'react-native'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 import CourseCard from '../../components/CourseCard'
 
@@ -9,8 +9,10 @@ import StartEarningImg from "../../assets/imgs/start_earning_img.png"
 
 import { Colors } from "../../constants/Colors"
 
-import { coursesData } from '../../constants/coursesData'
 import { router } from 'expo-router'
+import { getCourses } from '../../hooks/getCourses'
+
+import { getUser } from '../../services/auth'
 
 const CARD_WIDTH = 305;
 const CARD_SPACING = 16;
@@ -21,6 +23,33 @@ const Home = () => {
 
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me/liora_innovation`);
+  }
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me);
+      } catch (err) {
+        console.log("Failed to fetch user:", err);
+      }
+    };
+
+    fetchUser();
+  }, [])
+
+  const { courses, error } = getCourses();
+
+  const username = () => {
+    if (user?.first_name && user?.last_name) {
+      return `${user.first_name} ${user.last_name}`
+    } else if (user?.username && (!user?.first_name && !user?.last_name)) {
+      return (user.username)
+    } else {
+      return "PLACEHOLDER"
+    }
   }
 
   return (
@@ -36,7 +65,7 @@ const Home = () => {
         <View style={[styles.header__top_content]}>
           <View style={[styles.header__title_container]}>
             <Text style={[styles.header__title_text]}>Привіт! 👋</Text>
-            <Text style={[styles.header__name_text]}>Анастасія Лужко</Text>
+            <Text style={[styles.header__name_text]}>{username()}</Text>
           </View>
           <View style={[styles.header__btns_container]}>
             <Pressable
@@ -109,12 +138,12 @@ const Home = () => {
 
           {/* Carousel */}
           <Animated.FlatList
-            data={coursesData}
+            data={courses}
             style={{ paddingVertical: 15, }}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={{ width: CARD_WIDTH }}>
-                <CourseCard course={item} />
+                <CourseCard courseId={item.id} />
               </View>
             )}
             horizontal
@@ -135,7 +164,7 @@ const Home = () => {
 
           {/* Dots */}
           <View style={styles.dotsContainer}>
-            {coursesData.map((_, i) => {
+            {courses.map((_, i) => {
               const inputRange = [
                 (i - 1) * (CARD_WIDTH + CARD_SPACING),
                 i * (CARD_WIDTH + CARD_SPACING),

@@ -1,12 +1,14 @@
 {/* Imports */ }
 import { Pressable, StyleSheet, Text, View, Image, ScrollView, Modal, TextInput, Linking } from 'react-native'
 import { router } from 'expo-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 {/* Components */ }
 
 import CourseCard from '../../../components/CourseCard'
 
+import { getCourses } from '../../../hooks/getCourses'
+ 
 {/* Icons */ }
 
 import BellIcon from "../../../assets/icons/question_mark_icon.png"
@@ -15,7 +17,6 @@ import ArrowBackIcon from "../../../assets/icons/arrow_left_icon.png"
 import PlusIcom from "../../../assets/icons/plus_icon.png"
 import RobotIcom from "../../../assets/icons/robot_icon.png"
 
-import { coursesData } from "../../../constants/coursesData"
 
 {/* Constants */ }
 
@@ -25,25 +26,13 @@ import { Colors } from "../../../constants/Colors"
 
 const Courses = () => {
 
+  const {courses, coursesError} = getCourses();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
   const [isError, setIsError] = useState(false);
-
-  const hasBoughtCourses = coursesData.some(c => c.courseCardInfo?.isBought);
-
-  const sortedCourses = hasBoughtCourses
-    ? [...coursesData].sort((a, b) => {
-      const aBought = a.courseCardInfo?.isBought;
-      const bBought = b.courseCardInfo?.isBought;
-
-      if (aBought && !bBought) return -1;
-      if (!aBought && bBought) return 1;
-
-      return 0;
-    })
-    : coursesData;
 
   const courseCodes = [
     {
@@ -78,7 +67,7 @@ const Courses = () => {
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me/liora_innovation`);
   }
-
+  
   return (
     <View style={[styles.container]}>
 
@@ -150,9 +139,9 @@ const Courses = () => {
             />
           </Pressable>
         </View>
-        {sortedCourses.map((item, index) => (
+        {courses.map((course, index) => (
           <View key={index}>
-            <CourseCard course={item} />
+            <CourseCard courseId={course.id} />
           </View>
         ))}
       </ScrollView>

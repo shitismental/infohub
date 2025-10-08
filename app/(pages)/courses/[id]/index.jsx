@@ -13,15 +13,18 @@ import TestCardImg from "../../../../assets/imgs/card_img.png"
 import { Colors } from "../../../../constants/Colors";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
-import { coursesData } from "../../../../constants/coursesData";
+import { getCourse } from "../../../../hooks/getCourse";
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
   const courseId = Number(id);
 
-  const course = coursesData.find(c => c.id === courseId);
+  const { course, courseError } = getCourse(courseId);
+  const lessons = course?.lessons || []
 
-  const { name, description, price, stages } = course.mainCourseInfo || course
+  console.log(lessons)
+
+  const { title, description, price } = course
 
   const handleGoBack = () => {
     router.replace("/courses");
@@ -65,13 +68,13 @@ export default function CourseDetails() {
             />
           </Pressable>
           <Text style={[styles.header__content_title]}>Сторінка курсу</Text>
-          <Pressable 
-          onPress={redirectToTelegram}
-          style={({ pressed }) => [
-            { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)", borderWidth: 1 },
-            styles.header__bell_icon_btn,
-            pressed && { opacity: 0.7 }
-          ]}>
+          <Pressable
+            onPress={redirectToTelegram}
+            style={({ pressed }) => [
+              { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)", borderWidth: 1 },
+              styles.header__bell_icon_btn,
+              pressed && { opacity: 0.7 }
+            ]}>
             <Image
               style={[styles.header__bell_icon]}
               source={BellIcon}
@@ -88,7 +91,7 @@ export default function CourseDetails() {
             </View>
             <View style={[styles.course__info_card_text]}>
               <Text style={[styles.course__info_card_title]}>
-                {name}
+                {title}
               </Text>
               <Text style={[styles.course__info_card_price]}>
                 Ціна: {price}₴
@@ -133,12 +136,13 @@ export default function CourseDetails() {
           </Text>
         </View>
         <View style={{ gap: 10, }}>
-          {stages.map(item => {
+          {lessons.map(lesson => {
+            console.log(lesson.id)
             return (
               <CourseProgressCard
-                key={item.id}
-                stage={item}
-                onPress={() => router.push(`/courses/${courseId}/${encodeURIComponent(item.name)}`)}
+                key={lesson.id}
+                lessonId={lesson.id}
+                onPress={() => router.push(`/courses/${courseId}/${encodeURIComponent(lesson.id)}`)}
               />
             )
           })}

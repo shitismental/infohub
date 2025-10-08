@@ -44,6 +44,16 @@ const Profile = () => {
     fetchUser();
   }, [])
 
+  const username = () => {
+    if (user?.first_name && user?.last_name) {
+      return `${user.first_name} ${user.last_name}`
+    } else if (user?.username && (!user?.first_name && !user?.last_name)) {
+      return (user.username)
+    } else {
+      return "PLACEHOLDER"
+    }
+  }
+
   const handleGoBack = () => {
     router.replace("/chatbot")
   }
@@ -117,7 +127,7 @@ const Profile = () => {
             <View style={[styles.header__bottom_profile_icon_container]}>
               <Image style={[styles.header__bottom_profile_icon]} tintColor={Colors.white} source={ProfileIcon} resizeMode='contain' />
             </View>
-            <Text style={[styles.header__bottom_profile_name]}>{user?.username}</Text>
+            <Text style={[styles.header__bottom_profile_name]}>{username()}</Text>
           </View>
         </View>
       </View>

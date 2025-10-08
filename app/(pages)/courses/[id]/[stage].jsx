@@ -3,7 +3,6 @@ import { useLocalSearchParams, router } from "expo-router";
 import { useRef, useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { coursesData } from "../../../../constants/coursesData";
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 
 import BlurCircle from "../../../../assets/icons/BlurCircle.png";
@@ -13,32 +12,31 @@ import BellIcon from "../../../../assets/icons/question_mark_icon.png";
 import { Colors } from "../../../../constants/Colors";
 
 import TaskTab from "../../../../components/TaskTab";
+import { getLesson } from "../../../../hooks/getLesson";
+import { getCourse } from "../../../../hooks/getCourse";
 
 export default function StageDetails() {
   const [activeTab, setActiveTab] = useState("description");
 
   const { id, stage } = useLocalSearchParams();
   const courseId = Number(id);
+  const lessonId = Number(stage)
 
-  const course = coursesData.find(c => c.id === courseId);
+  const { course } = getCourse(courseId)
+  const { lesson } = getLesson(lessonId)
 
-  const { stages } = course.mainCourseInfo || course;
+  const lessons = course.lessons || [];
+  const homework = lesson.homework || [];
 
-  const currentStage = stages.find(
-    s => s.name === decodeURIComponent(stage)
-  );
+  console.log(lesson)
 
-  const { name, description, videoURL, videoPreviewImg } = currentStage || {};
+  const { title: lessonTitle, description: lessonDesc, video_url } = lesson
 
-  const currentIndex = stages.findIndex(
-    s => s.name === decodeURIComponent(stage)
-  );
+  const currentLessonIndex = lessons.findIndex(l => l.id === lesson.id);
 
-  const currentTask = currentStage?.tasks?.[0] ?? null
-  const taskDescription = currentTask?.description ?? null
-  const taskLink = currentTask?.taskLink ?? null
+  const remainingLessons = currentLessonIndex >= 0 ? lessons.slice(currentLessonIndex + 1) : [];
 
-  const remainingStages = stages.slice(currentIndex + 1);
+  console.log(remainingLessons)
 
   const handleGoBack = () => {
     router.push(`/courses/${courseId}`);
@@ -83,7 +81,7 @@ export default function StageDetails() {
           </Pressable>
           <Text style={[styles.header__content_title]}>Сторінка курсу</Text>
           <Pressable
-          onPress={redirectToTelegram}
+            onPress={redirectToTelegram}
             style={({ pressed }) => [
               {
                 backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -152,43 +150,46 @@ export default function StageDetails() {
           contentContainerStyle={{ paddingBottom: 110, gap: 20 }}
         >
           <View style={styles.stage__video_container}>
-            <video
+            {video_url && <video
               ref={videoRef}
               width="100%"
               height="100%"
               controls
               playsInline
-              poster={videoPreviewImg}
+              poster="https://placehold.co/400"
               style={{ objectFit: "cover" }}
             >
-              <source src={videoURL} type="video/mp4" />
-            </video>
+              <source src={video_url} type="video/mp4" />
+            </video>}
           </View>
           <View style={[styles.stage__info_description_container]}>
-            <Text style={[styles.stage__info_description_title]}>{name}</Text>
+            <Text style={[styles.stage__info_description_title]}>{lessonTitle}</Text>
             <Text style={[styles.stage__info_description_desc_text]}>
-              {description}
+              {lessonDesc}
             </Text>
           </View>
           <View style={{ gap: 10 }}>
-            {remainingStages.map(item => (
+            {remainingLessons.map(lesson => (
               <CourseProgressCard
-                key={item.id}
-                stage={item}
+                key={lesson.id}
+                lessonId={lesson.id}
                 onPress={() =>
-                  router.push(`/courses/${courseId}/${encodeURIComponent(item.name)}`)
+                  router.push(`/courses/${courseId}/${encodeURIComponent(lesson.id)}`)
                 }
               />
             ))}
           </View>
         </ScrollView>
         :
-        (activeTab === "tasks" && currentTask) ?
-        <TaskTab stageIndex={currentIndex} taskDescription={taskDescription} taskLink={taskLink} />
-        :
-        <View style={[styles.empty__tasks_container]}>
-          <Text style={[styles.empty__tasks_text]}>Завдань немає...</Text>
-        </View>
+        (activeTab === "tasks" && homework.length > 0) ? homework.map((h, index) => {
+          return (
+            <TaskTab key={h.id} homework={h} />
+          )
+        })
+          :
+          <View style={[styles.empty__tasks_container]}>
+            <Text style={[styles.empty__tasks_text]}>Завдань немає...</Text>
+          </View>
       }
     </View>
   );

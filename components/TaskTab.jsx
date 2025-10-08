@@ -1,15 +1,16 @@
 import { StyleSheet, Text, View, Pressable, Image, Linking, Modal } from 'react-native'
 import { useState } from 'react';
-import { router } from 'expo-router';
 
 import { Colors } from '../constants/Colors';
 
 import LinkIcon from "../assets/icons/link_icon.png"
 import RobotIcom from "../assets/icons/robot_icon.png"
 
-const TaskTab = ({ stageIndex, taskDescription, taskLink }) => {
+const TaskTab = ({ homework }) => {
 
-  const taskNumber = stageIndex + 1 || 0;
+  const { id, description, link } = homework;
+
+  console.log("id:", id)
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -32,10 +33,10 @@ const TaskTab = ({ stageIndex, taskDescription, taskLink }) => {
   };
 
   const handleTaskLinkRedirect = async () => {
-    const url = normalizeURL(taskLink);
+    const url = normalizeURL(link);
 
     if (!url) {
-      console.warn("Invalid link:", taskLink);
+      console.warn("Invalid link:", link);
       return;
     }
 
@@ -65,11 +66,11 @@ const TaskTab = ({ stageIndex, taskDescription, taskLink }) => {
                 Домашнє завдання
               </Text>
               <Text style={[styles.task__info_number]}>
-                №{taskNumber}
+                №{Number(id) + 1}
               </Text>
             </View>
             <Text style={[styles.task__info_card_desc_text]}>
-              {taskDescription}
+              {description}
             </Text>
           </View>
           <Pressable
@@ -91,7 +92,7 @@ const TaskTab = ({ stageIndex, taskDescription, taskLink }) => {
         </View>
         <View style={[styles.task__btns_container]}>
           <Pressable
-          onPress={() => setIsModalVisible(true)}
+            onPress={() => setIsModalVisible(true)}
             style={({ pressed }) => [
               styles.task__btn,
               styles.task__btn_completed,

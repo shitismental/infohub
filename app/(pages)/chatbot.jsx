@@ -15,10 +15,11 @@ import FileIcon from "../../assets/icons/file_icon.png"
 
 import RobotIcon from "../../assets/icons/robot_icon.png"
 
-import { coursesData } from '../../constants/coursesData';
 
 import { Colors } from "../../constants/Colors";
 import { useLocalSearchParams } from 'expo-router';
+import { getCourses } from '../../hooks/getCourses';
+import { getCourse } from '../../hooks/getCourse';
 
 const INITIAL_MESSAGES = [
   { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
@@ -32,6 +33,8 @@ const INITIAL_OPTIONS = [
 const ChatBot = () => {
 
   const telegramUsername = "yehor_rt"
+
+  const { courses } = getCourses();
 
   const { action, courseId } = useLocalSearchParams();
 
@@ -52,8 +55,9 @@ const ChatBot = () => {
 
   useEffect(() => {
     if (action === "buy" && courseId) {
-      const course = coursesData.find(c => String(c.id) === String(courseId));
-      const courseName = course?.mainCourseInfo?.name || course?.name || "курс";
+      const { course } = getCourse(courseId)
+
+      const courseName = course?.title || "курс";
 
       setMessages(prev => [
         ...prev,
@@ -83,14 +87,14 @@ const ChatBot = () => {
         { sender: "bot", text: "До якого курсу потрібен код?" }
       ]);
 
-      const courseOptions = coursesData.map(c => {
-        const { name } = c.mainCourseInfo || c;
+      const courseOptions = courses.map(c => {
+        const { title } = c
         return {
-          label: name,
+          label: title,
           action: "course",
-          courseId: c.id
-        };
-      });
+          courseId: c.id,
+        }
+      })
 
       const manualOption = {
         label: "Завершити сеанс",

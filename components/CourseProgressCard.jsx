@@ -1,46 +1,50 @@
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { Colors } from '../constants/Colors'
 
-import LockIcon from "../assets/icons/lock_icon.png"
-import CheckmarkIcon from "../assets/icons/checkmark_icon.png"
+import { getLesson } from '../hooks/getLesson'
 
-const CourseProgressCard = ({ stage, onPress }) => {
+const CourseProgressCard = ({ lessonId, onPress }) => {
+
+  const { lesson } = getLesson(lessonId);
+
+  const { title, description, position, is_free, duration_seconds } = lesson;
+
+  const lessonLengthInMinutes = Math.round(duration_seconds / 60);
+
   return (
-    <View 
-    style={[
-      styles.course__progress_card_wrapper,
-      !stage.isUnlocked && {opacity: 0.5}
-    ]}>
-      <Pressable
-      disabled={!stage.isUnlocked}
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.course__progress_card_container,
-        pressed && { opacity: 0.7 }
+    <View
+      style={[
+        styles.course__progress_card_wrapper,
       ]}>
+      <Pressable
+        onPress={onPress}
+        style={({ pressed }) => [
+          styles.course__progress_card_container,
+          pressed && { opacity: 0.7 }
+        ]}>
         <View style={[styles.course__progress_card_stage_container]}>
-          <Text style={[styles.course__progress_card_stage_text]}>{stage.id}</Text>
+          <Text style={[styles.course__progress_card_stage_text]}>{position}</Text>
         </View>
         <View style={[styles.course__progress_card_info_container]}>
-          <Text style={[styles.course__progress_card_stage_name]}>{stage.name}</Text>
-          <Text style={[styles.course__progress_card_stage_length]}>{stage.length} хвилин</Text>
+          <Text style={[styles.course__progress_card_stage_name]}>{title}</Text>
+          <Text style={[styles.course__progress_card_stage_length]}>{lessonLengthInMinutes} хвилин</Text>
         </View>
-        {(stage.isFree && !stage.isCompleted) && <View style={[styles.course__progress_card_isFree]}>
+        {is_free && <View style={[styles.course__progress_card_isFree]}>
           <Text style={[styles.course__progress_card_isFree_text]}>
             Безкоштовно
           </Text>
         </View>}
       </Pressable>
-      {!stage.isUnlocked 
-      && 
-      <View style={[styles.lock__icon_container]}>
-        <Image style={[styles.lock__icon]} source={LockIcon} resizeMode='contain' />
-      </View>
-      ||
-      stage.isCompleted && <View style={[styles.lock__icon_container]}>
-        <Image style={[styles.lock__icon]} source={CheckmarkIcon} resizeMode='contain' />
-      </View>
-      }
+      {/* {!stage.isUnlocked
+        &&
+        <View style={[styles.lock__icon_container]}>
+          <Image style={[styles.lock__icon]} source={LockIcon} resizeMode='contain' />
+        </View>
+        ||
+        stage.isCompleted && <View style={[styles.lock__icon_container]}>
+          <Image style={[styles.lock__icon]} source={CheckmarkIcon} resizeMode='contain' />
+        </View>
+      } */}
     </View>
   )
 }
