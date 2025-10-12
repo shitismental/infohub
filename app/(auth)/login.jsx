@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratMedium",
     color: "#0A0A0A",
     outlineStyle: "none",
+    fontSize: 16,
   },
   btns__container: {
     flexDirection: "row",

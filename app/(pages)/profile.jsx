@@ -228,7 +228,7 @@ const Profile = () => {
               </Pressable>
               {openCertificatsAccordion && <View style={[styles.accordion__info_container]}>
                 <View style={[styles.accordion__info_field_container]}>
-                  <Text style={[styles.accordion__certificats_field_text]}>А хуй знает...</Text>
+                  <Text style={[styles.accordion__certificats_field_text]}>Поділитися курсом легко: скористайтеся ЧатБОТОМ або натисніть «Поширити доступ» на сторінці «Курси».</Text>
                 </View>
               </View>}
             </View>
