@@ -1,4 +1,4 @@
-import { MEDIA_URL } from "@env";
+const MEDIA_URL = process.env.MEDIA_URL
 
 export const getMediaUrl = (path) => {
   if (!path) return "";
