@@ -163,7 +163,7 @@ const Home = () => {
 
           {/* Dots */}
           <View style={styles.dotsContainer}>
-            {courses.map((_, i) => {
+            {courses?.map((_, i) => {
               const inputRange = [
                 (i - 1) * (CARD_WIDTH + CARD_SPACING),
                 i * (CARD_WIDTH + CARD_SPACING),
