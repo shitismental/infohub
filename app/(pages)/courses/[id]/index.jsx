@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#094174",
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    height: 156,
+    height: 130,
     paddingVertical: 20,
   },
   topBlurCircle: {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   course__info_container: {
-    marginTop: -65,
+    marginTop: -40,
   },
   course__info_card_container: {
     flexDirection: "row",
