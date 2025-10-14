@@ -94,13 +94,9 @@ const Courses = () => {
               Наші курси
             </Text>
             <Pressable
-              onPress={redirectToTelegram}
-              style={({ pressed }) => [
-                { backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.2)" },
-                pressed && { opacity: 0.7 }
-              ]}>
+              onPress={redirectToTelegram}>
               <Image
-                style={[styles.header__btn_icon]}
+                style={[styles.header__btn_icon_bell]}
                 source={BellIcon}
                 resizeMode='contain'
               />
@@ -200,7 +196,8 @@ const styles = StyleSheet.create({
   },
   header__content: {
     gap: 30,
-    paddingVertical: 20,
+    paddingVertical: 14,
+    justifyContent: "center"
   },
   header__top_content: {
     flexDirection: "row",
@@ -257,6 +254,10 @@ const styles = StyleSheet.create({
   header__btn_icon: {
     width: 25,
     height: 25,
+  },
+  header__btn_icon_bell: {
+    width: 30,
+    height: 30,
   },
   courses__container: {
     paddingTop: 20,

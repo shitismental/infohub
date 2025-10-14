@@ -186,7 +186,12 @@ export default function StageDetails() {
         })
           :
           <View style={[styles.empty__tasks_container]}>
-            <Text style={[styles.empty__tasks_text]}>Завдань немає...</Text>
+            <Text style={[styles.empty__tasks_text]}>{"Завдання\nнемає"}</Text>
+            <Pressable style={[styles.empty__tasks_btn]}>
+              <Text style={[styles.empty__tasks_btn_text]}>
+                До уроку
+              </Text>
+            </Pressable>
           </View>
       }
     </View>
@@ -375,5 +380,6 @@ const styles = StyleSheet.create({
     backgroundClip: "text",
     WebkitBackgroundClip: "text",
     color: "transparent",
-  }
+    textAlign: "center",
+  },
 });

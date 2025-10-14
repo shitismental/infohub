@@ -410,8 +410,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#094174",
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    height: 96,
-    paddingVertical: 20,
+    paddingVertical: 14,
+    justifyContent: "center"
   },
   topBlurCircle: {
     pointerEvents: "none",
@@ -419,6 +419,7 @@ const styles = StyleSheet.create({
     height: 500,
     position: "absolute",
     left: "50%",
+    top: 0,
     transform: [{ translateX: -250 }, { translateY: -300 }],
     opacity: 0.1,
   },

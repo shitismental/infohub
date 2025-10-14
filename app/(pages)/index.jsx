@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   header__top_container: {
-    height: 186,
+    height: 166,
     backgroundColor: "#094174",
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,

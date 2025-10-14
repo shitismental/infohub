@@ -88,7 +88,7 @@ export default function CourseDetails() {
               <Image style={[styles.course__info_card_img]} source={TestCardImg} resizeMode="contain" />
             </View>
             <View style={[styles.course__info_card_text]}>
-              <Text style={[styles.course__info_card_title]}>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.course__info_card_title]}>
                 {title}
               </Text>
               <Text style={[styles.course__info_card_price]}>
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   },
   course__info_card: {
     backgroundColor: Colors.white,
-    padding: 15,
+    padding: 8,
     borderRadius: 10,
     boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
     flexDirection: "row",
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
   course__info_card_text: {
     justifyContent: "center",
     gap: 2,
+    flex: 1,
   },
   course__info_card_title: {
     fontFamily: "MontserratSemiBold",
