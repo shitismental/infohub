@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     borderColor: "#1D5588",
     paddingVertical: 15,
     paddingHorizontal: 14,
-    backgroundColor: Colors.white,
+    backgroundColor: "#FBFBFB",
     borderRadius: 41,
     color: "#0A0A0A",
     fontFamily: "MontserratMedium",
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   courses__container: {
     paddingTop: 20,
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: "#FBFBFB",
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
   },

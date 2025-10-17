@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, Linking } from 'react-native'
 import { useRouter } from "expo-router";
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
@@ -19,6 +19,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const router = useRouter()
+
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me//Yehor_liora`);
+  }
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -87,7 +91,7 @@ const Login = () => {
               <Pressable style={({ pressed }) => [styles.login__btn, pressed && { opacity: 0.7 }]} onPress={handleLogin}>
                 <Text style={styles.login__btn_text}>Увійти</Text>
               </Pressable>
-              <Pressable style={({ pressed }) => [styles.forgot__btn, pressed && { opacity: 0.7 }]}>
+              <Pressable onPress={redirectToTelegram} style={({ pressed }) => [styles.forgot__btn, pressed && { opacity: 0.7 }]}>
                 <Text style={styles.forgot__btn_text}>Забули пароль?</Text>
               </Pressable>
             </View>
@@ -100,7 +104,7 @@ const Login = () => {
         </View>
       </View>
 
-      <View style={styles.other__methods_container}>
+      {/* <View style={styles.other__methods_container}>
         <View style={styles.other__methods_wrapper}>
           <View style={styles.divider__with_text}>
             <View style={styles.divider__line} />
@@ -116,7 +120,7 @@ const Login = () => {
             </Pressable>
           </View>
         </View>
-      </View>
+      </View> */}
     </View>
   )
 }

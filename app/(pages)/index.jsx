@@ -7,11 +7,16 @@ import BellIcon from "../../assets/icons/question_mark_icon.png"
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 import StartEarningImg from "../../assets/imgs/start_earning_img.png"
 
+import TrophyIcon from "../../assets/icons/trophy_icon.png"
+
 import { Colors } from "../../constants/Colors"
 
 import { getCourses } from '../../hooks/getCourses'
 
 import { getUser } from '../../services/auth'
+
+import { TopEarners } from '../../constants/TopEarners'
+import TopEarnCard from '../../components/TopEarnCard'
 
 const CARD_WIDTH = 305;
 const CARD_SPACING = 16;
@@ -52,7 +57,7 @@ const Home = () => {
   }
 
   return (
-    <View style={[styles.container]}>
+    <ScrollView style={[styles.container, {paddingBottom: 110}]}>
       {/* Header */}
       <View style={[styles.header__top_container, styles.paddingWrapper]}>
         <Image
@@ -126,7 +131,7 @@ const Home = () => {
       </View>
 
       {/* Courses */}
-      <ScrollView style={[styles.paddingWrapper]}>
+      <View style={[styles.paddingWrapper]}>
         <View style={[styles.our__courses_container]}>
           <View style={[styles.our__courses_title_container]}>
             <Text style={[styles.our__courses_title_text]}>Наші курси</Text>
@@ -197,8 +202,29 @@ const Home = () => {
             })}
           </View>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+
+      <View style={[styles.paddingWrapper]}>
+        <View style={[styles.top__earn_container]}>
+          <View style={[styles.top__earn_top_info]}>
+            <View style={[styles.top__earn_top_info_left]}>
+              <Image resizeMode='contain' source={TrophyIcon} style={[styles.top__earn_top_info_img]} />
+              <Text style={[styles.top__earn_top_info_text]}>ТОП 3 заробітку</Text>
+            </View>
+            <Text style={[styles.top__earn_top_info_month]}>
+              Жовтень
+            </Text>
+          </View>
+          <View style={[styles.top__earners_display]}>
+            {TopEarners.map((earner, _) => {
+              return (
+                <TopEarnCard key={earner.id} id={earner.id} img={earner.img} name={earner.name} cashAmnt={earner.cashAmnt} />
+              )
+            })}
+          </View>
+        </View>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -208,7 +234,7 @@ const styles = StyleSheet.create({
   container: {
     overflow: "hidden",
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FBFBFB",
   },
   paddingWrapper: {
     paddingHorizontal: 15,
@@ -350,7 +376,7 @@ const styles = StyleSheet.create({
   },
   our__courses_container: {
     marginTop: 30,
-    marginBottom: 110
+    marginBottom: 24,
   },
   our__courses_title_container: {
     flexDirection: "row",
@@ -374,5 +400,49 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 6,
+  },
+  top__earn_container: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
+  },
+  top__earn_top_info: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+  },
+  top__earn_top_info_img: {
+    width: 20,
+    height: 20,
+  },
+  top__earn_top_info_left: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 14,
+    alignItems: "center",
+  },
+  top__earn_top_info_text: {
+    fontSize: 16,
+    fontFamily: "MontserratSemiBold",
+    color: "#0A0A0A",
+  },
+  top__earn_top_info_month: {
+    fontSize: 11,
+    fontFamily: "MontserratMedium",
+    color: "#000000"
+  },
+  top__earners_display: {
+    borderRadius: 10,
+    boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
+    padding: 16,
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
+    backgroundColor: "#FBFBFB",
   }
 })

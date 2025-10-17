@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     boxShadow: "0 3px 5px rgba(0,0,0,0.05)",
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
+    backgroundColor: Colors.white
   },
   card__bottom_btn_text: {
     color: Colors.textPrimary,

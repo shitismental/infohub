@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   chat__wrapper: {
-    backgroundColor: Colors.white,
+    backgroundColor: "#FBFBFB",
     flex: 1,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,

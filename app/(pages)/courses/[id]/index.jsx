@@ -150,7 +150,7 @@ export default function CourseDetails() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: "#FBFBFB",
   },
   paddingWrapper: {
     paddingHorizontal: 15,
