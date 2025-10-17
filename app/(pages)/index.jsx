@@ -443,6 +443,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     gap: 8,
-    backgroundColor: "#FBFBFB",
+    backgroundColor: Colors.white,
   }
 })
