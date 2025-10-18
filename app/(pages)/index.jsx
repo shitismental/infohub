@@ -49,10 +49,10 @@ const Home = () => {
   const username = () => {
     if (user?.first_name && user?.last_name) {
       return `${user.first_name} ${user.last_name}`
-    } else if (user?.username && (!user?.first_name && !user?.last_name)) {
-      return (user.username)
+    } else if (user?.username) {
+      return user.username
     } else {
-      return "PLACEHOLDER"
+      return "???"
     }
   }
 

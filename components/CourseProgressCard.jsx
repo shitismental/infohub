@@ -7,9 +7,11 @@ const CourseProgressCard = ({ lessonId, onPress }) => {
 
   const { lesson } = getLesson(lessonId);
 
-  const { title, description, position, is_free, duration_seconds } = lesson;
+  const { title, position, is_free, duration_seconds } = lesson;
 
-  const lessonLengthInMinutes = Math.round(duration_seconds / 60);
+  console.log(lesson)
+
+  const lessonLengthInMinutes = Math.round(duration_seconds / 60) || 0;
 
   return (
     <View
@@ -27,7 +29,7 @@ const CourseProgressCard = ({ lessonId, onPress }) => {
         </View>
         <View style={[styles.course__progress_card_info_container]}>
           <Text style={[styles.course__progress_card_stage_name]}>{title}</Text>
-          <Text style={[styles.course__progress_card_stage_length]}>{lessonLengthInMinutes} хвилин</Text>
+          <Text style={[styles.course__progress_card_stage_length]}>~{lessonLengthInMinutes} хвилин</Text>
         </View>
         {is_free && <View style={[styles.course__progress_card_isFree]}>
           <Text style={[styles.course__progress_card_isFree_text]}>

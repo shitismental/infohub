@@ -1,7 +1,7 @@
 import { Stack, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
-import { StatusBar, View } from "react-native";
+import { StatusBar } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -34,9 +34,7 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  if (!fontsLoaded) return null;
 
   return (
     <>

@@ -24,7 +24,7 @@ const Register = () => {
 
   const handleRegister = async () => {
     if (!username || !email || !password) {
-      Alert.alert("Помилка", "Заповніть усі обовʼязкові поля");
+      alert("Заповніть усі обовʼязкові поля");
       return;
     }
 
@@ -46,11 +46,11 @@ const Register = () => {
       await AsyncStorage.setItem("access_token", access);
       await AsyncStorage.setItem("refresh_token", refresh);
 
-      Alert.alert("Успіх!", "Акаунт створено і ви увійшли 🎉");
+      alert("Акаунт створено і ви увійшли 🎉");
       router.replace("(pages)/");
     } catch (err) {
       console.error(err.response?.data || err.message);
-      Alert.alert("Помилка", err.response?.data?.detail || "Щось пішло не так");
+      alert("Щось пішло не так");
     }
   }
 

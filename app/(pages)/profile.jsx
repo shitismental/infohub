@@ -50,7 +50,7 @@ const Profile = () => {
     } else if (user?.username && (!user?.first_name && !user?.last_name)) {
       return (user.username)
     } else {
-      return "PLACEHOLDER"
+      return "???"
     }
   }
 
@@ -235,7 +235,7 @@ const Profile = () => {
             <Pressable
               onPress={redirectToTelegram}
               style={({ pressed }) => [
-                styles.profile__main_content_help_button, { borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
+                styles.profile__main_content_help_button, {  borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
                 pressed && { opacity: 0.7 }
               ]}>
               <Image style={[styles.profile__main_content_help_button_icon]} source={PlaneIcon} resizeMode='contain' tintColor={"#094174"} />
@@ -246,7 +246,7 @@ const Profile = () => {
             <Pressable
               onPress={() => handleLogout()}
               style={({ pressed }) => [
-                styles.profile__main_content_help_button, { borderBottomLeftRadius: 10, borderBottomRightRadius: 10 },
+                styles.profile__main_content_help_button, { borderRadius: 10 },
                 pressed && { opacity: 0.7 }
               ]}>
               <Image style={[styles.profile__main_content_help_button_icon]} source={LogoutIcon} resizeMode='contain' tintColor={"#B3B3B3"} />
@@ -443,9 +443,7 @@ const styles = StyleSheet.create({
     color: "#B3B3B3",
   },
   profile__main_content_help_buttons_container: {
-    borderRadius: 10,
     overflow: "hidden",
-    backgroundColor: Colors.white,
     boxShadow: "0 3px 5px rgba(0,0,0,0.05)",
   },
   profile__main_content_help_button: {
@@ -453,6 +451,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: Colors.white,
     gap: 10,
   },
   profile__main_content_help_button_text: {

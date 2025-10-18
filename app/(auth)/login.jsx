@@ -26,7 +26,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      Alert.alert("Помилка", "Будь ласка, введіть ел. пошту та пароль");
+      alert("Будь ласка, введіть ел. пошту та пароль");
       return;
     }
 
@@ -39,11 +39,13 @@ const Login = () => {
       const { access, refresh } = res.data;
       await AsyncStorage.setItem("access_token", access);
       await AsyncStorage.setItem("refresh_token", refresh);
+      console.log("Refresh token: ", refresh)
+      console.log("Access token: ", access)
 
       router.replace("(pages)/");
     } catch (err) {
       console.error(err.response?.data || err.message);
-      Alert.alert("Помилка", "Невірний логін або пароль");
+      alert("Невірний логін або пароль");
     } finally {
     }
   }

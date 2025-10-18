@@ -32,7 +32,7 @@ const INITIAL_OPTIONS = [
 
 const ChatBot = () => {
 
-  const telegramUsername = "yehor_rt"
+  const telegramUsername = "Yehor_liora"
 
   const { courses } = getCourses();
 
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
   },
   toast: {
     position: "absolute",
-    bottom: 210,
+    top: 30,
     alignSelf: "center",
     backgroundColor: "rgba(0,0,0,0.7)",
     paddingVertical: 8,

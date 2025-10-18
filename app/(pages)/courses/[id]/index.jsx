@@ -22,7 +22,9 @@ export default function CourseDetails() {
   const { course, courseError } = getCourse(courseId);
   const lessons = course?.lessons || []
 
-  const { title, description, price } = course
+  const { title, description, price, discount_price } = course
+
+  console.log(course)
 
   const handleGoBack = () => {
     router.replace("/courses");
@@ -43,6 +45,8 @@ export default function CourseDetails() {
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
+
+  const actual_price = price - discount_price || price || 0
 
   return (
     <View style={[styles.container]}>
@@ -92,7 +96,7 @@ export default function CourseDetails() {
                 {title}
               </Text>
               <Text style={[styles.course__info_card_price]}>
-                Ціна: {price}₴
+                Ціна: {actual_price}₴
               </Text>
             </View>
           </View>
@@ -127,7 +131,7 @@ export default function CourseDetails() {
         <View style={[styles.course__info_description_container]}>
           <Text style={[styles.course__info_description_title]}>Опис курсу</Text>
           <Text style={[styles.course__info_description_desc_text]}>
-            {description}
+            {description || "В процесі..."}
           </Text>
         </View>
         <View style={{ gap: 10, }}>

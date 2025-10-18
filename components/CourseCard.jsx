@@ -13,7 +13,7 @@ const CourseCard = ({ courseId }) => {
 
   const { course, courseError } = getCourse(courseId);
 
-  const { id, title, preview_url } = course
+  const { id, title, subtitle, preview_url } = course
 
   return (
     <>
@@ -24,12 +24,15 @@ const CourseCard = ({ courseId }) => {
         style={styles.card__container}>
         <View style={[styles.card__content_container]}>
           <View style={[styles.card__content_hero_container]}>
-            <Image 
-            style={[styles.card__hero_img]} 
-            source={{uri: preview_url ? getMediaUrl(preview_url) : "https://placehold.co/60x60"}} resizeMode='contain' />
+            <Image
+              style={[styles.card__hero_img]}
+              source={{ uri: preview_url ? getMediaUrl(preview_url) : "https://placehold.co/60x60" }} resizeMode='contain' />
             <View style={[styles.card__content_hero_text_container]}>
-              <Text style={[styles.card__content_hero_text]}>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.card__content_hero_text]}>
                 {title}
+              </Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.card__content_hero_text]}>
+                {subtitle}
               </Text>
             </View>
           </View>
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
   },
   card__content_hero_text_container: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   card__content_hero_text: {
     fontFamily: "MontserratSemiBold",
