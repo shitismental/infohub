@@ -2,27 +2,33 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { Colors } from '../constants/Colors'
 
 import { getLesson } from '../hooks/getLesson'
+import { useUserOrders } from '../hooks/getOrders'
 
-const CourseProgressCard = ({ lessonId, onPress }) => {
+import LockIcon from "../assets/icons/lock_icon.png"
+
+const CourseProgressCard = ({ lessonId, courseId, onPress }) => {
 
   const { lesson } = getLesson(lessonId);
 
   const { title, position, is_free, duration_seconds } = lesson;
 
-  console.log(lesson)
-
   const lessonLengthInMinutes = Math.round(duration_seconds / 60) || 0;
+
+  const { boughtCourses } = useUserOrders()
+  const isUnlocked = is_free || boughtCourses.includes(courseId)
 
   return (
     <View
       style={[
         styles.course__progress_card_wrapper,
+        !isUnlocked && {opacity: 0.4}
       ]}>
       <Pressable
         onPress={onPress}
+        disabled={!isUnlocked}
         style={({ pressed }) => [
           styles.course__progress_card_container,
-          pressed && { opacity: 0.7 }
+          pressed && isUnlocked && { opacity: 0.7 }
         ]}>
         <View style={[styles.course__progress_card_stage_container]}>
           <Text style={[styles.course__progress_card_stage_text]}>{position}</Text>
@@ -37,16 +43,16 @@ const CourseProgressCard = ({ lessonId, onPress }) => {
           </Text>
         </View>}
       </Pressable>
-      {/* {!stage.isUnlocked
+      {!isUnlocked
         &&
         <View style={[styles.lock__icon_container]}>
           <Image style={[styles.lock__icon]} source={LockIcon} resizeMode='contain' />
         </View>
-        ||
-        stage.isCompleted && <View style={[styles.lock__icon_container]}>
-          <Image style={[styles.lock__icon]} source={CheckmarkIcon} resizeMode='contain' />
-        </View>
-      } */}
+        // ||
+        // stage.isCompleted && <View style={[styles.lock__icon_container]}>
+        //   <Image style={[styles.lock__icon]} source={CheckmarkIcon} resizeMode='contain' />
+        // </View>
+      }
     </View>
   )
 }

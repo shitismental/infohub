@@ -7,13 +7,13 @@ import BlurCircle from "../../../../assets/icons/BlurCircle.png"
 import ArrowLeftIcon from "../../../../assets/icons/arrow_left_icon.png"
 import BellIcon from "../../../../assets/icons/question_mark_icon.png"
 import CartIcon from "../../../../assets/icons/rounded_cart_icon.png"
-
-import TestCardImg from "../../../../assets/imgs/card_img.png"
+import HatIcon from "../../../../assets/icons/hat_icon.png"
 
 import { Colors } from "../../../../constants/Colors";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 import { getCourse } from "../../../../hooks/getCourse";
+import { useUserOrders } from "../../../../hooks/getOrders";
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
@@ -22,9 +22,10 @@ export default function CourseDetails() {
   const { course, courseError } = getCourse(courseId);
   const lessons = course?.lessons || []
 
-  const { title, description, price, discount_price } = course
+  const { title, description, price, discount_price, preview_url } = course
 
-  console.log(course)
+  const { boughtCourses } = useUserOrders()
+  const isUnlocked = boughtCourses.includes(course.id)
 
   const handleGoBack = () => {
     router.replace("/courses");
@@ -89,23 +90,24 @@ export default function CourseDetails() {
         <View style={[styles.course__info_card_container]}>
           <View style={[styles.course__info_card]}>
             <View style={[styles.course__info_card_img_container]}>
-              <Image style={[styles.course__info_card_img]} source={TestCardImg} resizeMode="contain" />
+              <Image style={[styles.course__info_card_img]} source={preview_url} resizeMode="contain" />
             </View>
             <View style={[styles.course__info_card_text]}>
               <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.course__info_card_title]}>
                 {title}
               </Text>
               <Text style={[styles.course__info_card_price]}>
-                Ціна: {actual_price}₴
+                {isUnlocked ? "Придбано" : `Ціна: ${actual_price}₴`}
               </Text>
             </View>
           </View>
           <Pressable
+            disabled={isUnlocked}
             style={({ pressed }) => [
               styles.course__buy_btn,
               pressed && { opacity: 0.7 }
             ]}>
-            <Image style={[styles.course__cart_icon]} source={CartIcon} resizeMode="contain" />
+            <Image style={[styles.course__cart_icon]} source={isUnlocked ? HatIcon : CartIcon} resizeMode="contain" />
           </Pressable>
         </View>
       </View>
@@ -140,6 +142,7 @@ export default function CourseDetails() {
               <CourseProgressCard
                 key={lesson.id}
                 lessonId={lesson.id}
+                courseId={course.id}
                 onPress={() => router.push(`/courses/${courseId}/${encodeURIComponent(lesson.id)}`)}
               />
             )
@@ -218,13 +221,12 @@ const styles = StyleSheet.create({
   course__info_card_img_container: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#094174",
     borderRadius: 10,
-    padding: 5,
+    overflow: "hidden"
   },
   course__info_card_img: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
   },
   course__info_card_text: {
     justifyContent: "center",

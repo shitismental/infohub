@@ -23,8 +23,13 @@ const Register = () => {
   const [telegramUser, setTelegramUser] = useState("");
 
   const handleRegister = async () => {
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !telegramUser || !repeatedPassword) {
       alert("Заповніть усі обовʼязкові поля");
+      return;
+    }
+
+    if (password !== repeatedPassword) {
+      alert("Введені паролі не співпадають")
       return;
     }
 
@@ -36,7 +41,6 @@ const Register = () => {
         password,
       });
 
-      // 2. Login to get tokens
       const loginRes = await API.post("/users/login/", {
         username,
         password,

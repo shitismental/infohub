@@ -46,7 +46,6 @@ const TaskTab = ({ homework }) => {
         console.warn("Cannot open URL:", url);
       }
     } catch (err) {
-      console.error("Error opening URL:", err);
     }
   };
 

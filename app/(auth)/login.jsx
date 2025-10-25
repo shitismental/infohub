@@ -39,8 +39,6 @@ const Login = () => {
       const { access, refresh } = res.data;
       await AsyncStorage.setItem("access_token", access);
       await AsyncStorage.setItem("refresh_token", refresh);
-      console.log("Refresh token: ", refresh)
-      console.log("Access token: ", access)
 
       router.replace("(pages)/");
     } catch (err) {

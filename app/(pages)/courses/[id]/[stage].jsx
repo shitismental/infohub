@@ -171,6 +171,7 @@ export default function StageDetails() {
               <CourseProgressCard
                 key={lesson.id}
                 lessonId={lesson.id}
+                courseId={course.id}
                 onPress={() =>
                   router.push(`/courses/${courseId}/${encodeURIComponent(lesson.id)}`)
                 }
@@ -187,7 +188,9 @@ export default function StageDetails() {
           :
           <View style={[styles.empty__tasks_container]}>
             <Text style={[styles.empty__tasks_text]}>{"Завдання\nнемає"}</Text>
-            <Pressable style={[styles.empty__tasks_btn]}>
+            <Pressable style={[styles.empty__tasks_btn]} onPress={() => {
+              setActiveTab("description")
+            }}>
               <Text style={[styles.empty__tasks_btn_text]}>
                 До уроку
               </Text>
@@ -372,6 +375,7 @@ const styles = StyleSheet.create({
     paddingBottom: 110,
     alignItems: "center",
     justifyContent: "center",
+    gap: 10,
   },
   empty__tasks_text: {
     fontFamily: "MontserratAlternatesBold",
@@ -382,4 +386,18 @@ const styles = StyleSheet.create({
     color: "transparent",
     textAlign: "center",
   },
+  empty__tasks_btn: {
+    backgroundColor: "#001E3A",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 11,
+    paddingHorizontal: 15,
+    borderRadius: 31,
+  },
+  empty__tasks_btn_text: {
+    color: Colors.white,
+    fontFamily: "MontserratMedium",
+    fontSize: 15,
+  }
 });

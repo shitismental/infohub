@@ -8,7 +8,8 @@ import { useState, useEffect } from 'react'
 import CourseCard from '../../../components/CourseCard'
 
 import { getCourses } from '../../../hooks/getCourses'
- 
+import { useCheckCode } from '../../../hooks/useCheckCode'
+
 {/* Icons */ }
 
 import BellIcon from "../../../assets/icons/question_mark_icon.png"
@@ -16,7 +17,6 @@ import BlurCircle from "../../../assets/icons/BlurCircle.png"
 import ArrowBackIcon from "../../../assets/icons/arrow_left_icon.png"
 import PlusIcom from "../../../assets/icons/plus_icon.png"
 import RobotIcom from "../../../assets/icons/robot_icon.png"
-
 
 {/* Constants */ }
 
@@ -26,7 +26,8 @@ import { Colors } from "../../../constants/Colors"
 
 const Courses = () => {
 
-  const {courses, coursesError} = getCourses();
+  const { courses } = getCourses();
+  const { checkCode } = useCheckCode();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
@@ -34,40 +35,33 @@ const Courses = () => {
   const [modalDescription, setModalDescription] = useState("");
   const [isError, setIsError] = useState(false);
 
-  const courseCodes = [
-    {
-      name: "Test Code"
-    },
-    {
-      name: "Fake Code"
-    },
-  ]
-
   const handleGoBack = () => {
     router.replace("/");
   };
 
-  const handleCheckCode = () => {
-    const validCodes = courseCodes.map(c => c.name);
+  const handleCheckCode = async () => {
+    if (!enteredCode.trim()) return;
 
-    if (validCodes.includes(enteredCode)) {
-      setModalTitle("Код активован");
-      setModalDescription("Вам відкрит доступ до всіх курсів\nКуратор з вами 24/7")
-      setIsError(false)
-    } else {
+    try {
+      await checkCode(enteredCode.trim());
+
+      setModalTitle("Код активовано");
+      setModalDescription("Вам відкрито доступ до курсу\nКуратор з вами 24/7");
+      setIsError(false);
+    } catch (error) {
       setModalTitle("Невірний код");
-      setModalDescription("Ви ввели неправильний код, перевірте його і спробуйте ще раз.")
-      setIsError(true)
+      setModalDescription("Ви ввели неправильний код, перевірте його і спробуйте ще раз.");
+      setIsError(true);
+    } finally {
+      setIsModalVisible(true);
+      setEnteredCode("");
     }
-
-    setIsModalVisible(true);
-    setEnteredCode("");
   };
 
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
-  
+
   return (
     <View style={[styles.container]}>
 

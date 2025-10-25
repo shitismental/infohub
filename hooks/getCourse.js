@@ -6,17 +6,16 @@ export const getCourse = (id) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchCourse = async () => {
       try {
         const response = await API.get(`/courses/courses/${id}`);
         setCourse(response.data);
       } catch (err) {
-        console.error("Failed to fetch course:", err);
         setError(err);
       }
     };
 
-    fetchCourses();
+    fetchCourse();
   }, [])
 
   return { course, courseError: error }

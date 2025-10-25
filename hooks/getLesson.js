@@ -11,7 +11,6 @@ export const getLesson = (lessonId) => {
         const response = await API.get(`/courses/lessons/${lessonId}`);
         setLesson(response.data);
       } catch (err) {
-        console.error("Failed to fetch lessons:", err);
         setError(err);
       }
     };

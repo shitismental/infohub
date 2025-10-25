@@ -15,11 +15,11 @@ import FileIcon from "../../assets/icons/file_icon.png"
 
 import RobotIcon from "../../assets/icons/robot_icon.png"
 
-
 import { Colors } from "../../constants/Colors";
 import { useLocalSearchParams } from 'expo-router';
 import { getCourses } from '../../hooks/getCourses';
 import { getCourse } from '../../hooks/getCourse';
+import { useCreateOrder } from '../../hooks/useCreateOrder'
 
 const INITIAL_MESSAGES = [
   { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
@@ -38,13 +38,12 @@ const ChatBot = () => {
 
   const { action, courseId } = useLocalSearchParams();
 
-  const [messages, setMessages] = useState(() => {
-    if (!action && !courseId) {
-      return INITIAL_MESSAGES;
-    }
-    return [];
-  });
+  const numberCourseId = Number(courseId)
+
+  const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [options, setOptions] = useState(INITIAL_OPTIONS);
+
+  const [selectedCourseId, setSelectedCourseId] = useState(numberCourseId || null);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -53,27 +52,27 @@ const ChatBot = () => {
 
   const scrollViewRef = useRef(null);
 
+  const { createOrder } = useCreateOrder();
+
   useEffect(() => {
-    if (action === "buy" && courseId) {
-      const { course } = getCourse(courseId)
+    if (action === "buy" && numberCourseId && courses.length > 0) {
+      const course = courses.find(c => c.id === numberCourseId);
+      if (!course) return;
 
-      const courseName = course?.title || "курс";
+      setSelectedCourseId(numberCourseId);
 
-      setMessages(prev => [
-        ...prev,
-        { sender: "user", text: `Хочу купити код доступу до "${courseName}"` },
-        { sender: "bot", text: "Добре! Я надішлю код після сплати, він діє один раз", hasBotIcon: true },
-        { sender: "bot", text: "Моно: 5375 4115 9012 5097", hasBotIcon: true }
+      setMessages([
+        { sender: "user", text: `Хочу купити код доступу до "${course.title}"` },
+        { sender: "bot", text: "Звісно! З радістю допоможу.", hasBotIcon: true },
+        { sender: "bot", text: "Оберіть спосіб оплати", hasBotIcon: true }
       ]);
 
       setOptions([
-        { label: "Я оплатив(ла)", action: "paid" },
-        { label: "Завершити сеанс", action: "end", hasSpecialStyle: true, }
+        { label: "На ФОП", action: "payToFOP" },
+        { label: "На картку", action: "payToCard", hasSpecialStyle: true },
       ]);
-
-      router.replace("/chatbot");
     }
-  }, [action, courseId]);
+  }, [action, numberCourseId, courses]);
 
   const handleOptionPress = (option) => {
     if (option.action !== "uploadReceipt") {
@@ -106,14 +105,39 @@ const ChatBot = () => {
     }
 
     else if (option.action === "course") {
+      setSelectedCourseId(option.courseId);
       setMessages(prev => [
         ...prev,
-        { sender: "bot", text: "Добре! Я надішлю код після сплати, він діє один раз." },
-        { sender: "bot", text: "Моно: 5375 4115 9012 5097" }
+        { sender: "bot", text: "Оберіть спосіб оплати" },
+      ]);
+      setOptions([
+        { label: "На ФОП", action: "payToFOP" },
+        { label: "На картку ", action: "payToCard", hasSpecialStyle: true, }
+      ]);
+    }
+
+    else if (option.action === "payToFOP") {
+      setMessages(prev => [
+        ...prev,
+        { sender: "bot", text: "Отримувач \nФОП Тютюнник Єгор Володимирович" },
+        { sender: "bot", text: "IBAN\nUA45322001000002600036\n0051448\n\nІПН/ЄДРПОУ\n3883502175" },
+        { sender: "bot", text: "Призначення платежу:\nСплата за навчання" },
       ]);
       setOptions([
         { label: "Я оплатив(ла)", action: "paid" },
-        { label: "Завершити сеанс", action: "end", hasSpecialStyle: true, }
+        { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
+      ]);
+    }
+
+    else if (option.action === "payToCard") {
+      setMessages(prev => [
+        ...prev,
+        { sender: "bot", text: "Добре! Я надішлю код після сплати, він діє один раз" },
+        { sender: "bot", text: "Моно: 5375 4115 9012 5097", hasSpecialStyle: true },
+      ]);
+      setOptions([
+        { label: "Я оплатив(ла)", action: "paid" },
+        { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
       ]);
     }
 
@@ -143,11 +167,22 @@ const ChatBot = () => {
     }
 
     else if (option.action === "paid") {
-      setMessages(prev => [
-        ...prev,
-        { sender: "bot", text: "Дякую! Ми перевіряємо твій платіж ⏳" },
-        { sender: "bot", text: "Щоб прискорити процес, прикріпи квитанцію про оплату." }
-      ]);
+      (async () => {
+        try {
+          await createOrder(selectedCourseId);
+          setMessages(prev => [
+            ...prev,
+            { sender: "bot", text: "Дякую! Ми перевіряємо твій платіж ⏳" },
+            { sender: "bot", text: "Щоб прискорити перевірку, прикріпи квитанцію про оплату." }
+          ]);
+        } catch (err) {
+          setMessages(prev => [
+            ...prev,
+            { sender: "bot", text: "❌ Не вдалося створити замовлення. Спробуй ще раз пізніше." }
+          ]);
+        }
+      })();
+
       setOptions([
         { label: "Квитанція", action: "uploadReceipt", hasFileIcon: true, hasSpecialStyle: true },
       ]);
@@ -261,7 +296,7 @@ const ChatBot = () => {
             const prevIsBot = index > 0 && messages[index - 1].sender === "bot";
 
             const showCopy =
-              msg.text?.includes("Моно:") || msg.text?.includes("Нік:");
+              msg.text?.includes("Моно:") || msg.text?.includes("Нік:") || msg.text?.includes("IBAN");
 
             if (isBot) {
               return (
@@ -505,7 +540,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    boxShadow: "0 4px 5px rgba(0,0,0,0.1)"
+    boxShadow: "0 4px 5px rgba(0,0,0,0.1)",
   },
   chat__user_response_text: {
     fontFamily: "MontserratMedium",

@@ -11,7 +11,6 @@ export const getCourses = () => {
         const response = await API.get("/courses/courses/");
         setCourses(response.data);
       } catch (err) {
-        console.error("Failed to fetch courses:", err);
         setError(err);
       }
     };

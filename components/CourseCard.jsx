@@ -9,11 +9,17 @@ import { Colors } from "../constants/Colors"
 import { getCourse } from '../hooks/getCourse'
 import { getMediaUrl } from '../utils/media'
 
+import { useUserOrders } from '../hooks/getOrders'
+
 const CourseCard = ({ courseId }) => {
 
-  const { course, courseError } = getCourse(courseId);
+  const { course } = getCourse(courseId);
 
   const { id, title, subtitle, preview_url } = course
+
+  const { boughtCourses } = useUserOrders();
+
+  const isBought = boughtCourses.includes(courseId);
 
   return (
     <>
@@ -37,25 +43,30 @@ const CourseCard = ({ courseId }) => {
             </View>
           </View>
         </View>
+        {!isBought && 
         <View style={[
           styles.card__top_info_container,
           { backgroundColor: "#002D61" }
         ]}>
-          <Text style={[styles.card__top_info_text]}>{"Заблоковано"}</Text>
+          <Text style={[styles.card__top_info_text]}>Заблоковано</Text>
         </View>
+        }
         <View style={[styles.big__circle]}></View>
         <View style={[styles.small__circle]}></View>
       </Pressable>
       <View style={[styles.paddingWrapper]}>
         <Pressable
           onPress={() => {
-            router.replace(`/courses/${id}`)
+            router.replace({
+              pathname: `/chatbot`,
+              params: { courseId: id, action: "buy" },
+            });
           }}
           style={({ pressed }) => [
             styles.card__bottom_btn_container,
             pressed && { opacity: 0.7 }
           ]}>
-          <Text style={[styles.card__bottom_btn_text]}>{"Купити зараз"}</Text>
+          <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Купити зараз"}</Text>
           <Pressable
             onPress={() => {
               router.replace(`/courses/${id}`)
@@ -66,7 +77,7 @@ const CourseCard = ({ courseId }) => {
             <Image
               tintColor={"#000"}
               style={[styles.card__bottom_btn_icon]}
-              source={RoundedCartIcon}
+              source={isBought ? ShareIcon : RoundedCartIcon}
               resizeMode='contain'
             />
           </Pressable>

@@ -12,8 +12,6 @@ import BellIcon from "../../assets/icons/question_mark_icon.png";
 import ProfileIcon from "../../assets/icons/profile_icon.png"
 import BookIcon from "../../assets/icons/book_icon.png"
 
-import EditIcon from "../../assets/icons/edit_icon.png"
-
 import PlaneIcon from "../../assets/icons/plane_icon.png"
 import PersonIcon from "../../assets/icons/person_icon.png"
 import EnvelopeIcon from "../../assets/icons/envelope_icon.png"
@@ -21,6 +19,8 @@ import PaperPlaneIcon from "../../assets/icons/paper_plane_icon.png"
 
 import InfoIcon from "../../assets/icons/info_icon.png"
 import LogoutIcon from "../../assets/icons/logout_icon.png"
+
+import { useUpdateUser } from '../../hooks/updateUser';
 
 import { Colors } from "../../constants/Colors";
 
@@ -31,18 +31,38 @@ const Profile = () => {
 
   const [user, setUser] = useState(null);
 
+  const { updateUser, loading } = useUpdateUser();
+
+  const [initialData, setInitialData] = useState({ email: "", first_name: "", last_name: "" });
+
+  const [userEmail, setUserEmail] = useState("petrik@gmail.com")
+  const [firstName, setFirstName] = useState("Петро")
+  const [lastName, setLastName] = useState("Петрик")
+  const [fullName, setFullName] = useState(`${firstName} ${lastName}`);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const me = await getUser();
         setUser(me);
+        setUserEmail(me.email);
+        setFirstName(me.first_name);
+        setLastName(me.last_name);
+        setInitialData({
+          email: me.email,
+          first_name: me.first_name,
+          last_name: me.last_name,
+        });
       } catch (err) {
-        console.log("Failed to fetch user:", err);
       }
     };
 
     fetchUser();
   }, [])
+
+  useEffect(() => {
+    setFullName(`${firstName} ${lastName}`.trim());
+  }, [firstName, lastName]);
 
   const username = () => {
     if (user?.first_name && user?.last_name) {
@@ -54,6 +74,29 @@ const Profile = () => {
     }
   }
 
+  const handleSaveChanges = async () => {
+    const [first, ...rest] = fullName.trim().split(" ");
+    const tempFirst = first || "";
+    const tempLast = rest.join(" ").trim();
+
+    if (!isChanged) return;
+
+    try {
+      const updatedData = {
+        first_name: tempFirst,
+        last_name: tempLast,
+        email: userEmail,
+      };
+
+      const updatedUser = await updateUser(updatedData);
+      setUser(updatedUser);
+      setInitialData(updatedData);
+      alert("Зміни збережено успішно!");
+    } catch (err) {
+      alert("Не вдалося зберегти зміни.");
+    }
+  };
+
   const handleGoBack = () => {
     router.replace("/chatbot")
   }
@@ -63,7 +106,6 @@ const Profile = () => {
       await logoutUser();
       router.replace("/login");
     } catch (err) {
-      console.error("Logout failed:", err);
     }
   };
 
@@ -78,6 +120,28 @@ const Profile = () => {
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
+
+  const [first, ...rest] = fullName.trim().split(" ");
+  const tempFirst = first || "";
+  const tempLast = rest.join(" ").trim();
+
+  const isChanged = (
+    userEmail !== initialData.email ||
+    tempFirst !== initialData.first_name ||
+    tempLast !== initialData.last_name
+  );
+
+  const capitalizeWords = (text) => {
+    if (!text) return '';
+
+    return text
+      .split(' ')
+      .map(word => {
+        if (!word) return '';
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
+  };
 
   return (
     <View style={styles.container}>
@@ -165,9 +229,14 @@ const Profile = () => {
                   <Image source={PersonIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
                   <View style={[styles.accordion__info_field_input_container]}>
                     <TextInput
-                      editable={false}
                       style={[styles.accordion__info_field_input]}
-                      placeholder='Анастасія Лужко'
+                      value={fullName}
+                      onChangeText={(text) => {
+                        const capitalizedText = capitalizeWords(text)
+                        setFullName(capitalizedText)
+                      }}
+                      placeholder="Петро Петрик"
+                      maxLength={30}
                     />
                   </View>
                 </View>
@@ -175,18 +244,33 @@ const Profile = () => {
                   <Image source={EnvelopeIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
                   <View style={[styles.accordion__info_field_input_container]}>
                     <TextInput
-                      editable={false}
-
+                      value={userEmail}
+                      onChangeText={setUserEmail}
                       style={[styles.accordion__info_field_input]}
-                      placeholder='anastitest@gmail.com'
+                      placeholder='petrik@gmail.com'
                     />
                   </View>
                 </View>
-                <View style={[styles.accordion__info_field_container]}>
+                {isChanged && (
+                  <View style={[styles.accordion__info_field_container]}>
+                    <Pressable
+                      disabled={loading}
+                      style={({ pressed }) => [
+                        styles.confirm__btn,
+                        pressed && { opacity: 0.7 }
+                      ]}
+                      onPress={handleSaveChanges}
+                    >
+                      <Text style={[styles.confirm__btn_text]}>
+                        {loading ? "Зберігаємо..." : "Зберегти"}
+                      </Text>
+                    </Pressable>
+                  </View>
+                )}
+                {/* <View style={[styles.accordion__info_field_container]}>
                   <Image source={PaperPlaneIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
                   <View style={[styles.accordion__info_field_input_container]}>
                     <TextInput
-                      editable={false}
                       style={[styles.accordion__info_field_input]}
                       placeholder='@ananasik'
                     />
@@ -201,7 +285,7 @@ const Profile = () => {
                         style={[styles.accordion__edit_icon]} />
                     </Pressable>
                   </View>
-                </View>
+                </View> */}
               </View>}
             </View>
             <View style={[styles.profile__main_content_accordion_container,
@@ -235,7 +319,7 @@ const Profile = () => {
             <Pressable
               onPress={redirectToTelegram}
               style={({ pressed }) => [
-                styles.profile__main_content_help_button, {  borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
+                styles.profile__main_content_help_button, { borderBottomWidth: 1, borderBottomColor: "#F7F7F7" },
                 pressed && { opacity: 0.7 }
               ]}>
               <Image style={[styles.profile__main_content_help_button_icon]} source={PlaneIcon} resizeMode='contain' tintColor={"#094174"} />
@@ -462,5 +546,18 @@ const styles = StyleSheet.create({
   profile__main_content_help_button_icon: {
     width: 20,
     height: 20,
+  },
+  confirm__btn: {
+    backgroundColor: "#44ac63ff",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    borderRadius: 6,
+    width: "100%",
+  },
+  confirm__btn_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 14,
+    color: Colors.white
   }
 })
