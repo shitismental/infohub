@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, Linking } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Pressable, Linking } from 'react-native'
 import { useRouter } from "expo-router";
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
@@ -8,8 +8,7 @@ import API from "../../services/api"
 
 import PersonIcon from "../../assets/icons/person_blue.png"
 import LockIcon from "../../assets/icons/lock_blue.png"
-import AppleLogo from "../../assets/icons/apple_logo.png"
-import GoogleLogo from "../../assets/icons/google_logo.png"
+import ErrorIcon from "../../assets/icons/error_icon.png"
 
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 
@@ -17,6 +16,7 @@ const Login = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorText, setErrorText] = useState("");
 
   const router = useRouter()
 
@@ -26,7 +26,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      alert("Будь ласка, введіть ел. пошту та пароль");
+      setErrorText("Будь ласка, введіть логін та пароль.");
       return;
     }
 
@@ -42,9 +42,7 @@ const Login = () => {
 
       router.replace("(pages)/");
     } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert("Невірний логін або пароль");
-    } finally {
+      setErrorText("Невірний логін або пароль");
     }
   }
 
@@ -86,6 +84,12 @@ const Login = () => {
                   secureTextEntry
                   style={styles.input} />
               </View>
+              {errorText && <View style={[styles.error__container]}>
+                <Image style={[styles.error__icon]} source={ErrorIcon} resizeMode='contain' />
+                <Text style={[styles.error__text]}>
+                  {errorText}
+                </Text>
+              </View>}
             </View>
             <View style={styles.btns__container}>
               <Pressable style={({ pressed }) => [styles.login__btn, pressed && { opacity: 0.7 }]} onPress={handleLogin}>
@@ -207,7 +211,6 @@ const styles = StyleSheet.create({
     flexDirection: "column"
   },
   login__form_inputs_container: {
-    alignItems: "center",
     gap: 12,
   },
   login__form_input_container: {
@@ -318,5 +321,20 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     resizeMode: "contain",
+  },
+  error__container: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  error__icon: {
+    width: 15,
+    height: 15,
+  },
+  error__text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 11,
+    color: "#FF0000",
   }
 })

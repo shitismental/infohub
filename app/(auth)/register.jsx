@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Pressable } from 'react-native'
 import { useRouter } from "expo-router";
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,6 +8,7 @@ import API from "../../services/api"
 import PersonIcon from "../../assets/icons/person_blue.png"
 import PlaneIcon from "../../assets/icons/plane_icon.png"
 import LockIcon from "../../assets/icons/lock_icon.png"
+import ErrorIcon from "../../assets/icons/error_icon.png"
 
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 import { useState } from 'react';
@@ -22,14 +23,36 @@ const Register = () => {
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [telegramUser, setTelegramUser] = useState("");
 
+  const [errorText, setErrorText] = useState("");
+
   const handleRegister = async () => {
     if (!username || !email || !password || !telegramUser || !repeatedPassword) {
-      alert("Заповніть усі обовʼязкові поля");
+      setErrorText("Заповніть усі обовʼязкові поля");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+      setErrorText("Логін може містити лише латиницю, цифри, підкреслення або дефіс.");
+      return;
+    }
+
+    if (username.length < 3) {
+      setErrorText("Логін має містити щонайменше 3 символи.")
+      return;
+    }
+
+    if (username.startsWith("_") || username.startsWith("-") || username.endsWith("_") || username.endsWith("-")) {
+      setErrorText("Логін не може починатися або закінчуватися підкресленням/дефісом.")
+      return;
+    }
+
+    if (password.length < 8) {
+      setErrorText("Пароль має містити щонайменше 8 символів.")
       return;
     }
 
     if (password !== repeatedPassword) {
-      alert("Введені паролі не співпадають")
+      setErrorText("Введені паролі не співпадають")
       return;
     }
 
@@ -53,8 +76,22 @@ const Register = () => {
       alert("Акаунт створено і ви увійшли 🎉");
       router.replace("(pages)/");
     } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert("Щось пішло не так");
+      const data = err.response?.data;
+      console.error(data)
+
+      if (data && typeof data === "object") {
+        const messages = Object.values(data)
+          .flat()
+          .filter(Boolean)
+          .join("\n");
+
+        if (messages) {
+          setErrorText(messages);
+          return;
+        }
+      }
+
+      setErrorText("Щось пішло не так");
     }
   }
 
@@ -77,12 +114,12 @@ const Register = () => {
                 <View style={styles.image__container}>
                   <Image style={styles.image} source={PersonIcon} />
                 </View>
-                <TextInput 
-                onChangeText={setUsername} 
-                value={username}
-                placeholder='Логін' 
-                placeholderTextColor="#0A0A0A" 
-                style={styles.input} />
+                <TextInput
+                  onChangeText={setUsername}
+                  value={username}
+                  placeholder='Логін'
+                  placeholderTextColor="#0A0A0A"
+                  style={styles.input} />
               </View>
               <View style={styles.register__form_input_container}>
                 <View style={styles.image__container}>
@@ -131,12 +168,18 @@ const Register = () => {
                 <View style={styles.image__container}>
                   <Image style={styles.image} source={PlaneIcon} />
                 </View>
-                <TextInput 
-                value={telegramUser}
-                onChangeText={setTelegramUser}
-                placeholder='Номер/нік телеграм' placeholderTextColor="#0A0A0A" 
-                style={styles.input} />
+                <TextInput
+                  value={telegramUser}
+                  onChangeText={setTelegramUser}
+                  placeholder='Номер/нік телеграм' placeholderTextColor="#0A0A0A"
+                  style={styles.input} />
               </View>
+              {errorText && <View style={[styles.error__container]}>
+                <Image style={[styles.error__icon]} source={ErrorIcon} resizeMode='contain' />
+                <Text style={[styles.error__text]}>
+                  {errorText}
+                </Text>
+              </View>}
             </View>
             <View style={styles.btns__container}>
               <Pressable style={({ pressed }) => [styles.register__btn, pressed && { opacity: 0.7 }]} onPress={handleRegister}>
@@ -238,7 +281,6 @@ const styles = StyleSheet.create({
     flexDirection: "column"
   },
   register__form_inputs_container: {
-    alignItems: "center",
     gap: 12,
   },
   register__form_input_container: {
@@ -382,4 +424,19 @@ const styles = StyleSheet.create({
     color: "#0A0A0A",
     fontFamily: "MontserratMedium",
   },
+  error__container: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  error__icon: {
+    width: 15,
+    height: 15,
+  },
+  error__text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 11,
+    color: "#FF0000",
+  }
 })
