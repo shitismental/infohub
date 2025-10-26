@@ -1,7 +1,7 @@
 {/* Imports */ }
 import { Pressable, StyleSheet, Text, View, Image, ScrollView, Modal, TextInput, Linking } from 'react-native'
 import { router } from 'expo-router'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 {/* Components */ }
 
@@ -9,6 +9,7 @@ import CourseCard from '../../../components/CourseCard'
 
 import { getCourses } from '../../../hooks/getCourses'
 import { useCheckCode } from '../../../hooks/useCheckCode'
+import { useUserOrders } from '../../../hooks/getOrders'
 
 {/* Icons */ }
 
@@ -29,11 +30,19 @@ const Courses = () => {
   const { courses } = getCourses();
   const { checkCode } = useCheckCode();
 
+  const { boughtCourses } = useUserOrders();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
   const [isError, setIsError] = useState(false);
+
+  const sortedCourses = [...(courses || [])].sort((a, b) => {
+    const aBought = boughtCourses.includes(a.id);
+    const bBought = boughtCourses.includes(b.id);
+    return aBought === bBought ? 0 : aBought ? -1 : 1;
+  });
 
   const handleGoBack = () => {
     router.replace("/");
@@ -129,7 +138,7 @@ const Courses = () => {
             />
           </Pressable>
         </View>
-        {courses.map((course, index) => (
+        {sortedCourses.map((course, index) => (
           <View key={index}>
             <CourseCard courseId={course.id} />
           </View>

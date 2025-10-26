@@ -43,13 +43,13 @@ const CourseCard = ({ courseId }) => {
             </View>
           </View>
         </View>
-        {!isBought && 
-        <View style={[
-          styles.card__top_info_container,
-          { backgroundColor: "#002D61" }
-        ]}>
-          <Text style={[styles.card__top_info_text]}>Заблоковано</Text>
-        </View>
+        {!isBought &&
+          <View style={[
+            styles.card__top_info_container,
+            { backgroundColor: "#002D61" }
+          ]}>
+            <Text style={[styles.card__top_info_text]}>Заблоковано</Text>
+          </View>
         }
         <View style={[styles.big__circle]}></View>
         <View style={[styles.small__circle]}></View>
@@ -69,7 +69,10 @@ const CourseCard = ({ courseId }) => {
           <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Купити зараз"}</Text>
           <Pressable
             onPress={() => {
-              router.replace(`/courses/${id}`)
+              router.replace({
+                pathname: `/chatbot`,
+                params: { courseId: id, action: "buy" },
+              });
             }}
             style={({ pressed }) => [
               pressed && { opacity: 0.7 }

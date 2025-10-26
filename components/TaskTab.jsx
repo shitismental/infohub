@@ -63,7 +63,7 @@ const TaskTab = ({ homework }) => {
                 Домашнє завдання
               </Text>
               <Text style={[styles.task__info_number]}>
-                №{Number(id) + 1}
+                №{Number(id)}
               </Text>
             </View>
             <Text style={[styles.task__info_card_desc_text]}>

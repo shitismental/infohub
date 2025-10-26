@@ -103,6 +103,12 @@ export default function CourseDetails() {
           </View>
           <Pressable
             disabled={isUnlocked}
+            onPress={() => {
+            router.replace({
+              pathname: `/chatbot`,
+              params: { courseId: course.id, action: "buy" },
+            });
+            }}
             style={({ pressed }) => [
               styles.course__buy_btn,
               pressed && { opacity: 0.7 }

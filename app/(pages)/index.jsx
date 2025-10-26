@@ -12,6 +12,7 @@ import TrophyIcon from "../../assets/icons/trophy_icon.png"
 import { Colors } from "../../constants/Colors"
 
 import { getCourses } from '../../hooks/getCourses'
+import { useUserOrders } from '../../hooks/getOrders'
 
 import { getUser } from '../../services/auth'
 
@@ -31,6 +32,15 @@ const Home = () => {
 
   const [user, setUser] = useState(null);
 
+  const { courses } = getCourses();
+  const { boughtCourses } = useUserOrders();
+
+  const sortedCourses = [...(courses || [])].sort((a, b) => {
+    const aBought = boughtCourses.includes(a.id);
+    const bBought = boughtCourses.includes(b.id);
+    return aBought === bBought ? 0 : aBought ? -1 : 1; // bought = first
+  });
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -43,7 +53,6 @@ const Home = () => {
     fetchUser();
   }, [])
 
-  const { courses, error } = getCourses();
 
   const username = () => {
     if (user?.first_name && user?.last_name) {
@@ -56,7 +65,7 @@ const Home = () => {
   }
 
   return (
-    <ScrollView style={[styles.container, {paddingBottom: 110}]}>
+    <ScrollView style={[styles.container, { paddingBottom: 110 }]}>
       {/* Header */}
       <View style={[styles.header__top_container, styles.paddingWrapper]}>
         <Image
@@ -141,7 +150,7 @@ const Home = () => {
 
           {/* Carousel */}
           <Animated.FlatList
-            data={courses}
+            data={sortedCourses}
             style={{ paddingVertical: 15, }}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
