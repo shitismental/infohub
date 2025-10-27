@@ -21,13 +21,37 @@ API.interceptors.request.use(async (config) => {
   return config;
 });
 
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+function onRefreshed(token) {
+  refreshSubscribers.forEach((callback) => callback(token));
+  refreshSubscribers = [];
+}
+
+function addRefreshSubscriber(callback) {
+  refreshSubscribers.push(callback);
+}
+
 API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          addRefreshSubscriber((token) => {
+            if (!token) reject(error);
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(API(originalRequest));
+          });
+        });
+      }
+
+      isRefreshing = true;
 
       try {
         const refreshToken = await AsyncStorage.getItem("refresh_token");
@@ -39,15 +63,20 @@ API.interceptors.response.use(
 
         await AsyncStorage.setItem("access_token", data.access);
 
+        API.defaults.headers.Authorization = `Bearer ${data.access}`;
+        onRefreshed(data.access);
+        isRefreshing = false;
+
         originalRequest.headers.Authorization = `Bearer ${data.access}`;
         return API(originalRequest);
-      } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
+      } catch (err) {
+        isRefreshing = false;
+        onRefreshed(null);
 
-        await AsyncStorage.removeItem("access_token");
-        await AsyncStorage.removeItem("refresh_token");
+        console.error("Token refresh failed:", err);
 
-        return Promise.reject(refreshError);
+        await AsyncStorage.multiRemove(["access_token", "refresh_token"]);
+        return Promise.reject(err);
       }
     }
 

@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { Colors } from '../constants/Colors'
 
+import { useEffect } from 'react'
+
 import { getLesson } from '../hooks/getLesson'
-import { useUserOrders } from '../hooks/getOrders'
+import { getUser } from '../services/auth'
 
 import LockIcon from "../assets/icons/lock_icon.png"
+import { useState } from 'react'
 
 const CourseProgressCard = ({ lessonId, courseId, onPress }) => {
 
@@ -12,16 +15,31 @@ const CourseProgressCard = ({ lessonId, courseId, onPress }) => {
 
   const { title, position, is_free, duration_seconds } = lesson;
 
+  const [user, setUser] = useState(null);
+
   const lessonLengthInMinutes = Math.round(duration_seconds / 60) || 0;
 
-  const { boughtCourses } = useUserOrders()
-  const isUnlocked = is_free || boughtCourses.includes(courseId)
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me)
+        console.log(me.courses)
+      } catch (err) {
+      }
+    };
+
+    fetchUser();
+  }, [])
+
+  const userCourses = user?.courses
+  const isUnlocked = !!(is_free || userCourses?.some((c) => c.id === courseId))
 
   return (
     <View
       style={[
         styles.course__progress_card_wrapper,
-        !isUnlocked && {opacity: 0.4}
+        !isUnlocked && { opacity: 0.4 }
       ]}>
       <Pressable
         onPress={onPress}

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import { router } from 'expo-router'
+import { useEffect, useState } from 'react'
 
-import CardCartIcon from "../assets/icons/card_cart_icon.png"
 import ShareIcon from "../assets/icons/share_icon.png"
 import RoundedCartIcon from "../assets/icons/rounded_cart_icon.png"
 
@@ -9,7 +9,7 @@ import { Colors } from "../constants/Colors"
 import { getCourse } from '../hooks/getCourse'
 import { getMediaUrl } from '../utils/media'
 
-import { useUserOrders } from '../hooks/getOrders'
+import { getUser } from '../services/auth'
 
 const CourseCard = ({ courseId }) => {
 
@@ -17,9 +17,23 @@ const CourseCard = ({ courseId }) => {
 
   const { id, title, subtitle, preview_url } = course
 
-  const { boughtCourses } = useUserOrders();
+  const [user, setUser] = useState(null);
 
-  const isBought = boughtCourses.includes(courseId);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me)
+      } catch (err) {
+      }
+    };
+
+    fetchUser();
+  }, [])
+
+  const userCourses = user?.courses
+
+  const isBought = userCourses?.some((c) => c.id === id);
 
   return (
     <>

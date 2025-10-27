@@ -12,6 +12,7 @@ export const useCreateOrder = () => {
       return response.data;
     } catch (err) {
       setError(err);
+      throw err;
     }
   };
 

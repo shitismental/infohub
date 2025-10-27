@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View, Image, Animated, ScrollView, Linking } from 'react-native'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 
 import CourseCard from '../../components/CourseCard'
 
@@ -12,7 +12,6 @@ import TrophyIcon from "../../assets/icons/trophy_icon.png"
 import { Colors } from "../../constants/Colors"
 
 import { getCourses } from '../../hooks/getCourses'
-import { useUserOrders } from '../../hooks/getOrders'
 
 import { getUser } from '../../services/auth'
 
@@ -33,13 +32,29 @@ const Home = () => {
   const [user, setUser] = useState(null);
 
   const { courses } = getCourses();
-  const { boughtCourses } = useUserOrders();
 
-  const sortedCourses = [...(courses || [])].sort((a, b) => {
-    const aBought = boughtCourses.includes(a.id);
-    const bBought = boughtCourses.includes(b.id);
-    return aBought === bBought ? 0 : aBought ? -1 : 1; // bought = first
-  });
+  const userCourses = user?.courses || [];
+
+  const sortedCourses = useMemo(() => {
+    if (!courses || !Array.isArray(courses) || !user) {
+      return [];
+    }
+
+    const boughtIds = new Set(userCourses.map((uc) => uc.id));
+
+    return [...courses].sort((a, b) => {
+      const aBought = boughtIds.has(a.id);
+      const bBought = boughtIds.has(b.id);
+
+      if (aBought && !bBought) return -1;
+      if (!aBought && bBought) return 1;
+      return a.id - b.id;
+    });
+  }, [courses, user]);
+
+  useEffect(() => {
+    console.log("Courses:", courses?.length, "User:", !!user, "Sorted:", sortedCourses?.map(c => c.id));
+  }, [courses, user, sortedCourses]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -52,7 +67,6 @@ const Home = () => {
 
     fetchUser();
   }, [])
-
 
   const username = () => {
     if (user?.first_name && user?.last_name) {

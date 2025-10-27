@@ -33,25 +33,24 @@ const Profile = () => {
 
   const { updateUser, loading } = useUpdateUser();
 
-  const [initialData, setInitialData] = useState({ email: "", first_name: "", last_name: "" });
+  const [initialData, setInitialData] = useState({ username: "", email: "", telegram: "" });
 
   const [userEmail, setUserEmail] = useState("petrik@gmail.com")
-  const [firstName, setFirstName] = useState("Петро")
-  const [lastName, setLastName] = useState("Петрик")
-  const [fullName, setFullName] = useState(`${firstName} ${lastName}`);
+  const [usernameText, setUsernameText] = useState("")
+  const [userTelegram, setUserTelegram] = useState("")
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const me = await getUser();
         setUser(me);
+        setUsernameText(me.username)
         setUserEmail(me.email);
-        setFirstName(me.first_name);
-        setLastName(me.last_name);
+        setUserTelegram(me.telegram)
         setInitialData({
+          username: me.username,
           email: me.email,
-          first_name: me.first_name,
-          last_name: me.last_name,
+          telegram: me.telegram
         });
       } catch (err) {
       }
@@ -61,31 +60,55 @@ const Profile = () => {
   }, [])
 
   useEffect(() => {
-    setFullName(`${firstName} ${lastName}`.trim());
-  }, [firstName, lastName]);
+    setUsernameText(usernameText);
+  }, [usernameText]);
 
   const username = () => {
-    if (user?.first_name && user?.last_name) {
-      return `${user.first_name} ${user.last_name}`
-    } else if (user?.username && (!user?.first_name && !user?.last_name)) {
+    if (user?.username) {
       return (user.username)
     } else {
-      return "???"
+      return "Loading..."
     }
   }
 
   const handleSaveChanges = async () => {
-    const [first, ...rest] = fullName.trim().split(" ");
-    const tempFirst = first || "";
-    const tempLast = rest.join(" ").trim();
-
     if (!isChanged) return;
+
+    if (usernameText.length < 3) {
+      alert("Логін має містити щонайменше 3 символи.")
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_-]+$/.test(usernameText)) {
+      alert("Логін може містити лише латиницю, цифри, підкреслення або дефіс.");
+      return;
+    }
+
+    if (usernameText.startsWith("_") || usernameText.startsWith("-") || usernameText.endsWith("_") || usernameText.endsWith("-")) {
+      alert("Логін не може починатися або закінчуватися підкресленням/дефісом.")
+      return;
+    }
+
+    if (userTelegram.length < 3) {
+      alert("Нік телеграм має містити щонайменше 3 символи.")
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9]+$/.test(userTelegram)) {
+      alert("Нік телеграм може містити лише латиницю та цифри.");
+      return;
+    }
+
+    if (usernameText.startsWith("_") || usernameText.startsWith("-") || usernameText.endsWith("_") || usernameText.endsWith("-")) {
+      alert("Логін не може починатися або закінчуватися підкресленням/дефісом.")
+      return;
+    }
 
     try {
       const updatedData = {
-        first_name: tempFirst,
-        last_name: tempLast,
+        username: usernameText,
         email: userEmail,
+        telegram: userTelegram,
       };
 
       const updatedUser = await updateUser(updatedData);
@@ -93,7 +116,11 @@ const Profile = () => {
       setInitialData(updatedData);
       alert("Зміни збережено успішно!");
     } catch (err) {
-      alert("Не вдалося зберегти зміни.");
+      if (err.response?.status === 400 && err.response?.data?.username) {
+        alert(err.response.data.username[0]);
+      } else {
+        alert("Не вдалося зберегти зміни.");
+      }
     }
   };
 
@@ -106,6 +133,7 @@ const Profile = () => {
       await logoutUser();
       router.replace("/login");
     } catch (err) {
+      alert("Сталася помилка. повторіть спробу пізніше.")
     }
   };
 
@@ -121,27 +149,11 @@ const Profile = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
-  const [first, ...rest] = fullName.trim().split(" ");
-  const tempFirst = first || "";
-  const tempLast = rest.join(" ").trim();
-
   const isChanged = (
+    usernameText !== initialData.username ||
     userEmail !== initialData.email ||
-    tempFirst !== initialData.first_name ||
-    tempLast !== initialData.last_name
+    userTelegram !== initialData.telegram
   );
-
-  const capitalizeWords = (text) => {
-    if (!text) return '';
-
-    return text
-      .split(' ')
-      .map(word => {
-        if (!word) return '';
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
-      .join(' ');
-  };
 
   return (
     <View style={styles.container}>
@@ -230,12 +242,10 @@ const Profile = () => {
                   <View style={[styles.accordion__info_field_input_container]}>
                     <TextInput
                       style={[styles.accordion__info_field_input]}
-                      value={fullName}
+                      value={usernameText}
                       onChangeText={(text) => {
-                        const capitalizedText = capitalizeWords(text)
-                        setFullName(capitalizedText)
+                        setUsernameText(text.trim())
                       }}
-                      placeholder="Петро Петрик"
                       maxLength={30}
                     />
                   </View>
@@ -247,7 +257,17 @@ const Profile = () => {
                       value={userEmail}
                       onChangeText={setUserEmail}
                       style={[styles.accordion__info_field_input]}
-                      placeholder='petrik@gmail.com'
+                    />
+                  </View>
+                </View>
+                <View style={[styles.accordion__info_field_container]}>
+                  <Image source={PaperPlaneIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
+                  <View style={[styles.accordion__info_field_input_container]}>
+                    <TextInput
+                      value={userTelegram}
+                      onChangeText={setUserTelegram}
+                      maxLength={25}
+                      style={[styles.accordion__info_field_input]}
                     />
                   </View>
                 </View>
@@ -330,7 +350,7 @@ const Profile = () => {
             <Pressable
               onPress={() => handleLogout()}
               style={({ pressed }) => [
-                styles.profile__main_content_help_button, { borderRadius: 10 },
+                styles.profile__main_content_help_button,
                 pressed && { opacity: 0.7 }
               ]}>
               <Image style={[styles.profile__main_content_help_button_icon]} source={LogoutIcon} resizeMode='contain' tintColor={"#B3B3B3"} />
@@ -429,6 +449,7 @@ const styles = StyleSheet.create({
   },
   profile__main_content_container: {
     gap: 20,
+    backgroundColor: "transparent"
   },
   profile__main_content_accordions_container: {
     boxShadow: "0 2px 15px rgba(0,0,0,0.1)",
@@ -529,13 +550,14 @@ const styles = StyleSheet.create({
   profile__main_content_help_buttons_container: {
     overflow: "hidden",
     boxShadow: "0 3px 5px rgba(0,0,0,0.05)",
+    borderRadius: 10,
   },
   profile__main_content_help_button: {
     paddingHorizontal: 14,
     paddingVertical: 15,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.white,
+    backgroundColor: "#fff",
     gap: 10,
   },
   profile__main_content_help_button_text: {

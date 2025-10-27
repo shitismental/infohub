@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, Linking } from "react-native";
 import { useLocalSearchParams, router, } from "expo-router";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import BlurCircle from "../../../../assets/icons/BlurCircle.png"
@@ -13,19 +13,33 @@ import { Colors } from "../../../../constants/Colors";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 import { getCourse } from "../../../../hooks/getCourse";
-import { useUserOrders } from "../../../../hooks/getOrders";
+import { getUser } from "../../../../services/auth";
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
   const courseId = Number(id);
+
+  const [user, setUser] = useState(null);
 
   const { course, courseError } = getCourse(courseId);
   const lessons = course?.lessons || []
 
   const { title, description, price, discount_price, preview_url } = course
 
-  const { boughtCourses } = useUserOrders()
-  const isUnlocked = boughtCourses.includes(course.id)
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me)
+      } catch (err) {
+      }
+    };
+
+    fetchUser();
+  }, [])
+
+  const userCourses = user?.courses
+  const isUnlocked = !!(userCourses?.some((c) => c.id === course.id))
 
   const handleGoBack = () => {
     router.replace("/courses");
@@ -104,10 +118,10 @@ export default function CourseDetails() {
           <Pressable
             disabled={isUnlocked}
             onPress={() => {
-            router.replace({
-              pathname: `/chatbot`,
-              params: { courseId: course.id, action: "buy" },
-            });
+              router.replace({
+                pathname: `/chatbot`,
+                params: { courseId: course.id, action: "buy" },
+              });
             }}
             style={({ pressed }) => [
               styles.course__buy_btn,

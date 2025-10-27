@@ -7,6 +7,7 @@ export const useCheckCode = () => {
       const response = await API.post("/codes/activate/", { code: passedCode });
       return response.data;
     } catch (err) {
+      throw err;
     }
   };
 

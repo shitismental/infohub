@@ -1,7 +1,7 @@
 {/* Imports */ }
 import { Pressable, StyleSheet, Text, View, Image, ScrollView, Modal, TextInput, Linking } from 'react-native'
 import { router } from 'expo-router'
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 {/* Components */ }
 
@@ -9,7 +9,7 @@ import CourseCard from '../../../components/CourseCard'
 
 import { getCourses } from '../../../hooks/getCourses'
 import { useCheckCode } from '../../../hooks/useCheckCode'
-import { useUserOrders } from '../../../hooks/getOrders'
+import { getUser } from '../../../services/auth'
 
 {/* Icons */ }
 
@@ -30,7 +30,7 @@ const Courses = () => {
   const { courses } = getCourses();
   const { checkCode } = useCheckCode();
 
-  const { boughtCourses } = useUserOrders();
+  const [user, setUser] = useState(null);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
@@ -38,11 +38,38 @@ const Courses = () => {
   const [modalDescription, setModalDescription] = useState("");
   const [isError, setIsError] = useState(false);
 
-  const sortedCourses = [...(courses || [])].sort((a, b) => {
-    const aBought = boughtCourses.includes(a.id);
-    const bBought = boughtCourses.includes(b.id);
-    return aBought === bBought ? 0 : aBought ? -1 : 1;
-  });
+  const userCourses = user?.courses || [];
+
+  const sortedCourses = useMemo(() => {
+    if (!courses || !Array.isArray(courses) || !user) {
+      return [];
+    }
+
+    const boughtIds = new Set(userCourses.map((uc) => uc.id));
+
+    return [...courses].sort((a, b) => {
+      const aBought = boughtIds.has(a.id);
+      const bBought = boughtIds.has(b.id);
+
+      if (aBought && !bBought) return -1;
+      if (!aBought && bBought) return 1;
+      return a.id - b.id;
+    });
+  }, [courses, user]);
+
+  useEffect(() => {
+
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me);
+      } catch (err) {
+        console.log("Failed to fetch user", err);
+      }
+    };
+
+    fetchUser();
+  }, [])
 
   const handleGoBack = () => {
     router.replace("/");

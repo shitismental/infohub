@@ -12,6 +12,7 @@ export const getCourses = () => {
         setCourses(response.data);
       } catch (err) {
         setError(err);
+        throw err;
       }
     };
 

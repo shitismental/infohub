@@ -70,6 +70,7 @@ const ChatBot = () => {
       setOptions([
         { label: "На ФОП", action: "payToFOP" },
         { label: "На картку", action: "payToCard", hasSpecialStyle: true },
+        { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
       ]);
     }
   }, [action, numberCourseId, courses]);
@@ -96,7 +97,7 @@ const ChatBot = () => {
       })
 
       const manualOption = {
-        label: "Завершити сеанс",
+        label: "Завершити чат",
         action: "end",
         hasSpecialStyle: true
       };
@@ -112,7 +113,8 @@ const ChatBot = () => {
       ]);
       setOptions([
         { label: "На ФОП", action: "payToFOP" },
-        { label: "На картку ", action: "payToCard", hasSpecialStyle: true, }
+        { label: "На картку ", action: "payToCard", hasSpecialStyle: true, },
+        { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
       ]);
     }
 
@@ -133,7 +135,7 @@ const ChatBot = () => {
       setMessages(prev => [
         ...prev,
         { sender: "bot", text: "Добре! Я надішлю код після сплати, він діє один раз" },
-        { sender: "bot", text: "Моно: 5375 4115 9012 5097", hasSpecialStyle: true },
+        { sender: "bot", text: "Моно: 4441 1110 2886 2369", hasSpecialStyle: true },
       ]);
       setOptions([
         { label: "Я оплатив(ла)", action: "paid" },
@@ -149,7 +151,7 @@ const ChatBot = () => {
       ]);
       setOptions([
         { label: "Відкрити телеграм", action: "openTelegram" },
-        { label: "Завершити сеанс", action: "end", hasSpecialStyle: true, }
+        { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
       ]);
     }
 
@@ -185,6 +187,7 @@ const ChatBot = () => {
 
       setOptions([
         { label: "Квитанція", action: "uploadReceipt", hasFileIcon: true, hasSpecialStyle: true },
+        { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
       ]);
     }
 

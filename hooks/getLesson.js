@@ -12,6 +12,7 @@ export const getLesson = (lessonId) => {
         setLesson(response.data);
       } catch (err) {
         setError(err);
+        throw err;
       }
     };
 

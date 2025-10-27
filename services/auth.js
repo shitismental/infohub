@@ -24,7 +24,7 @@ export const getUser = async () => {
     const token = await AsyncStorage.getItem("access_token");
     if (!token) throw new Error("No token found");
 
-   const res = await API.get("/users/me/");
+    const res = await API.get("/users/me/");
 
     return res.data;
   } catch (err) {

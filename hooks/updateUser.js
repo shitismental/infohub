@@ -10,6 +10,7 @@ export const useUpdateUser = () => {
       const response = await API.patch("/users/me/", data);
       return response.data;
     } catch (err) {
+      throw err;
     } finally {
       setLoading(false);
     }
