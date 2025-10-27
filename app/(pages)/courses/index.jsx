@@ -64,7 +64,6 @@ const Courses = () => {
         const me = await getUser();
         setUser(me);
       } catch (err) {
-        console.log("Failed to fetch user", err);
       }
     };
 

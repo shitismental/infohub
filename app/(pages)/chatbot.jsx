@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable, Image, ScrollView, Linking, Modal } from 'react-native'
 import { router } from 'expo-router';
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import * as ImagePicker from "expo-image-picker";
 
 import * as Clipboard from "expo-clipboard";
@@ -20,6 +20,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { getCourses } from '../../hooks/getCourses';
 import { getCourse } from '../../hooks/getCourse';
 import { useCreateOrder } from '../../hooks/useCreateOrder'
+import { getUser } from '../../services/auth';
 
 const INITIAL_MESSAGES = [
   { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
@@ -54,6 +55,22 @@ const ChatBot = () => {
 
   const { createOrder } = useCreateOrder();
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me);
+      } catch (err) {
+      }
+    };
+
+    fetchUser();
+  }, [])
+
+  const userCourses = user?.courses
+
   useEffect(() => {
     if (action === "buy" && numberCourseId && courses.length > 0) {
       const course = courses.find(c => c.id === numberCourseId);
@@ -61,10 +78,13 @@ const ChatBot = () => {
 
       setSelectedCourseId(numberCourseId);
 
+      const unlocked = !!userCourses?.some(c => c.id === course.id);
+
       setMessages([
         { sender: "user", text: `Хочу купити код доступу до "${course.title}"` },
         { sender: "bot", text: "Звісно! З радістю допоможу.", hasBotIcon: true },
-        { sender: "bot", text: "Оберіть спосіб оплати", hasBotIcon: true }
+        { sender: "bot", text: `Ціна курсу: ${unlocked ? course.discount_price : course.price}₴` },
+        { sender: "bot", text: "Оберіть спосіб оплати" }
       ]);
 
       setOptions([
@@ -73,7 +93,7 @@ const ChatBot = () => {
         { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
       ]);
     }
-  }, [action, numberCourseId, courses]);
+  }, [action, numberCourseId, courses, userCourses]);
 
   const handleOptionPress = (option) => {
     if (option.action !== "uploadReceipt") {
@@ -106,9 +126,16 @@ const ChatBot = () => {
     }
 
     else if (option.action === "course") {
+
+      const course = courses.find(c => c.id === option.courseId);
+      if (!course) return;
+
+      const unlocked = !!userCourses?.some(c => c.id === option.courseId);
+
       setSelectedCourseId(option.courseId);
       setMessages(prev => [
         ...prev,
+        { sender: "bot", text: `Ціна курсу: ${unlocked ? course.discount_price : course.price}₴` },
         { sender: "bot", text: "Оберіть спосіб оплати" },
       ]);
       setOptions([

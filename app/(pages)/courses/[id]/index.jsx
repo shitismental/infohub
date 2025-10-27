@@ -61,7 +61,7 @@ export default function CourseDetails() {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
-  const actual_price = price - discount_price || price || 0
+  const actual_price = price || "???"
 
   return (
     <View style={[styles.container]}>

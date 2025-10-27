@@ -24,7 +24,6 @@ const CourseProgressCard = ({ lessonId, courseId, onPress }) => {
       try {
         const me = await getUser();
         setUser(me)
-        console.log(me.courses)
       } catch (err) {
       }
     };

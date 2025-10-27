@@ -53,10 +53,6 @@ const Home = () => {
   }, [courses, user]);
 
   useEffect(() => {
-    console.log("Courses:", courses?.length, "User:", !!user, "Sorted:", sortedCourses?.map(c => c.id));
-  }, [courses, user, sortedCourses]);
-
-  useEffect(() => {
     const fetchUser = async () => {
       try {
         const me = await getUser();
@@ -158,7 +154,7 @@ const Home = () => {
           <View style={[styles.our__courses_title_container]}>
             <Text style={[styles.our__courses_title_text]}>Наші курси</Text>
             <Text style={[styles.our__courses_infohub_text]}>
-              <Text style={{ fontFamily: "MontserratSemiBold" }}>INFO</Text>hub
+              LIORA
             </Text>
           </View>
 
@@ -409,7 +405,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   our__courses_infohub_text: {
-    fontFamily: "MontserratRegular",
+    fontFamily: "MontserratMedium",
     fontSize: 15,
   },
   dotsContainer: {
