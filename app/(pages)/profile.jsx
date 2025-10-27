@@ -8,6 +8,7 @@ import { getUser } from '../../services/auth';
 import BlurCircle from "../../assets/icons/BlurCircle.png";
 import ArrowIcon from "../../assets/icons/arrow_left_icon.png";
 import BellIcon from "../../assets/icons/question_mark_icon.png";
+import ErrorIcon from "../../assets/icons/error_icon.png"
 
 import ProfileIcon from "../../assets/icons/profile_icon.png"
 import BookIcon from "../../assets/icons/book_icon.png"
@@ -28,6 +29,8 @@ const Profile = () => {
 
   const [openInfoAccordion, setOpenInfoAccordion] = useState(false);
   const [openCertificatsAccordion, setOpenCertificatsAccordion] = useState(false);
+
+  const [errorText, setErrorText] = useState("");
 
   const [user, setUser] = useState(null);
 
@@ -75,32 +78,22 @@ const Profile = () => {
     if (!isChanged) return;
 
     if (usernameText.length < 3) {
-      alert("Логін має містити щонайменше 3 символи.")
+      setErrorText("Логін має містити щонайменше 3 символи.")
       return;
     }
 
     if (!/^[a-zA-Z0-9_-]+$/.test(usernameText)) {
-      alert("Логін може містити лише латиницю, цифри, підкреслення або дефіс.");
+      setErrorText("Логін може містити лише латиницю, цифри, підкреслення або дефіс.");
       return;
     }
 
     if (usernameText.startsWith("_") || usernameText.startsWith("-") || usernameText.endsWith("_") || usernameText.endsWith("-")) {
-      alert("Логін не може починатися або закінчуватися підкресленням/дефісом.")
-      return;
-    }
-
-    if (userTelegram.length < 3) {
-      alert("Нік телеграм має містити щонайменше 3 символи.")
-      return;
-    }
-
-    if (!/^[a-zA-Z0-9]+$/.test(userTelegram)) {
-      alert("Нік телеграм може містити лише латиницю та цифри.");
+      setErrorText("Логін не може починатися або закінчуватися підкресленням/дефісом.")
       return;
     }
 
     if (usernameText.startsWith("_") || usernameText.startsWith("-") || usernameText.endsWith("_") || usernameText.endsWith("-")) {
-      alert("Логін не може починатися або закінчуватися підкресленням/дефісом.")
+      setErrorText("Логін не може починатися або закінчуватися підкресленням/дефісом.")
       return;
     }
 
@@ -116,10 +109,15 @@ const Profile = () => {
       setInitialData(updatedData);
       alert("Зміни збережено успішно!");
     } catch (err) {
+      console.error(err)
       if (err.response?.status === 400 && err.response?.data?.username) {
-        alert(err.response.data.username[0]);
+        setErrorText(err.response.data.username[0]);
+      } else if (err.response?.status === 400 && err.response?.data?.email) {
+        setErrorText(err.response.data.email[0]);
+      } else if (err.response?.status === 400 && err.response?.data?.telegram) {
+        setErrorText(err.response.data.telegram[0]);
       } else {
-        alert("Не вдалося зберегти зміни.");
+        setErrorText("Щось пішло не так. Спробуйте пізніше.")
       }
     }
   };
@@ -271,6 +269,15 @@ const Profile = () => {
                     />
                   </View>
                 </View>
+                {errorText && <View style={[styles.error__container, {
+                  paddingHorizontal: 14,
+                  paddingVertical: 7,
+                }]}>
+                  <Image style={[styles.error__icon]} source={ErrorIcon} resizeMode='contain' />
+                  <Text style={[styles.error__text]}>
+                    {errorText}
+                  </Text>
+                </View>}
                 {isChanged && (
                   <View style={[styles.accordion__info_field_container]}>
                     <Pressable
@@ -581,5 +588,20 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratMedium",
     fontSize: 14,
     color: Colors.white
+  },
+  error__container: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  error__icon: {
+    width: 15,
+    height: 15,
+  },
+  error__text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 11,
+    color: "#FF0000",
   }
 })

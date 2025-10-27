@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, Image, ScrollView, Linking } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
@@ -14,6 +14,7 @@ import { Colors } from "../../../../constants/Colors";
 import TaskTab from "../../../../components/TaskTab";
 import { getLesson } from "../../../../hooks/getLesson";
 import { getCourse } from "../../../../hooks/getCourse";
+import { getUser } from "../../../../services/auth";
 
 import { getMediaUrl } from "../../../../utils/media";
 
@@ -36,6 +37,8 @@ export default function StageDetails() {
 
   const remainingLessons = currentLessonIndex >= 0 ? lessons.slice(currentLessonIndex + 1) : [];
 
+  const isUnlocked = !lesson?.video_locked
+
   const handleGoBack = () => {
     router.push(`/courses/${courseId}`);
   };
@@ -55,6 +58,38 @@ export default function StageDetails() {
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
+
+  const [thumb, setThumb] = useState(null);
+
+  useEffect(() => {
+    if (!video_url) return;
+
+    const video = document.createElement("video");
+    video.src = getMediaUrl(video_url);
+    video.crossOrigin = "anonymous";
+    video.preload = "metadata";
+
+    const handleLoaded = () => {
+      video.currentTime = 0.001;
+    };
+
+    const handleSeeked = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      setThumb(canvas.toDataURL("image/png"));
+    };
+
+    video.addEventListener("loadeddata", handleLoaded);
+    video.addEventListener("seeked", handleSeeked);
+
+    return () => {
+      video.removeEventListener("loadeddata", handleLoaded);
+      video.removeEventListener("seeked", handleSeeked);
+    };
+  }, [video_url]);
 
   return (
     <View style={[styles.container]}>
@@ -148,22 +183,22 @@ export default function StageDetails() {
           contentContainerStyle={{ paddingBottom: 110, gap: 20 }}
         >
           <View style={styles.stage__video_container}>
-            {video_url && <video
+            {isUnlocked ? (video_url && <video
               ref={videoRef}
               width="100%"
               height="100%"
               controls
               playsInline
-              poster="https://placehold.co/400"
+              poster={thumb || "https://placehold.co/400"}
               style={{ objectFit: "cover" }}
             >
               <source src={getMediaUrl(video_url)} type="video/mp4" />
-            </video>}
+            </video>) : <Text style={[styles.no__access_text]}>Немає доступу</Text>}
           </View>
           <View style={[styles.stage__info_description_container]}>
             <Text style={[styles.stage__info_description_title]}>{lessonTitle}</Text>
             <Text style={[styles.stage__info_description_desc_text]}>
-              {lessonDesc}
+              {isUnlocked ? lessonDesc : "Немає доступу"}
             </Text>
           </View>
           <View style={{ gap: 10 }}>
@@ -180,7 +215,7 @@ export default function StageDetails() {
           </View>
         </ScrollView>
         :
-        (activeTab === "tasks" && homework.length > 0) ? homework.map((h, index) => {
+        (activeTab === "tasks" && homework.length > 0 && isUnlocked) ? homework.map((h, index) => {
           return (
             <TaskTab key={h.id} homework={h} />
           )
@@ -286,6 +321,8 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 10,
     overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center"
   },
   stage__info_description_container: {
     gap: 16,
@@ -399,5 +436,14 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontFamily: "MontserratMedium",
     fontSize: 15,
+  },
+  no__access_text: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: "10vw",
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+    textAlign: "center",
   }
 });
