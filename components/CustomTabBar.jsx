@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#0A0A0A",
-    fontSize: 15,
+    fontSize: 11,
   },
   blurCircle: {
     pointerEvents: "none",
