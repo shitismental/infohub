@@ -58,24 +58,12 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
               activeOpacity={1}
               style={styles.tabItem}
             >
-              <Animated.View
-                style={[
-                  styles.focusBorder,
-                  {
-                    width: progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ["0%", "45%"],
-                    }),
-                    opacity: progress,
-                  },
-                ]}
-              />
-
+              {isFocused && <View style={styles.focusBorder}></View>}
               <View style={styles.inner}>
                 {options.tabBarIcon && (
                   <Image
-                    source={{ ...options.tabBarIcon }}
-                    tintColor={isFocused ? "#2666EC" : "#0A0A0A"}
+                    source={options.tabBarIcon}
+                    tintColor={"#0A0A0A"}
                     style={styles.icon}
                     resizeMode="contain"
                   />
