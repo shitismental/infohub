@@ -93,6 +93,16 @@ const Courses = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    const wasSuccess = !isError
+
+    setIsModalVisible(false);
+    
+    if (wasSuccess) {
+      router.replace("/courses")
+    }
+  }
+
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
@@ -145,8 +155,8 @@ const Courses = () => {
         <View style={[styles.header__bottom_content]}>
           <TextInput
             style={[styles.header__input]}
-            placeholder='Є код доступу?'
-            placeholderTextColor={"#0A0A0A"}
+            placeholder='Введіть код доступу'
+            placeholderTextColor={Colors.white}
             value={enteredCode}
             onChangeText={(text) => setEnteredCode(text)}
             autoFocus={false}
@@ -160,7 +170,7 @@ const Courses = () => {
               style={[styles.header__btn_icon]}
               source={PlusIcom}
               resizeMode='contain'
-              tintColor={"#0A0A0A"}
+              tintColor={"#FFFFFF"}
             />
           </Pressable>
         </View>
@@ -174,7 +184,7 @@ const Courses = () => {
       {/* Code Modal */}
       <Modal
         visible={isModalVisible}
-        onRequestClose={() => setIsModalVisible(false)}
+        onRequestClose={handleCloseModal}
         animationType='fade'
         transparent={true}
       >
@@ -199,7 +209,7 @@ const Courses = () => {
               ]}>{modalTitle}</Text>
               <Text style={[styles.modal__text_desc]}>{modalDescription}</Text>
             </View>
-            <Pressable onPress={() => setIsModalVisible(false)} style={[styles.modal__close_btn]}>
+            <Pressable onPress={handleCloseModal} style={[styles.modal__close_btn]}>
               <Text style={[styles.modal__close_btn_text]}>Закрити</Text>
             </Pressable>
           </View>
@@ -247,6 +257,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderWidth: 1,
     borderColor: "#1D5588",
+    backgroundColor: "#134B7E",
     borderRadius: 9999,
     alignItems: "center",
     justifyContent: "center",
@@ -269,12 +280,11 @@ const styles = StyleSheet.create({
   header__input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#1D5588",
+    backgroundColor: "#134B7E",
     paddingVertical: 15,
     paddingHorizontal: 14,
-    backgroundColor: "#FBFBFB",
     borderRadius: 41,
-    color: "#0A0A0A",
+    color: Colors.white,
     fontFamily: "MontserratMedium",
     fontSize: 16,
     boxShadow: "0 3px 5px rgba(0,0,0,0.05)",

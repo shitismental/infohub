@@ -108,8 +108,8 @@ const Profile = () => {
       setUser(updatedUser);
       setInitialData(updatedData);
       alert("Зміни збережено успішно!");
+      setErrorText("");
     } catch (err) {
-      console.error(err)
       if (err.response?.status === 400 && err.response?.data?.username) {
         setErrorText(err.response.data.username[0]);
       } else if (err.response?.status === 400 && err.response?.data?.email) {
@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     backgroundColor: Colors.white,
     justifyContent: "space-between",
-    gap: 24,
+    gap: 20,
   },
   accordion__info_container: {
     overflow: "hidden",
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
   accordion__info_field_input: {
     paddingHorizontal: 16,
     paddingVertical: 6,
-    fontSize: 12,
+    fontSize: 16,
     color: "#0A0A0A",
     fontFamily: "MontserratMedium",
     borderRadius: 5,

@@ -31,13 +31,13 @@ const Register = () => {
       return;
     }
 
-    if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
-      setErrorText("Логін може містити лише латиницю, цифри, підкреслення або дефіс.");
+    if (!/^[a-zA-Z0-9._-]+$/.test(username)) {
+      setErrorText("Логін може містити лише латиницю, цифри, підкреслення, крапку або дефіс.");
       return;
     }
 
-    if (username.length < 3) {
-      setErrorText("Логін має містити щонайменше 3 символи.")
+    if (username.length < 4) {
+      setErrorText("Логін має містити щонайменше 4 символи.")
       return;
     }
 
@@ -77,7 +77,6 @@ const Register = () => {
       router.replace("(pages)/");
     } catch (err) {
       const data = err.response?.data;
-      console.error(data)
 
       if (data && typeof data === "object") {
         const messages = Object.values(data)

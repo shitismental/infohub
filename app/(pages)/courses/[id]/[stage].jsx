@@ -59,38 +59,6 @@ export default function StageDetails() {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
-  const [thumb, setThumb] = useState(null);
-
-  useEffect(() => {
-    if (!video_url) return;
-
-    const video = document.createElement("video");
-    video.src = getMediaUrl(video_url);
-    video.crossOrigin = "anonymous";
-    video.preload = "metadata";
-
-    const handleLoaded = () => {
-      video.currentTime = 0.001;
-    };
-
-    const handleSeeked = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      setThumb(canvas.toDataURL("image/png"));
-    };
-
-    video.addEventListener("loadeddata", handleLoaded);
-    video.addEventListener("seeked", handleSeeked);
-
-    return () => {
-      video.removeEventListener("loadeddata", handleLoaded);
-      video.removeEventListener("seeked", handleSeeked);
-    };
-  }, [video_url]);
-
   return (
     <View style={[styles.container]}>
       {/* HEADER */}
@@ -189,7 +157,7 @@ export default function StageDetails() {
               height="100%"
               controls
               playsInline
-              poster={thumb || "https://placehold.co/400"}
+              poster={"https://placehold.co/400"}
               style={{ objectFit: "cover" }}
             >
               <source src={getMediaUrl(video_url)} type="video/mp4" />
@@ -217,7 +185,7 @@ export default function StageDetails() {
         :
         (activeTab === "tasks" && homework.length > 0 && isUnlocked) ? homework.map((h, index) => {
           return (
-            <TaskTab key={h.id} homework={h} />
+            <TaskTab key={h.id} homework={h} hwId={lesson?.position} />
           )
         })
           :

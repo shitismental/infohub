@@ -73,6 +73,8 @@ const Home = () => {
       return "???"
     }
   }
+  
+  const currMonth = new Date().toLocaleString('uk-UA', { month: 'long' });
 
   return (
     <ScrollView style={[styles.container, { paddingBottom: 110 }]}>
@@ -230,7 +232,7 @@ const Home = () => {
               <Text style={[styles.top__earn_top_info_text]}>ТОП 3 заробітку</Text>
             </View>
             <Text style={[styles.top__earn_top_info_month]}>
-              Жовтень
+              {currMonth}
             </Text>
           </View>
           <View style={[styles.top__earners_display]}>
@@ -452,7 +454,8 @@ const styles = StyleSheet.create({
   top__earn_top_info_month: {
     fontSize: 11,
     fontFamily: "MontserratMedium",
-    color: "#000000"
+    color: "#000000",
+    textTransform: "capitalize"
   },
   top__earners_display: {
     borderRadius: 10,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image, Linking, Modal } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image, Linking, Modal, ScrollView } from 'react-native'
 import { useState } from 'react';
 
 import { Colors } from '../constants/Colors';
@@ -6,10 +6,10 @@ import { Colors } from '../constants/Colors';
 import LinkIcon from "../assets/icons/link_icon.png"
 import RobotIcom from "../assets/icons/robot_icon.png"
 
-const TaskTab = ({ homework }) => {
+const TaskTab = ({ homework, hwId }) => {
 
-  const { id, description, link } = homework;
-
+  const { description, link } = homework;
+  
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const normalizeURL = (url) => {
@@ -55,7 +55,7 @@ const TaskTab = ({ homework }) => {
 
   return (
     <>
-      <View style={[styles.container, styles.paddingWrapper]}>
+      <ScrollView contentContainerStyle={{justifyContent: "space-between"}} style={[styles.container, styles.paddingWrapper]}>
         <View style={[styles.task__content_container]}>
           <View style={[styles.task__info_card_container]}>
             <View style={[styles.task__info_card_top]}>
@@ -63,7 +63,7 @@ const TaskTab = ({ homework }) => {
                 Домашнє завдання
               </Text>
               <Text style={[styles.task__info_number]}>
-                №{Number(id)}
+                №{hwId}
               </Text>
             </View>
             <Text style={[styles.task__info_card_desc_text]}>
@@ -108,7 +108,7 @@ const TaskTab = ({ homework }) => {
             <Text style={[styles.task__btn_text, { color: "#1D5588" }]}>Є питання</Text>
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
       <Modal
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}
@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 110,
-    justifyContent: "space-between",
   },
   paddingWrapper: {
     paddingHorizontal: 15,
@@ -214,6 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
     alignItems: "center",
+    marginTop: 16,
   },
   task__btn: {
     flex: 1,
