@@ -175,7 +175,7 @@ export default function StageDetails() {
                 lessonId={lesson.id}
                 courseId={course.id}
                 onPress={() =>
-                  router.push(`/courses/${courseId}/${encodeURIComponent(lesson.id)}`)
+                  router.push(`/courses/${courseId}/${encodeURIComponent(lesson?.position)}`)
                 }
               />
             ))}
