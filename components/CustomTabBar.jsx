@@ -74,8 +74,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
               <View style={styles.inner}>
                 {options.tabBarIcon && (
                   <Image
-                    key={isFocused ? "focused" : "unfocused"}
-                    source={options.tabBarIcon}
+                    source={{ ...options.tabBarIcon }}
                     tintColor={isFocused ? "#2666EC" : "#0A0A0A"}
                     style={styles.icon}
                     resizeMode="contain"
