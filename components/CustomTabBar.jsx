@@ -1,23 +1,22 @@
-import { View, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image, Dimensions, Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useEffect, useRef } from 'react';
 
-import BlurCircle from "../assets/icons/BlurCircle.png"
+import BlurCircle from "../assets/icons/BlurCircle.png";
 
 const { width, height } = Dimensions.get("window");
 
 const BASE_WIDTH = 414;
 const BASE_HEIGHT = 846;
-
 const scale = Math.min(width / BASE_WIDTH, height / BASE_HEIGHT);
-
 const circleSize = 400 * scale;
 
 const CustomTabBar = ({ state, descriptors, navigation }) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.tabBarWrapper]}>
-      <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.blurCircle]} />
+    <View style={styles.tabBarWrapper}>
+      <Image tintColor={"#0A0A0A"} source={BlurCircle} style={styles.blurCircle} />
       <View style={[{ marginBottom: insets.bottom || 16 }, styles.tabBarContainer]}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -25,10 +24,20 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
-                ? options.title
-                : route.name;
+              ? options.title
+              : route.name;
 
           const isFocused = state.index === index;
+
+          const progress = useRef(new Animated.Value(isFocused ? 1 : 0)).current;
+
+          useEffect(() => {
+            Animated.timing(progress, {
+              toValue: isFocused ? 1 : 0,
+              duration: 250,
+              useNativeDriver: false,
+            }).start();
+          }, [isFocused]);
 
           const onPress = () => {
             const event = navigation.emit({
@@ -47,24 +56,33 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
               key={index}
               onPress={onPress}
               activeOpacity={1}
-              style={[styles.tabItem, isFocused && styles.tabItemActive]}
+              style={styles.tabItem}
             >
-              <View style={[
-                styles.inner, 
-                ]}>
+              <Animated.View
+                style={[
+                  styles.focusBorder,
+                  {
+                    width: progress.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ["0%", "45%"],
+                    }),
+                    opacity: progress,
+                  },
+                ]}
+              />
+
+              <View style={styles.inner}>
                 {options.tabBarIcon && (
                   <Image
                     source={options.tabBarIcon}
-                    tintColor={"#0A0A0A"}
-                    style={[styles.icon]}
-                    resizeMode='contain'
+                    tintColor={isFocused ? "#2666EC" : "#0A0A0A"}
+                    style={styles.icon}
+                    resizeMode="contain"
                   />
                 )}
-                {isFocused && (
-                  <Text style={styles.label}>
-                    {label}
-                  </Text>
-                )}
+                <Text style={[styles.label, isFocused && { color: "#2666EC" }]}>
+                  {label}
+                </Text>
               </View>
             </TouchableOpacity>
           );
@@ -84,7 +102,7 @@ const styles = StyleSheet.create({
   },
   tabBarContainer: {
     borderRadius: 50,
-    padding: 16,
+    paddingHorizontal: 16,
     overflow: "hidden",
     flexDirection: "row",
     backgroundImage: "linear-gradient(0deg, #FFFFFF 0%, #E6E6E6 100%)",
@@ -92,27 +110,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     boxShadow: "0 0 5px rgba(0,0,0,0.1)",
     zIndex: 5,
-    gap: 15,
   },
   tabItem: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  tabItemActive: {
-    flex: 2,
-  },
   inner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 10,
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: '#fff',
-    backgroundColor: "rgba(247, 247, 247, 0.1)",
-    borderWidth: 1,
-    boxShadow: "0 0 5px rgba(0,0,0,0.2), inset 0 5px 10px rgba(0,0,0,0.2), inset -2px -2px 6px rgba(255,255,255,0.7)"
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   icon: {
     width: 22,
@@ -121,9 +131,6 @@ const styles = StyleSheet.create({
   label: {
     color: "#0A0A0A",
     fontSize: 15,
-    marginLeft: 6,
-    flexShrink: 0,
-    flexWrap: 'nowrap',
   },
   blurCircle: {
     pointerEvents: "none",
@@ -135,6 +142,15 @@ const styles = StyleSheet.create({
     bottom: -230 * scale,
     left: "50%",
     transform: [{ translateX: -circleSize / 2 }],
+  },
+  focusBorder: {
+    position: "absolute",
+    top: 0,
+    height: 2,
+    backgroundColor: "#2666EC",
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    alignSelf: "center",
   },
 });
 
