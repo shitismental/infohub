@@ -24,8 +24,8 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
-                ? options.title
-                : route.name;
+              ? options.title
+              : route.name;
 
           const isFocused = state.index === index;
 
@@ -58,17 +58,29 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
               activeOpacity={1}
               style={styles.tabItem}
             >
-              {isFocused && <View style={styles.focusBorder}></View>}
+              <Animated.View
+                style={[
+                  styles.focusBorder,
+                  {
+                    width: progress.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ["0%", "45%"],
+                    }),
+                    opacity: progress,
+                  },
+                ]}
+              />
+
               <View style={styles.inner}>
                 {options.tabBarIcon && (
                   <Image
                     source={options.tabBarIcon}
-                    tintColor={isFocused ? "#2666EC" : "#0A0A0A"}
+                    tintColor={"#0A0A0A"}
                     style={styles.icon}
                     resizeMode="contain"
                   />
                 )}
-                <Text style={[styles.label, isFocused && { color: "#2666EC" }]}>
+                <Text style={[styles.label]}>
                   {label}
                 </Text>
               </View>
