@@ -157,10 +157,9 @@ export default function StageDetails() {
               height="100%"
               controls
               playsInline
-              poster={"https://placehold.co/400"}
               style={{ objectFit: "cover" }}
             >
-              <source src={getMediaUrl(video_url)} type="video/mp4" />
+              <source src={getMediaUrl(video_url) + "#t=0.001"} type="video/mp4" />
             </video>) : <Text style={[styles.no__access_text]}>Немає доступу</Text>}
           </View>
           <View style={[styles.stage__info_description_container]}>

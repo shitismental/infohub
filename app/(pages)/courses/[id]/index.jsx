@@ -14,6 +14,7 @@ import { Colors } from "../../../../constants/Colors";
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 import { getCourse } from "../../../../hooks/getCourse";
 import { getUser } from "../../../../services/auth";
+import { getMediaUrl } from "../../../../utils/media";
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
@@ -21,10 +22,12 @@ export default function CourseDetails() {
 
   const [user, setUser] = useState(null);
 
-  const { course, courseError } = getCourse(courseId);
+  const { course } = getCourse(courseId);
   const lessons = course?.lessons || []
 
-  const { title, description, price, discount_price, preview_url } = course
+  const { title, description, price, discount_price, preview_url, preview_video } = course
+
+  console.log(course)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -138,17 +141,16 @@ export default function CourseDetails() {
         contentContainerStyle={{ paddingBottom: 110, gap: 20 }}
       >
         <View style={styles.course__video_container}>
-          <video
+          {preview_video && <video
             ref={videoRef}
             width="100%"
             height="100%"
             controls
             playsInline
-            poster="/video_preview_img_1.jpg"
             style={{ objectFit: "cover" }}
           >
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-          </video>
+            <source src={getMediaUrl(preview_video) + "#t=0.001"} type="video/mp4" />
+          </video>}
         </View>
         <View style={[styles.course__info_description_container]}>
           <Text style={[styles.course__info_description_title]}>Опис курсу</Text>
