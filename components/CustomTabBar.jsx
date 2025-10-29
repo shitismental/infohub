@@ -63,7 +63,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                 {options.tabBarIcon && (
                   <Image
                     source={options.tabBarIcon}
-                    tintColor={"#0A0A0A"}
+                    tintColor={isFocused ? "#2666EC" : "#0A0A0A"}
                     style={styles.icon}
                     resizeMode="contain"
                   />
