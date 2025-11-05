@@ -9,8 +9,6 @@ import { Colors } from "../constants/Colors"
 import { useGetCourse } from '../hooks/getCourse'
 import { getMediaUrl } from '../utils/media'
 
-import { getUser } from '../services/auth'
-
 const CourseCard = ({ courseId, user }) => {
 
   const { course } = useGetCourse(courseId);

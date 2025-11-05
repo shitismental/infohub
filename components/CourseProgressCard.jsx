@@ -4,7 +4,6 @@ import { Colors } from '../constants/Colors'
 import { useEffect } from 'react'
 
 import { useGetLesson } from '../hooks/getLesson'
-import { getUser } from '../services/auth'
 
 import LockIcon from "../assets/icons/lock_icon.png"
 import { useState } from 'react'

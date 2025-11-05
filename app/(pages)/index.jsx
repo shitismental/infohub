@@ -13,7 +13,7 @@ import { Colors } from "../../constants/Colors"
 
 import { useGetCourses } from '../../hooks/getCourses'
 
-import { getUser } from '../../services/auth'
+import { useUser } from '../../utils/userContext'
 
 import { TopEarners } from '../../constants/TopEarners'
 import TopEarnCard from '../../components/TopEarnCard'
@@ -23,13 +23,15 @@ const CARD_SPACING = 16;
 
 const Home = () => {
 
+  console.log("123")
+
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
 
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
 
   const { courses } = useGetCourses();
 
@@ -51,18 +53,6 @@ const Home = () => {
       return a.id - b.id;
     });
   }, [courses, user]);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me);
-      } catch (err) {
-      }
-    };
-
-    fetchUser();
-  }, [])
 
   const username = () => {
     if (user?.first_name && user?.last_name) {
@@ -167,7 +157,7 @@ const Home = () => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={{ width: CARD_WIDTH }}>
-                <CourseCard courseId={item.id} />
+                <CourseCard courseId={item.id} user={user} />
               </View>
             )}
             horizontal

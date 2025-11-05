@@ -2,6 +2,7 @@ import { Stack, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { StatusBar } from "react-native";
+import { UserProvider } from "../utils/userContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -37,7 +38,7 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <>
+    <UserProvider>
       <StatusBar
         barStyle="auto"
         backgroundColor="transparent"
@@ -53,6 +54,6 @@ export default function RootLayout() {
           options={{ headerShown: false, animation: "none" }}
         />
       </Stack>
-    </>
+    </UserProvider>
   );
 }

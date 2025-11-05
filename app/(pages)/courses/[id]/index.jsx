@@ -13,33 +13,21 @@ import { Colors } from "../../../../constants/Colors";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 import { useGetCourse } from "../../../../hooks/getCourse";
-import { getUser } from "../../../../services/auth";
 import { getMediaUrl } from "../../../../utils/media";
+import { useUser } from "../../../../utils/userContext";
 
 export default function CourseDetails() {
   const { id } = useLocalSearchParams();
   const courseId = Number(id);
 
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
+
+  if (!user) return null;
 
   const { course } = useGetCourse(courseId);
   const lessons = course?.lessons || []
 
   const { title, description, price, discount_price, preview_url, preview_video } = course || {}
-
-  console.log(course)
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me)
-      } catch (err) {
-      }
-    };
-
-    fetchUser();
-  }, [])
 
   const userCourses = user?.courses
   const isUnlocked = !!(userCourses?.some((c) => c.id === course.id))

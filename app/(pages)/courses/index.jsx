@@ -9,7 +9,7 @@ import CourseCard from '../../../components/CourseCard'
 
 import { useGetCourses } from '../../../hooks/getCourses'
 import { useCheckCode } from '../../../hooks/useCheckCode'
-import { getUser } from '../../../services/auth'
+import { useUser } from '../../../utils/userContext'
 
 {/* Icons */ }
 
@@ -30,7 +30,9 @@ const Courses = () => {
   const { courses } = useGetCourses();
   const { checkCode } = useCheckCode();
 
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
+
+  if (!user) return null;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
@@ -56,19 +58,6 @@ const Courses = () => {
       return a.id - b.id;
     });
   }, [courses, user]);
-
-  useEffect(() => {
-
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me);
-      } catch (err) {
-      }
-    };
-
-    fetchUser();
-  }, [])
 
   const handleGoBack = () => {
     router.replace("/");
@@ -97,7 +86,7 @@ const Courses = () => {
     const wasSuccess = !isError
 
     setIsModalVisible(false);
-    
+
     if (wasSuccess) {
       router.replace("/courses")
     }

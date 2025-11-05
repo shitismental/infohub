@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
 
 import { logoutUser } from '../../services/auth';
-import { getUser } from '../../services/auth';
+import { useUser } from '../../utils/userContext';
 
 import BlurCircle from "../../assets/icons/BlurCircle.png";
 import ArrowIcon from "../../assets/icons/arrow_left_icon.png";
@@ -32,7 +32,9 @@ const Profile = () => {
 
   const [errorText, setErrorText] = useState("");
 
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
+
+  if (!user) return null;
 
   const { updateUser, loading } = useUpdateUser();
 
@@ -41,26 +43,6 @@ const Profile = () => {
   const [userEmail, setUserEmail] = useState("petrik@gmail.com")
   const [usernameText, setUsernameText] = useState("")
   const [userTelegram, setUserTelegram] = useState("")
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me);
-        setUsernameText(me.username)
-        setUserEmail(me.email);
-        setUserTelegram(me.telegram)
-        setInitialData({
-          username: me.username,
-          email: me.email,
-          telegram: me.telegram
-        });
-      } catch (err) {
-      }
-    };
-
-    fetchUser();
-  }, [])
 
   useEffect(() => {
     setUsernameText(usernameText);

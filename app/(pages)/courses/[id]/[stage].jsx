@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, Image, ScrollView, Linking } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useRef, useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
@@ -17,9 +17,13 @@ import { useGetCourse } from "../../../../hooks/getCourse";
 
 import { getMediaUrl } from "../../../../utils/media";
 
+import { useUser } from "../../../../utils/userContext";
+
 export default function StageDetails() {
   const [activeTab, setActiveTab] = useState("description");
-  const [user, setUser] = useState(null);
+  const { user, loading } = useUser();
+
+  if (!user) return null;
 
   const { id, stage } = useLocalSearchParams();
   const courseId = Number(id);
@@ -38,16 +42,6 @@ export default function StageDetails() {
   const remainingLessons = currentLessonIndex >= 0 ? lessons.slice(currentLessonIndex + 1) : [];
 
   const isUnlocked = !lesson?.video_locked
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me);
-      } catch (err) { }
-    };
-    fetchUser();
-  }, []);
 
   const handleGoBack = () => {
     router.push(`/courses/${courseId}`);

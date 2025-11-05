@@ -19,7 +19,8 @@ import { Colors } from "../../constants/Colors";
 import { useLocalSearchParams } from 'expo-router';
 import { useGetCourses } from '../../hooks/getCourses';
 import { useCreateOrder } from '../../hooks/useCreateOrder'
-import { getUser } from '../../services/auth';
+
+import { useUser } from '../../utils/userContext';
 
 const INITIAL_MESSAGES = [
   { sender: "bot", text: "Чим я можу тобі допомогти?", hasBotIcon: true }
@@ -54,19 +55,9 @@ const ChatBot = () => {
 
   const { createOrder } = useCreateOrder();
 
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me);
-      } catch (err) {
-      }
-    };
-
-    fetchUser();
-  }, [])
+  if (!user) return null;
 
   const userCourses = user?.courses
 
