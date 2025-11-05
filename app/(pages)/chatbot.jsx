@@ -17,8 +17,7 @@ import RobotIcon from "../../assets/icons/robot_icon.png"
 
 import { Colors } from "../../constants/Colors";
 import { useLocalSearchParams } from 'expo-router';
-import { getCourses } from '../../hooks/getCourses';
-import { getCourse } from '../../hooks/getCourse';
+import { useGetCourses } from '../../hooks/getCourses';
 import { useCreateOrder } from '../../hooks/useCreateOrder'
 import { getUser } from '../../services/auth';
 
@@ -35,7 +34,7 @@ const ChatBot = () => {
 
   const telegramUsername = "Yehor_liora"
 
-  const { courses } = getCourses();
+  const { courses } = useGetCourses();
 
   const { action, courseId } = useLocalSearchParams();
 

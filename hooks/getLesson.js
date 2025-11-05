@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import API from "../services/api"
 
-export const getLesson = (lessonId) => {
+export const useGetLesson = (lessonId) => {
   const [lesson, setLesson] = useState([]);
   const [error, setError] = useState(null);
 

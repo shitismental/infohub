@@ -11,7 +11,7 @@ import TrophyIcon from "../../assets/icons/trophy_icon.png"
 
 import { Colors } from "../../constants/Colors"
 
-import { getCourses } from '../../hooks/getCourses'
+import { useGetCourses } from '../../hooks/getCourses'
 
 import { getUser } from '../../services/auth'
 
@@ -31,7 +31,7 @@ const Home = () => {
 
   const [user, setUser] = useState(null);
 
-  const { courses } = getCourses();
+  const { courses } = useGetCourses();
 
   const userCourses = user?.courses || [];
 

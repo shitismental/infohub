@@ -1,23 +1,27 @@
-import { useState, useEffect } from "react"
-import API from "../services/api"
+// hooks/useGetCourses.js
+import { useState, useEffect } from "react";
+import API from "../services/api";
 
-export const getCourses = () => {
+export const useGetCourses = () => {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await API.get("/courses/courses/");
-        setCourses(response.data);
+        setLoading(true);
+        const { data } = await API.get("/courses/courses/");
+        setCourses(data);
       } catch (err) {
         setError(err);
-        throw err;
+      } finally {
+        setLoading(false);  // ← ALWAYS SET FALSE
       }
     };
 
     fetchCourses();
-  }, [])
+  }, []);
 
-  return { courses, coursesError: error }
-}
+  return { courses, loading, coursesError: error }; // ← RETURN LOADING
+};

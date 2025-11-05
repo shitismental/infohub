@@ -7,7 +7,7 @@ import { useState, useEffect, useMemo } from 'react'
 
 import CourseCard from '../../../components/CourseCard'
 
-import { getCourses } from '../../../hooks/getCourses'
+import { useGetCourses } from '../../../hooks/getCourses'
 import { useCheckCode } from '../../../hooks/useCheckCode'
 import { getUser } from '../../../services/auth'
 
@@ -27,7 +27,7 @@ import { Colors } from "../../../constants/Colors"
 
 const Courses = () => {
 
-  const { courses } = getCourses();
+  const { courses } = useGetCourses();
   const { checkCode } = useCheckCode();
 
   const [user, setUser] = useState(null);
@@ -176,7 +176,7 @@ const Courses = () => {
         </View>
         {sortedCourses.map((course, index) => (
           <View key={index}>
-            <CourseCard courseId={course.id} />
+            <CourseCard courseId={course.id} user={user} />
           </View>
         ))}
       </ScrollView>

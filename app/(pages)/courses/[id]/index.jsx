@@ -12,7 +12,7 @@ import HatIcon from "../../../../assets/icons/hat_icon.png"
 import { Colors } from "../../../../constants/Colors";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
-import { getCourse } from "../../../../hooks/getCourse";
+import { useGetCourse } from "../../../../hooks/getCourse";
 import { getUser } from "../../../../services/auth";
 import { getMediaUrl } from "../../../../utils/media";
 
@@ -22,10 +22,10 @@ export default function CourseDetails() {
 
   const [user, setUser] = useState(null);
 
-  const { course } = getCourse(courseId);
+  const { course } = useGetCourse(courseId);
   const lessons = course?.lessons || []
 
-  const { title, description, price, discount_price, preview_url, preview_video } = course
+  const { title, description, price, discount_price, preview_url, preview_video } = course || {}
 
   console.log(course)
 
@@ -165,6 +165,7 @@ export default function CourseDetails() {
                 key={lesson.id}
                 lessonId={lesson.id}
                 courseId={course.id}
+                user={user}
                 onPress={() => router.push(`/courses/${courseId}/${encodeURIComponent(lesson.id)}`)}
               />
             )

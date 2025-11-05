@@ -3,33 +3,21 @@ import { Colors } from '../constants/Colors'
 
 import { useEffect } from 'react'
 
-import { getLesson } from '../hooks/getLesson'
+import { useGetLesson } from '../hooks/getLesson'
 import { getUser } from '../services/auth'
 
 import LockIcon from "../assets/icons/lock_icon.png"
 import { useState } from 'react'
 
-const CourseProgressCard = ({ lessonId, courseId, onPress }) => {
+const CourseProgressCard = ({ lessonId, courseId, onPress, user }) => {
 
-  const { lesson } = getLesson(lessonId);
+  const { lesson } = useGetLesson(lessonId);
+
+  if (!lesson) return null;
 
   const { title, position, is_free, duration_seconds } = lesson;
 
-  const [user, setUser] = useState(null);
-
   const lessonLengthInMinutes = Math.round(duration_seconds / 60) || 0;
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me)
-      } catch (err) {
-      }
-    };
-
-    fetchUser();
-  }, [])
 
   const userCourses = user?.courses
   const isUnlocked = !!(is_free || userCourses?.some((c) => c.id === courseId))

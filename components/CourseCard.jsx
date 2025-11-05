@@ -6,30 +6,18 @@ import ShareIcon from "../assets/icons/share_icon.png"
 import RoundedCartIcon from "../assets/icons/rounded_cart_icon.png"
 
 import { Colors } from "../constants/Colors"
-import { getCourse } from '../hooks/getCourse'
+import { useGetCourse } from '../hooks/getCourse'
 import { getMediaUrl } from '../utils/media'
 
 import { getUser } from '../services/auth'
 
-const CourseCard = ({ courseId }) => {
+const CourseCard = ({ courseId, user }) => {
 
-  const { course } = getCourse(courseId);
+  const { course } = useGetCourse(courseId);
+
+  if (!course) return null;
 
   const { id, title, subtitle, preview_url } = course
-
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const me = await getUser();
-        setUser(me)
-      } catch (err) {
-      }
-    };
-
-    fetchUser();
-  }, [])
 
   const userCourses = user?.courses
 

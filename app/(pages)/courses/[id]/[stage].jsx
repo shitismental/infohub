@@ -12,21 +12,21 @@ import BellIcon from "../../../../assets/icons/question_mark_icon.png";
 import { Colors } from "../../../../constants/Colors";
 
 import TaskTab from "../../../../components/TaskTab";
-import { getLesson } from "../../../../hooks/getLesson";
-import { getCourse } from "../../../../hooks/getCourse";
-import { getUser } from "../../../../services/auth";
+import { useGetLesson } from "../../../../hooks/getLesson";
+import { useGetCourse } from "../../../../hooks/getCourse";
 
 import { getMediaUrl } from "../../../../utils/media";
 
 export default function StageDetails() {
   const [activeTab, setActiveTab] = useState("description");
+  const [user, setUser] = useState(null);
 
   const { id, stage } = useLocalSearchParams();
   const courseId = Number(id);
   const lessonId = Number(stage)
 
-  const { course } = getCourse(courseId)
-  const { lesson } = getLesson(lessonId)
+  const { course } = useGetCourse(courseId)
+  const { lesson } = useGetLesson(lessonId)
 
   const lessons = course.lessons || [];
   const homework = lesson.homework || [];
@@ -38,6 +38,16 @@ export default function StageDetails() {
   const remainingLessons = currentLessonIndex >= 0 ? lessons.slice(currentLessonIndex + 1) : [];
 
   const isUnlocked = !lesson?.video_locked
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const me = await getUser();
+        setUser(me);
+      } catch (err) { }
+    };
+    fetchUser();
+  }, []);
 
   const handleGoBack = () => {
     router.push(`/courses/${courseId}`);
@@ -174,6 +184,7 @@ export default function StageDetails() {
                 key={lesson.id}
                 lessonId={lesson.id}
                 courseId={course.id}
+                user={user}
                 onPress={() =>
                   router.push(`/courses/${courseId}/${encodeURIComponent(lesson?.position)}`)
                 }
