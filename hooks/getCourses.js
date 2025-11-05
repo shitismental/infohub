@@ -12,7 +12,7 @@ export const useGetCourses = () => {
       try {
         setLoading(true);
         const { data } = await API.get("/courses/courses/");
-        setCourses(data);
+        setCourses(data?.results);
       } catch (err) {
         setError(err);
       } finally {

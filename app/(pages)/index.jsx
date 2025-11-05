@@ -22,9 +22,6 @@ const CARD_WIDTH = 305;
 const CARD_SPACING = 16;
 
 const Home = () => {
-
-  console.log("123")
-
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const redirectToTelegram = () => {
