@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   stage__video_container: {
-    height: 200,
+    maxHeight: 700,
     borderRadius: 10,
     overflow: "hidden",
     alignItems: "center",

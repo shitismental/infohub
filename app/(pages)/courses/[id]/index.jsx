@@ -24,7 +24,7 @@ export default function CourseDetails() {
 
   if (!user) return null;
 
-  const { course } = useGetCourse(courseId);
+  const { course, loading } = useGetCourse(courseId);
   const lessons = course?.lessons || []
 
   const { title, description, price, discount_price, preview_url, preview_video } = course || {}
@@ -129,7 +129,7 @@ export default function CourseDetails() {
         contentContainerStyle={{ paddingBottom: 110, gap: 20 }}
       >
         <View style={styles.course__video_container}>
-          {preview_video && <video
+          {preview_video ? <video
             ref={videoRef}
             width="100%"
             height="100%"
@@ -138,7 +138,7 @@ export default function CourseDetails() {
             style={{ objectFit: "cover" }}
           >
             <source src={getMediaUrl(preview_video) + "#t=0.001"} type="video/mp4" />
-          </video>}
+          </video> : !loading && <Text style={[styles.no__video_text]}>Немає відео</Text>}
         </View>
         <View style={[styles.course__info_description_container]}>
           <Text style={[styles.course__info_description_title]}>Опис курсу</Text>
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   course__video_container: {
-    height: 200,
+    maxHeight: 700,
     borderRadius: 10,
     overflow: "hidden",
   },
@@ -286,5 +286,14 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratMedium",
     fontSize: 13,
     color: "#717171"
+  },
+  no__video_text: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: "10vw",
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+    textAlign: "center",
   }
 });

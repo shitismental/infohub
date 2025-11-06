@@ -1,17 +1,14 @@
 import { Tabs } from "expo-router";
 import CustomTabBar from "../../components/CustomTabBar";
-import HomeIcon from "../../assets/icons/home_icon.png";
-import CoursesIcon from "../../assets/icons/courses_icon.png";
-import ChatIcon from "../../assets/icons/chat_icon.png";
-import ProfileIcon from "../../assets/icons/profile_icon.png";
+import HomeIcon from "../../assets/icons/home_icon.svg";
+import CoursesIcon from "../../assets/icons/courses_icon.svg";
+import ChatIcon from "../../assets/icons/chat_icon.svg";
+import ProfileIcon from "../../assets/icons/profile_icon.svg";
 
 import { useUser } from "../../utils/userContext";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "expo-router";
 export default function DashboardLayout() {
 
-  const router = useRouter();
   const { user } = useUser();
 
   if (!user) return null

@@ -34,6 +34,8 @@ const Profile = () => {
 
   const { user } = useUser();
 
+  const [tempUser, setTempUser] = useState(null);
+
   if (!user) return null;
 
   const { updateUser, loading } = useUpdateUser();
@@ -45,8 +47,22 @@ const Profile = () => {
   const [userTelegram, setUserTelegram] = useState("")
 
   useEffect(() => {
-    setUsernameText(usernameText);
-  }, [usernameText]);
+    if (user) {
+      const initialUsername = user.username || "";
+      const initialEmail = user.email || "";
+      const initialTelegram = user.telegram || "";
+
+      setUsernameText(initialUsername);
+      setUserEmail(initialEmail);
+      setUserTelegram(initialTelegram);
+
+      setInitialData({
+        username: initialUsername,
+        email: initialEmail,
+        telegram: initialTelegram,
+      });
+    }
+  }, [user]);
 
   const username = () => {
     if (user?.username) {
@@ -87,7 +103,7 @@ const Profile = () => {
       };
 
       const updatedUser = await updateUser(updatedData);
-      setUser(updatedUser);
+      setTempUser(updatedUser);
       setInitialData(updatedData);
       alert("Зміни збережено успішно!");
       setErrorText("");
@@ -251,50 +267,27 @@ const Profile = () => {
                     />
                   </View>
                 </View>
-                {errorText && <View style={[styles.error__container, {
-                  paddingHorizontal: 14,
-                  paddingVertical: 7,
-                }]}>
-                  <Image style={[styles.error__icon]} source={ErrorIcon} resizeMode='contain' />
-                  <Text style={[styles.error__text]}>
-                    {errorText}
-                  </Text>
-                </View>}
-                {isChanged && (
-                  <View style={[styles.accordion__info_field_container]}>
-                    <Pressable
-                      disabled={loading}
-                      style={({ pressed }) => [
-                        styles.confirm__btn,
-                        pressed && { opacity: 0.7 }
-                      ]}
-                      onPress={handleSaveChanges}
-                    >
-                      <Text style={[styles.confirm__btn_text]}>
-                        {loading ? "Зберігаємо..." : "Зберегти"}
-                      </Text>
-                    </Pressable>
-                  </View>
-                )}
-                {/* <View style={[styles.accordion__info_field_container]}>
-                  <Image source={PaperPlaneIcon} style={[styles.accordion__info_field_icon]} resizeMode='contain' />
-                  <View style={[styles.accordion__info_field_input_container]}>
-                    <TextInput
-                      style={[styles.accordion__info_field_input]}
-                      placeholder='@ananasik'
-                    />
-                    <Pressable
-                      style={({ pressed }) => [
-                        styles.accordion__edit_icon_container,
-                        pressed && { opacity: 0.7 }
-                      ]}>
-                      <Image
-                        source={EditIcon}
-                        resizeMode='contain'
-                        style={[styles.accordion__edit_icon]} />
-                    </Pressable>
-                  </View>
-                </View> */}
+                <>
+                  {errorText && (
+                    <View style={[styles.error__container, { paddingHorizontal: 14, paddingVertical: 7 }]}>
+                      <Image style={styles.error__icon} source={ErrorIcon} resizeMode="contain" />
+                      <Text style={styles.error__text}>{errorText}</Text>
+                    </View>
+                  )}
+                  {isChanged && (
+                    <View style={styles.accordion__info_field_container}>
+                      <Pressable
+                        disabled={loading}
+                        style={({ pressed }) => [styles.confirm__btn, pressed && { opacity: 0.7 }]}
+                        onPress={handleSaveChanges}
+                      >
+                        <Text style={styles.confirm__btn_text}>
+                          {loading ? "Зберігаємо..." : "Зберегти"}
+                        </Text>
+                      </Pressable>
+                    </View>
+                  )}
+                </>
               </View>}
             </View>
             <View style={[styles.profile__main_content_accordion_container,

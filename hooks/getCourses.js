@@ -16,7 +16,7 @@ export const useGetCourses = () => {
       } catch (err) {
         setError(err);
       } finally {
-        setLoading(false);  // ← ALWAYS SET FALSE
+        setLoading(false);
       }
     };
 
