@@ -12,10 +12,13 @@ import ErrorIcon from "../../assets/icons/error_icon.png"
 
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 import { useState } from 'react';
+import { useUser } from '../../utils/userContext';
 
 const Register = () => {
 
   const router = useRouter()
+
+  const {setUser} = useUser();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -72,6 +75,9 @@ const Register = () => {
       const { access, refresh } = loginRes.data;
       await AsyncStorage.setItem("access_token", access);
       await AsyncStorage.setItem("refresh_token", refresh);
+
+      const me = await API.get("/users/me/");
+      setUser(me.data);
 
       alert("Акаунт створено і ви увійшли 🎉");
       router.replace("(pages)/");

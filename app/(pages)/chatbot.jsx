@@ -57,8 +57,6 @@ const ChatBot = () => {
 
   const { user } = useUser();
 
-  if (!user) return null;
-
   const userCourses = user?.courses
 
   useEffect(() => {

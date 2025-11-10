@@ -11,8 +11,10 @@ import LockIcon from "../../assets/icons/lock_blue.png"
 import ErrorIcon from "../../assets/icons/error_icon.png"
 
 import BlurCircle from "../../assets/icons/BlurCircle.png"
-
+import { useUser } from '../../utils/userContext';
 const Login = () => {
+  
+  const {setUser} = useUser();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +41,9 @@ const Login = () => {
       const { access, refresh } = res.data;
       await AsyncStorage.setItem("access_token", access);
       await AsyncStorage.setItem("refresh_token", refresh);
+
+      const me = await API.get("/users/me/");
+      setUser(me.data);
 
       router.replace("(pages)/");
     } catch (err) {
@@ -84,12 +89,12 @@ const Login = () => {
                   secureTextEntry
                   style={styles.input} />
               </View>
-              {errorText && <View style={[styles.error__container]}>
+              <>{errorText && <View style={[styles.error__container]}>
                 <Image style={[styles.error__icon]} source={ErrorIcon} resizeMode='contain' />
                 <Text style={[styles.error__text]}>
                   {errorText}
                 </Text>
-              </View>}
+              </View>}</>
             </View>
             <View style={styles.btns__container}>
               <Pressable style={({ pressed }) => [styles.login__btn, pressed && { opacity: 0.7 }]} onPress={handleLogin}>
@@ -107,24 +112,6 @@ const Login = () => {
           </Pressable>
         </View>
       </View>
-
-      {/* <View style={styles.other__methods_container}>
-        <View style={styles.other__methods_wrapper}>
-          <View style={styles.divider__with_text}>
-            <View style={styles.divider__line} />
-            <Text style={styles.divider__text}>Вхід за допомогою</Text>
-            <View style={styles.divider__line} />
-          </View>
-          <View style={styles.other__methods_btns_container}>
-            <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
-              <Image style={styles.other__methods_img} source={AppleLogo} />
-            </Pressable>
-            <Pressable style={({ pressed }) => [styles.other__methods_btn, pressed && { opacity: 0.7 }]}>
-              <Image style={styles.other__methods_img} source={GoogleLogo} />
-            </Pressable>
-          </View>
-        </View>
-      </View> */}
     </View>
   )
 }

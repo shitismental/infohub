@@ -1,4 +1,5 @@
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
+import { useEffect } from "react";
 import CustomTabBar from "../../components/CustomTabBar";
 import HomeIcon from "../../assets/icons/home_icon.svg";
 import CoursesIcon from "../../assets/icons/courses_icon.svg";
@@ -9,8 +10,18 @@ import { useUser } from "../../utils/userContext";
 
 export default function DashboardLayout() {
 
-  const { user } = useUser();
-  
+  const router = useRouter();
+
+  const { user, loading } = useUser();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login");
+    }
+  }, [user, loading]);
+
+  if (loading || !user) return null;
+
   return (
     <Tabs tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{
       headerShown: false
@@ -24,12 +35,19 @@ export default function DashboardLayout() {
         options={{
           title: "Курси",
           tabBarIcon: CoursesIcon,
-          href: "/courses"
+          href: "/courses",
         }}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             e.preventDefault();
-            navigation.navigate("courses");
+
+            navigation.navigate({
+              name: "courses",
+              merge: false,
+              params: {
+                screen: "index",
+              },
+            });
           },
         })}
       />

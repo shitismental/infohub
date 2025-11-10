@@ -36,8 +36,6 @@ const Profile = () => {
 
   const [tempUser, setTempUser] = useState(null);
 
-  if (!user) return null;
-
   const { updateUser, loading } = useUpdateUser();
 
   const [initialData, setInitialData] = useState({ username: "", email: "", telegram: "" });
