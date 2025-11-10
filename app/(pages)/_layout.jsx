@@ -10,8 +10,6 @@ import { useUser } from "../../utils/userContext";
 export default function DashboardLayout() {
 
   const { user } = useUser();
-
-  if (!user) return null
   
   return (
     <Tabs tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{
