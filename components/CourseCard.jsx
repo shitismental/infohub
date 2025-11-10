@@ -7,7 +7,6 @@ import RoundedCartIcon from "../assets/icons/rounded_cart_icon.png"
 
 import { Colors } from "../constants/Colors"
 import { useGetCourse } from '../hooks/getCourse'
-import { getMediaUrl } from '../utils/media'
 
 const CourseCard = ({ courseId, user }) => {
 
@@ -32,7 +31,7 @@ const CourseCard = ({ courseId, user }) => {
           <View style={[styles.card__content_hero_container]}>
             <Image
               style={[styles.card__hero_img]}
-              source={{ uri: preview_url ? getMediaUrl(preview_url) : "https://placehold.co/60x60" }} resizeMode='contain' />
+              source={{ uri: preview_url ? preview_url : "https://placehold.co/60x60" }} resizeMode='contain' />
             <View style={[styles.card__content_hero_text_container]}>
               <Text numberOfLines={1} ellipsizeMode="tail" style={[styles.card__content_hero_text]}>
                 {title}

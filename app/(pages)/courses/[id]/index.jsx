@@ -13,7 +13,6 @@ import { Colors } from "../../../../constants/Colors";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
 import { useGetCourse } from "../../../../hooks/getCourse";
-import { getMediaUrl } from "../../../../utils/media";
 import { useUser } from "../../../../utils/userContext";
 
 export default function CourseDetails() {
@@ -137,7 +136,7 @@ export default function CourseDetails() {
             playsInline
             style={{ objectFit: "cover" }}
           >
-            <source src={getMediaUrl(preview_video) + "#t=0.001"} type="video/mp4" />
+            <source src={preview_video + "#t=0.001"} type="video/mp4" />
           </video> : !loading && <Text style={[styles.no__video_text]}>Немає відео</Text>}
         </View>
         <View style={[styles.course__info_description_container]}>

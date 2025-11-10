@@ -15,8 +15,6 @@ import TaskTab from "../../../../components/TaskTab";
 import { useGetLesson } from "../../../../hooks/getLesson";
 import { useGetCourse } from "../../../../hooks/getCourse";
 
-import { getMediaUrl } from "../../../../utils/media";
-
 import { useUser } from "../../../../utils/userContext";
 
 export default function StageDetails() {
@@ -163,7 +161,7 @@ export default function StageDetails() {
               playsInline
               style={{ objectFit: "cover" }}
             >
-              <source src={getMediaUrl(video_url) + "#t=0.001"} type="video/mp4" />
+              <source src={video_url + "#t=0.001"} type="video/mp4" />
             </video>) : <Text style={[styles.no__access_text]}>Немає доступу</Text>}
           </View>
           <View style={[styles.stage__info_description_container]}>
