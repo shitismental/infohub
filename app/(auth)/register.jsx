@@ -7,7 +7,7 @@ import API from "../../services/api"
 
 import PersonIcon from "../../assets/icons/person_blue.png"
 import PlaneIcon from "../../assets/icons/plane_icon.png"
-import LockIcon from "../../assets/icons/lock_icon.png"
+import LockIcon from "../../assets/icons/lock_blue.png"
 import ErrorIcon from "../../assets/icons/error_icon.png"
 
 import BlurCircle from "../../assets/icons/BlurCircle.png"

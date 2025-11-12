@@ -42,7 +42,14 @@ const CourseCard = ({ courseId, user }) => {
             </View>
           </View>
         </View>
-        {!isBought &&
+        {isBought ?
+          <View style={[
+            styles.card__top_info_container,
+            { backgroundColor: "#2B6BF1" }
+          ]}>
+            <Text style={[styles.card__top_info_text]}>Відкрито</Text>
+          </View>
+          :
           <View style={[
             styles.card__top_info_container,
             { backgroundColor: "#002D61" }
