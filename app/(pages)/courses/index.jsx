@@ -1,7 +1,7 @@
 {/* Imports */ }
 import { Pressable, StyleSheet, Text, View, Image, ScrollView, Modal, TextInput, Linking } from 'react-native'
 import { router } from 'expo-router'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 
 {/* Components */ }
 
@@ -30,9 +30,7 @@ const Courses = () => {
   const { courses } = useGetCourses();
   const { checkCode } = useCheckCode();
 
-  const { user } = useUser();
-
-  if (!user) return null;
+  const { user, refreshUser } = useUser();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [enteredCode, setEnteredCode] = useState("");
@@ -82,15 +80,15 @@ const Courses = () => {
     }
   };
 
-  const handleCloseModal = () => {
-    const wasSuccess = !isError
-
+  const handleCloseModal = async () => {
+    const wasSuccess = !isError;
     setIsModalVisible(false);
 
     if (wasSuccess) {
+      await refreshUser?.();
       router.replace("/courses")
     }
-  }
+  };
 
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);

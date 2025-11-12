@@ -226,7 +226,9 @@ const ChatBot = () => {
             { sender: "bot", text: "Дякуємо! Після перевірки оплати код прийде вам на пошту." },
           ]);
 
-          setOptions([]);
+          setOptions([
+            { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
+          ]);
         }
       })();
     }

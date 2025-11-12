@@ -18,7 +18,15 @@ const Register = () => {
 
   const router = useRouter()
 
-  const {setUser} = useUser();
+  const { setUser, user, loading } = useUser();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/");
+    }
+  }, [user, loading]);
+
+  if (loading || user) return null;
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

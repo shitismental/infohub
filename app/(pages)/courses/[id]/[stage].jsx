@@ -19,9 +19,7 @@ import { useUser } from "../../../../utils/userContext";
 
 export default function StageDetails() {
   const [activeTab, setActiveTab] = useState("description");
-  const { user, loading } = useUser();
-
-  if (!user) return null;
+  const { user } = useUser();
 
   const { id, stage } = useLocalSearchParams();
   const courseId = Number(id);
@@ -33,7 +31,7 @@ export default function StageDetails() {
   const lessons = course.lessons || [];
   const homework = lesson.homework || [];
 
-  const { title: lessonTitle, description: lessonDesc, video_url } = lesson
+  const { title: lessonTitle, description: lessonDesc, video_url, preview } = lesson
 
   const currentLessonIndex = lessons.findIndex(l => l.id === lesson.id);
 
@@ -159,9 +157,10 @@ export default function StageDetails() {
               height="100%"
               controls
               playsInline
+              poster={preview || "https://placehold.co/600x400" }
               style={{ objectFit: "cover" }}
             >
-              <source src={video_url + "#t=0.001"} type="video/mp4" />
+              <source src={video_url} type="video/mp4" />
             </video>) : <Text style={[styles.no__access_text]}>Немає доступу</Text>}
           </View>
           <View style={[styles.stage__info_description_container]}>

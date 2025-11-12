@@ -32,7 +32,7 @@ const Profile = () => {
 
   const [errorText, setErrorText] = useState("");
 
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const [tempUser, setTempUser] = useState(null);
 
@@ -125,6 +125,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
+      setUser(null);
       router.replace("/login");
     } catch (err) {
       alert("Сталася помилка. повторіть спробу пізніше.")
