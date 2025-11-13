@@ -28,13 +28,16 @@ export default function DashboardLayout() {
     }}>
       <Tabs.Screen
         name="index"
-        options={{ title: "Головна", tabBarIcon: HomeIcon }}
+        options={{
+          title: "Головна",
+          tabBarIcon: ({ color }) => <HomeIcon width={22} height={22} color={color} />,
+        }}
       />
       <Tabs.Screen
         name="courses"
         options={{
           title: "Курси",
-          tabBarIcon: CoursesIcon,
+          tabBarIcon: ({ color }) => <CoursesIcon width={22} height={22} color={color} />,
           href: "/courses",
         }}
         listeners={({ navigation }) => ({
@@ -53,11 +56,11 @@ export default function DashboardLayout() {
       />
       <Tabs.Screen
         name="chatbot"
-        options={{ title: "ЧатБОТ", tabBarIcon: ChatIcon }}
+        options={{ title: "ЧатБОТ", tabBarIcon: ({ color }) => <ChatIcon width={22} height={22} color={color} />, }}
       />
       <Tabs.Screen
         name="profile"
-        options={{ title: "Профіль", tabBarIcon: ProfileIcon }}
+        options={{ title: "Профіль", tabBarIcon: ({ color }) => <ProfileIcon width={22} height={22} color={color} />, }}
       />
     </Tabs>
   );

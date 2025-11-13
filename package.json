@@ -32,7 +32,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "dotenv-webpack": "^8.1.1"
+    "dotenv-webpack": "^8.1.1",
+    "react-native-svg-transformer": "^1.5.2"
   },
   "private": true
 }

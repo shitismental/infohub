@@ -24,8 +24,8 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
-              ? options.title
-              : route.name;
+                ? options.title
+                : route.name;
 
           const isFocused = state.index === index;
 
@@ -72,15 +72,12 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
               />
 
               <View style={styles.inner}>
-                {options.tabBarIcon && (
-                  <Image
-                    source={options.tabBarIcon}
-                    tintColor={"#0A0A0A"}
-                    style={styles.icon}
-                    resizeMode="contain"
-                  />
-                )}
-                <Text style={[styles.label, {color: isFocused && "#2666EC"}]}>
+                {options.tabBarIcon &&
+                  options.tabBarIcon({
+                    color: isFocused ? "#2666EC" : "#0A0A0A",
+                  })
+                }
+                <Text style={[styles.label, { color: isFocused && "#2666EC" }]}>
                   {label}
                 </Text>
               </View>
