@@ -219,8 +219,6 @@ const ChatBot = () => {
             },
           ]);
         } catch (err) {
-          console.log("ORDER ERROR:", err);
-
           setMessages(prev => [
             ...prev,
             { sender: "bot", text: "Помилка. Спробуйте ще раз..." },
