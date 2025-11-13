@@ -3,6 +3,8 @@ import { useRouter } from "expo-router";
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { useEffect } from 'react';
+
 import API from "../../services/api"
 
 import PersonIcon from "../../assets/icons/person_blue.png"

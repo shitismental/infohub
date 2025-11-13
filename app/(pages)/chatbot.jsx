@@ -184,21 +184,10 @@ const ChatBot = () => {
     }
 
     else if (option.action === "paid") {
-      (async () => {
-        try {
-          await createOrder(selectedCourseId);
-          setMessages(prev => [
-            ...prev,
-            { sender: "bot", text: "Дякую! Ми перевіряємо твій платіж ⏳" },
-            { sender: "bot", text: "Щоб прискорити перевірку, прикріпи квитанцію про оплату." }
-          ]);
-        } catch (err) {
-          setMessages(prev => [
-            ...prev,
-            { sender: "bot", text: "❌ Не вдалося створити замовлення. Спробуй ще раз пізніше." }
-          ]);
-        }
-      })();
+      setMessages(prev => [
+        ...prev,
+        { sender: "bot", text: "Дякую! Будь ласка, прикріпіть квитанцію про оплату, щоб ми могли перевірити платіж." }
+      ]);
 
       setOptions([
         { label: "Квитанція", action: "uploadReceipt", hasFileIcon: true, hasSpecialStyle: true },
@@ -213,23 +202,32 @@ const ChatBot = () => {
           quality: 1,
         });
 
-        if (!result.canceled) {
-          const pickedImage = result.assets[0].uri;
+        if (result.canceled) return;
+
+        const pickedImage = result.assets[0].uri;
+
+        setMessages(prev => [...prev, { sender: "user", image: pickedImage }]);
+
+        try {
+          const orderData = await createOrder(selectedCourseId, pickedImage);
 
           setMessages(prev => [
             ...prev,
-            { sender: "user", image: pickedImage }
+            {
+              sender: "bot",
+              text: "Готово! Замовлення створено. Код доступу надійде на пошту після перевірки.",
+            },
           ]);
-
+        } catch (err) {
           setMessages(prev => [
             ...prev,
-            { sender: "bot", text: "Дякуємо! Після перевірки оплати код прийде вам на пошту." },
-          ]);
-
-          setOptions([
-            { label: "Завершити чат", action: "end", hasSpecialStyle: true, }
+            { sender: "bot", text: "Помилка. Спробуйте ще раз..." },
           ]);
         }
+
+        setOptions([
+          { label: "Завершити чат", action: "end", hasSpecialStyle: true },
+        ]);
       })();
     }
   };
