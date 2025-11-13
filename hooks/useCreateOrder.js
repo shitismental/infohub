@@ -6,31 +6,24 @@ export const useCreateOrder = () => {
   const [order, setOrder] = useState(null);
   const [orderError, setOrderError] = useState(null);
 
-  /**
-   * @param {number} courseId
-   * @param {string} invoiceUri
-   */
-
-  const createOrder = async (courseId, invoiceUri) => {
+  const createOrder = async (courseId, imageUri) => {
     if (!courseId) throw new Error("courseId is required");
-    if (!invoiceUri) throw new Error("invoiceUri is required");
+    if (!imageUri) throw new Error("imageUri is required");
 
     setIsLoading(true);
     setOrderError(null);
 
     try {
+      const blob = await fetch(imageUri).then((res) => res.blob());
+
+      const fileName = "invoice.jpg";
+      const fileType = "image/jpeg";
+
+      const file = new File([blob], fileName, { type: fileType });
+
       const formData = new FormData();
-
       formData.append("course", String(courseId));
-
-      const fileName = invoiceUri.split("/").pop() || "receipt.jpg";
-      const fileType = invoiceUri.includes(".png") ? "image/png" : "image/jpeg";
-
-      formData.append("invoice", {
-        uri: invoiceUri,
-        name: fileName,
-        type: fileType,
-      });
+      formData.append("invoice", file);
 
       const response = await API.post("/orders/create/", formData, {
         headers: {
@@ -41,6 +34,7 @@ export const useCreateOrder = () => {
       setOrder(response.data);
       return response.data;
     } catch (err) {
+      console.log("UPLOAD ERROR:", err);
       setOrderError(err);
       throw err;
     } finally {

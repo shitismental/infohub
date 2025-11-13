@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable, Image, ScrollView, Linking, Modal } from 'react-native'
 import { router } from 'expo-router';
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import * as ImagePicker from "expo-image-picker";
 
 import * as Clipboard from "expo-clipboard";
@@ -204,12 +204,12 @@ const ChatBot = () => {
 
         if (result.canceled) return;
 
-        const pickedImage = result.assets[0].uri;
+        const imageUri = result.assets[0].uri;
 
-        setMessages(prev => [...prev, { sender: "user", image: pickedImage }]);
+        setMessages(prev => [...prev, { sender: "user", image: imageUri }]);
 
         try {
-          const orderData = await createOrder(selectedCourseId, pickedImage);
+          const orderData = await createOrder(selectedCourseId, imageUri);
 
           setMessages(prev => [
             ...prev,
@@ -219,6 +219,8 @@ const ChatBot = () => {
             },
           ]);
         } catch (err) {
+          console.log("ORDER ERROR:", err);
+
           setMessages(prev => [
             ...prev,
             { sender: "bot", text: "Помилка. Спробуйте ще раз..." },
