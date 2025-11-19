@@ -27,7 +27,7 @@ const INITIAL_MESSAGES = [
 ];
 
 const INITIAL_OPTIONS = [
-  { label: "Хочу купити код доступу", action: "buy", hasArrow: true },
+  // { label: "Хочу купити код доступу", action: "buy", hasArrow: true },
   { label: "Мені потрібен адмін", action: "admin", hasArrow: true, hasSpecialStyle: true }
 ];
 
