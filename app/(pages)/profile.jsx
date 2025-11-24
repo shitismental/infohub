@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Pressable, Image, TextInput, ScrollView, Linking } from 'react-native'
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
 
 import { logoutUser } from '../../services/auth';
@@ -32,9 +32,7 @@ const Profile = () => {
 
   const [errorText, setErrorText] = useState("");
 
-  const { user, setUser } = useUser();
-
-  const [tempUser, setTempUser] = useState(null);
+  const { user, setUser, loading: userLoading } = useUser();
 
   const { updateUser, loading } = useUpdateUser();
 
@@ -43,6 +41,14 @@ const Profile = () => {
   const [userEmail, setUserEmail] = useState("petrik@gmail.com")
   const [usernameText, setUsernameText] = useState("")
   const [userTelegram, setUserTelegram] = useState("")
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!userLoading && !user) {
+      router.replace("/login");
+    }
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -101,7 +107,6 @@ const Profile = () => {
       };
 
       const updatedUser = await updateUser(updatedData);
-      setTempUser(updatedUser);
       setInitialData(updatedData);
       alert("Зміни збережено успішно!");
       setErrorText("");
@@ -149,6 +154,8 @@ const Profile = () => {
     userEmail !== initialData.email ||
     userTelegram !== initialData.telegram
   );
+
+  if (!userLoading && !user) return null;
 
   return (
     <View style={styles.container}>

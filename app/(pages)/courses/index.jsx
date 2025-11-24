@@ -41,7 +41,7 @@ const Courses = () => {
   const userCourses = user?.courses || [];
 
   const sortedCourses = useMemo(() => {
-    if (!courses || !Array.isArray(courses) || !user) {
+    if (!courses || !Array.isArray(courses)) {
       return [];
     }
 

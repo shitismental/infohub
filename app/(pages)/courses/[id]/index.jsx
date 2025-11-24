@@ -21,8 +21,6 @@ export default function CourseDetails() {
 
   const { user } = useUser();
 
-  if (!user) return null;
-
   const { course, loading } = useGetCourse(courseId);
   const lessons = course?.lessons || []
 
@@ -108,10 +106,16 @@ export default function CourseDetails() {
           <Pressable
             disabled={isUnlocked}
             onPress={() => {
-              router.replace({
-                pathname: `/chatbot`,
-                params: { courseId: course.id, action: "buy" },
-              });
+              if (user) {
+                router.replace({
+                  pathname: `/chatbot`,
+                  params: { courseId: id, action: "buy" },
+                });
+              } else {
+                router.replace({
+                  pathname: `/login`
+                })
+              }
             }}
             style={({ pressed }) => [
               styles.course__buy_btn,

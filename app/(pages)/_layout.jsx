@@ -10,17 +10,17 @@ import { useUser } from "../../utils/userContext";
 
 export default function DashboardLayout() {
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const { user, loading } = useUser();
+  // const { user, loading } = useUser();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace("/login");
-    }
-  }, [user, loading]);
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     router.replace("/login");
+  //   }
+  // }, [user, loading]);
 
-  if (loading || !user) return null;
+  // if (loading || !user) return null;
 
   return (
     <Tabs tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{

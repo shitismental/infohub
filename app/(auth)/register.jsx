@@ -11,6 +11,7 @@ import PersonIcon from "../../assets/icons/person_blue.png"
 import PlaneIcon from "../../assets/icons/plane_icon.png"
 import LockIcon from "../../assets/icons/lock_blue.png"
 import ErrorIcon from "../../assets/icons/error_icon.png"
+import ArrowLeft from "../../assets/icons/arrow_left_dark_icon.png"
 
 import BlurCircle from "../../assets/icons/BlurCircle.png"
 import { useState } from 'react';
@@ -118,6 +119,14 @@ const Register = () => {
     <View style={styles.main__container}>
       <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.topBlurCircle]} />
       <Image tintColor={"#0A0A0A"} source={BlurCircle} style={[styles.bottomBlurCircle]} />
+      <Pressable style={({ pressed }) => [styles.back__button_container, pressed && { opacity: 0.7 }]} onPress={handleRedirectLogin}>
+        <View style={[styles.back__button_icon_container]}>
+          <Image source={ArrowLeft} style={[styles.back__button_icon]} resizeMode='contain' />
+        </View>
+        <Text style={[styles.back__button_icon_text]}>
+          Назад
+        </Text>
+      </Pressable>
       <View style={styles.register__wrapper}>
         <Image tintColor={"#094174"} source={BlurCircle} style={[styles.blurCircle, styles.leftCircle]} />
         <Image tintColor={"#094174"} source={BlurCircle} style={[styles.blurCircle, styles.rightCircle]} />
@@ -453,5 +462,30 @@ const styles = StyleSheet.create({
     fontFamily: "MontserratMedium",
     fontSize: 11,
     color: "#FF0000",
+  },
+  back__button_container: {
+    position: "absolute",
+    top: 20,
+    left: 15,
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  back__button_icon_container: {
+    borderRadius: 999,
+    padding: 5,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)"
+  },
+  back__button_icon: {
+    width: 22,
+    height: 22,
+  },
+  back__button_icon_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 14,
+    fontWeight: 500,
   }
 })

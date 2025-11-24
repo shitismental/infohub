@@ -35,7 +35,7 @@ const Home = () => {
   const userCourses = user?.courses || [];
 
   const sortedCourses = useMemo(() => {
-    if (!courses || !Array.isArray(courses) || !user) {
+    if (!courses || !Array.isArray(courses)) {
       return [];
     }
 
@@ -57,7 +57,7 @@ const Home = () => {
     } else if (user?.username) {
       return user.username
     } else {
-      return "???"
+      return "Loading..."
     }
   }
   
@@ -73,10 +73,10 @@ const Home = () => {
           source={BlurCircle}
           resizeMode='contain'
         />
-        <View style={[styles.header__top_content]}>
+        <View style={[styles.header__top_content, !user && {alignItems: "center"}]}>
           <View style={[styles.header__title_container]}>
             <Text style={[styles.header__title_text]}>Привіт! 👋</Text>
-            <Text style={[styles.header__name_text]}>{username()}</Text>
+            {user && <Text style={[styles.header__name_text]}>{username()}</Text>}
           </View>
           <View style={[styles.header__btns_container]}>
             <Pressable

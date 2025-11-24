@@ -63,10 +63,16 @@ const CourseCard = ({ courseId, user }) => {
       <View style={[styles.paddingWrapper]}>
         <Pressable
           onPress={() => {
-            router.replace({
-              pathname: `/chatbot`,
-              params: { courseId: id, action: "buy" },
-            });
+            if (user) {
+              router.replace({
+                pathname: `/chatbot`,
+                params: { courseId: id, action: "buy" },
+              });
+            } else {
+              router.replace({
+                pathname: `/login`
+              })
+            }
           }}
           style={({ pressed }) => [
             styles.card__bottom_btn_container,

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Pressable, Image, ScrollView, Linking, Modal } from 'react-native'
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState, useRef, useEffect } from 'react'
 import * as ImagePicker from "expo-image-picker";
 
@@ -27,13 +27,15 @@ const INITIAL_MESSAGES = [
 ];
 
 const INITIAL_OPTIONS = [
-  // { label: "Хочу купити код доступу", action: "buy", hasArrow: true },
+  { label: "Хочу купити код доступу", action: "buy", hasArrow: true },
   { label: "Мені потрібен адмін", action: "admin", hasArrow: true, hasSpecialStyle: true }
 ];
 
 const ChatBot = () => {
 
   const telegramUsername = "Yehor_liora"
+
+  const router = useRouter();
 
   const { courses } = useGetCourses();
 
@@ -55,12 +57,18 @@ const ChatBot = () => {
 
   const { createOrder } = useCreateOrder();
 
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   const userCourses = user?.courses
 
   useEffect(() => {
     if (action === "buy" && numberCourseId && courses.length > 0) {
+
+      if (!loading && !user) {
+        router.replace("/login")
+        return;
+      }
+
       const course = courses.find(c => c.id === numberCourseId);
       if (!course) return;
 
@@ -89,6 +97,11 @@ const ChatBot = () => {
     }
 
     if (option.action === "buy") {
+      if (!loading && !user) {
+        router.replace("/login")
+        return;
+      }
+
       setMessages(prev => [
         ...prev,
         { sender: "bot", text: "Звісно! З радістю допоможу.", hasBotIcon: true },
