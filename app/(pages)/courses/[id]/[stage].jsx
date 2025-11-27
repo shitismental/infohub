@@ -43,7 +43,7 @@ export default function StageDetails() {
   const isUnlocked = !lesson?.video_locked
 
   const handleGoBack = () => {
-    router.push(`/courses/${courseId}`);
+    router.push(`/courses/${courseId}/`);
   };
 
   const videoRef = useRef(null);

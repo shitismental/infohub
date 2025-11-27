@@ -24,7 +24,7 @@ export default function DashboardLayout() {
 
   return (
     <Tabs tabBar={(props) => <CustomTabBar {...props} />} screenOptions={{
-      headerShown: false
+      headerShown: false,
     }}>
       <Tabs.Screen
         name="index"

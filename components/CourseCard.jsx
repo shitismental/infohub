@@ -30,7 +30,7 @@ const CourseCard = ({ courseId, user }) => {
   const btnText = isCopied ? "Скопійовано!" : baseBtnText;
 
   const handleCopyCourseLink = async () => {
-    const link = `https://liora.business/courses/${id}`;
+    const link = `https://liora.business/courses/${id}/`;
     await Clipboard.setStringAsync(link);
 
     setIsCopied(true);
@@ -47,7 +47,7 @@ const CourseCard = ({ courseId, user }) => {
     <>
       <Pressable
         onPress={() => {
-          router.replace(`/courses/${id}`);
+          router.replace(`/courses/${id}/`);
         }}
         style={styles.card__container}>
         <View style={[styles.card__content_container]}>
