@@ -1,6 +1,7 @@
+import * as Clipboard from "expo-clipboard";
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import { router } from 'expo-router'
-import { useEffect, useState } from 'react'
+import {useState, useRef } from 'react'
 
 import ShareIcon from "../assets/icons/share_icon.png"
 import RoundedCartIcon from "../assets/icons/rounded_cart_icon.png"
@@ -14,11 +15,33 @@ const CourseCard = ({ courseId, user }) => {
 
   if (!course) return null;
 
-  const { id, title, subtitle, preview_url } = course
+  const { id, title, subtitle, preview_url, is_free } = course || {}
 
   const userCourses = user?.courses
 
   const isBought = userCourses?.some((c) => c.id === id);
+
+  const timeoutId = useRef(null);
+
+  const [isCopied, setIsCopied] = useState(false);
+
+  const baseBtnText = (isBought || is_free) ? "Поширити доступ?" : "Купити зараз";
+
+  const btnText = isCopied ? "Скопійовано!" : baseBtnText;
+
+  const handleCopyCourseLink = async () => {
+    const link = `https://liora.business/courses/${id}`;
+    await Clipboard.setStringAsync(link);
+
+    setIsCopied(true);
+
+    if (timeoutId.current) clearTimeout(timeoutId.current);
+
+    timeoutId.current = setTimeout(() => {
+      setIsCopied(false);
+      timeoutId.current = null;
+    }, 2000);
+  };
 
   return (
     <>
@@ -42,7 +65,7 @@ const CourseCard = ({ courseId, user }) => {
             </View>
           </View>
         </View>
-        {isBought ?
+        {(isBought || is_free) ?
           <View style={[
             styles.card__top_info_container,
             { backgroundColor: "#2B6BF1" }
@@ -63,28 +86,40 @@ const CourseCard = ({ courseId, user }) => {
       <View style={[styles.paddingWrapper]}>
         <Pressable
           onPress={() => {
-            if (user) {
+            if (user && !is_free) {
               router.replace({
                 pathname: `/chatbot`,
                 params: { courseId: id, action: "buy" },
               });
-            } else {
+            } else if (!user) {
               router.replace({
                 pathname: `/login`
               })
+            } else {
+              handleCopyCourseLink();
             }
           }}
           style={({ pressed }) => [
             styles.card__bottom_btn_container,
             pressed && { opacity: 0.7 }
           ]}>
-          <Text style={[styles.card__bottom_btn_text]}>{isBought ? "Поширити доступ?" : "Купити зараз"}</Text>
+          <Text style={[styles.card__bottom_btn_text]}>
+            {btnText}
+          </Text>
           <Pressable
             onPress={() => {
-              router.replace({
-                pathname: `/chatbot`,
-                params: { courseId: id, action: "buy" },
-              });
+              if (user && !is_free) {
+                router.replace({
+                  pathname: `/chatbot`,
+                  params: { courseId: id, action: "buy" },
+                });
+              } else if (!user) {
+                router.replace({
+                  pathname: `/login`
+                })
+              } else {
+                handleCopyCourseLink();
+              }
             }}
             style={({ pressed }) => [
               pressed && { opacity: 0.7 }
@@ -92,7 +127,7 @@ const CourseCard = ({ courseId, user }) => {
             <Image
               tintColor={"#000"}
               style={[styles.card__bottom_btn_icon]}
-              source={isBought ? ShareIcon : RoundedCartIcon}
+              source={(isBought || is_free) ? ShareIcon : RoundedCartIcon}
               resizeMode='contain'
             />
           </Pressable>
@@ -292,5 +327,5 @@ const styles = StyleSheet.create({
     width: 147,
     backgroundColor: "#3B73A7",
     zIndex: -2
-  }
+  },
 })

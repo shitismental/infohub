@@ -35,21 +35,26 @@ const Home = () => {
   const userCourses = user?.courses || [];
 
   const sortedCourses = useMemo(() => {
-    if (!courses || !Array.isArray(courses)) {
-      return [];
-    }
+    if (!Array.isArray(courses)) return [];
 
-    const boughtIds = new Set(userCourses.map((uc) => uc.id));
+    const boughtIds = new Set(userCourses.map(uc => uc.id));
 
     return [...courses].sort((a, b) => {
       const aBought = boughtIds.has(a.id);
       const bBought = boughtIds.has(b.id);
 
-      if (aBought && !bBought) return -1;
-      if (!aBought && bBought) return 1;
+      const aFree = a.is_free;
+      const bFree = b.is_free;
+
+      if (aBought !== bBought) return aBought ? -1 : 1;
+
+      if (!aBought && !bBought && aFree !== bFree) {
+        return aFree ? -1 : 1;
+      }
+
       return a.id - b.id;
     });
-  }, [courses, user]);
+  }, [courses, userCourses]);
 
   const username = () => {
     if (user?.first_name && user?.last_name) {
@@ -60,7 +65,7 @@ const Home = () => {
       return "Loading..."
     }
   }
-  
+
   const currMonth = new Date().toLocaleString('uk-UA', { month: 'long' });
 
   return (
@@ -73,7 +78,7 @@ const Home = () => {
           source={BlurCircle}
           resizeMode='contain'
         />
-        <View style={[styles.header__top_content, !user && {alignItems: "center"}]}>
+        <View style={[styles.header__top_content, !user && { alignItems: "center" }]}>
           <View style={[styles.header__title_container]}>
             <Text style={[styles.header__title_text]}>Привіт! 👋</Text>
             {user && <Text style={[styles.header__name_text]}>{username()}</Text>}

@@ -28,7 +28,6 @@ export const getUser = async () => {
 
     return res.data;
   } catch (err) {
-    console.error("getUser failed:", err);
     throw err;
   }
 };

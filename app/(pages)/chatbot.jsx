@@ -108,14 +108,13 @@ const ChatBot = () => {
         { sender: "bot", text: "До якого курсу потрібен код?" }
       ]);
 
-      const courseOptions = courses.map(c => {
-        const { title } = c
-        return {
-          label: title,
+      const courseOptions = courses
+        .filter(c => !c.is_free) // <- EXCLUDES FREE COURSES
+        .map(c => ({
+          label: c.title,
           action: "course",
           courseId: c.id,
-        }
-      })
+        }));
 
       const manualOption = {
         label: "Завершити чат",

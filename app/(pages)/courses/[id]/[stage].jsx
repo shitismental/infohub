@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, Image, ScrollView, Linking } from "react-native";
-import { useLocalSearchParams, router } from "expo-router";
-import { useRef, useCallback, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import CourseProgressCard from "../../../../components/CourseProgressCard";
@@ -18,6 +18,9 @@ import { useGetCourse } from "../../../../hooks/getCourse";
 import { useUser } from "../../../../utils/userContext";
 
 export default function StageDetails() {
+
+  const router = useRouter()
+
   const [activeTab, setActiveTab] = useState("description");
   const { user } = useUser();
 
@@ -58,6 +61,14 @@ export default function StageDetails() {
   const redirectToTelegram = () => {
     Linking.openURL(`https://t.me//Yehor_liora`);
   }
+
+  useEffect(() => {
+    if (!isUnlocked) {
+      router.replace("/courses");
+    }
+  }, [isUnlocked]);
+
+  if (!isUnlocked) return null;
 
   return (
     <View style={[styles.container]}>
@@ -157,7 +168,7 @@ export default function StageDetails() {
               height="100%"
               controls
               playsInline
-              poster={preview || "https://placehold.co/600x400" }
+              poster={preview || "https://placehold.co/600x400"}
               style={{ objectFit: "cover" }}
             >
               <source src={video_url} type="video/mp4" />
