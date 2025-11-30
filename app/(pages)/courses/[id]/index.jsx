@@ -25,7 +25,7 @@ export default function CourseDetails() {
   const lessons = course?.lessons || []
 
   const { title, description, price, discount_price, preview_url, preview_video, is_free } = course || {}
-
+  
   const userCourses = user?.courses
   const isUnlocked = !!(userCourses?.some((c) => c.id === course.id))
 
