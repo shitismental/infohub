@@ -1,0 +1,23 @@
+import { useState, useEffect } from "react"
+import API from "../services/api"
+
+export const useGetLesson = (lessonId) => {
+  const [lesson, setLesson] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const response = await API.get(`/courses/lessons/${lessonId}`);
+        setLesson(response.data);
+      } catch (err) {
+        setError(err);
+        throw err;
+      }
+    };
+
+    fetchLessons();
+  }, [])
+
+  return { lesson, lessonError: error }
+}

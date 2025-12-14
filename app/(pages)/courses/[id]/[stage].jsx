@@ -1,0 +1,429 @@
+import { View, Text, StyleSheet, Pressable, Image, ScrollView, Linking } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRef, useCallback, useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+
+import CourseProgressCard from "../../../../components/CourseProgressCard";
+
+import BlurCircle from "../../../../assets/icons/BlurCircle.png";
+import ArrowLeftIcon from "../../../../assets/icons/arrow_left_icon.png";
+import BellIcon from "../../../../assets/icons/question_mark_icon.png";
+
+import { Colors } from "../../../../constants/Colors";
+
+import TaskTab from "../../../../components/TaskTab";
+import { useGetLesson } from "../../../../hooks/getLesson";
+import { useGetCourse } from "../../../../hooks/getCourse";
+
+import { useUser } from "../../../../utils/userContext";
+
+export default function StageDetails() {
+
+  const router = useRouter()
+
+  const [activeTab, setActiveTab] = useState("description");
+  const { user } = useUser();
+
+  const { id, stage } = useLocalSearchParams();
+  const courseId = Number(id);
+  const lessonId = Number(stage)
+
+  const { course } = useGetCourse(courseId)
+  const { lesson } = useGetLesson(lessonId)
+
+  const lessons = course.lessons || [];
+  const homework = lesson.homework || [];
+
+  const { title: lessonTitle, description: lessonDesc, video_url, preview } = lesson
+
+  const currentLessonIndex = lessons.findIndex(l => l.id === lesson.id);
+
+  const remainingLessons = currentLessonIndex >= 0 ? lessons.slice(currentLessonIndex + 1) : [];
+
+  const isUnlocked = !lesson?.video_locked
+
+  const handleGoBack = () => {
+    router.push(`/courses/${courseId}`);
+  };
+
+  const videoRef = useRef(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (videoRef.current) {
+          videoRef.current.pause();
+        }
+      };
+    }, [])
+  );
+
+  const redirectToTelegram = () => {
+    Linking.openURL(`https://t.me//Yehor_liora`);
+  }
+
+  useEffect(() => {
+    if (!isUnlocked) {
+      router.replace("/courses");
+    }
+  }, [isUnlocked]);
+
+  if (!isUnlocked) return null;
+
+  return (
+    <View style={[styles.container]}>
+      {/* HEADER */}
+      <View style={[styles.paddingWrapper, styles.header__container]}>
+        <Image
+          tintColor={Colors.white}
+          style={[styles.topBlurCircle]}
+          source={BlurCircle}
+          resizeMode="contain"
+        />
+        <View style={[styles.header__content_container]}>
+          <Pressable
+            onPress={handleGoBack}
+            style={({ pressed }) => [pressed && { opacity: 0.7 }]}
+          >
+            <Image
+              style={[styles.header__left_arrow_icon]}
+              source={ArrowLeftIcon}
+              resizeMode="contain"
+            />
+          </Pressable>
+          <Text style={[styles.header__content_title]}>Сторінка курсу</Text>
+          <Pressable
+            onPress={redirectToTelegram}
+            style={({ pressed }) => [
+              {
+                backgroundColor: "rgba(255, 255, 255, 0.05)",
+                borderColor: "rgba(255, 255, 255, 0.1)",
+              },
+              styles.header__bell_icon_btn,
+              pressed && { opacity: 0.7 },
+            ]}
+          >
+            <Image
+              style={[styles.header__bell_icon]}
+              source={BellIcon}
+              resizeMode="contain"
+            />
+          </Pressable>
+        </View>
+      </View>
+
+      {/* TABS */}
+      <View style={[styles.paddingWrapper]}>
+        <View style={[styles.tabs__container]}>
+          <Pressable
+            onPress={() => setActiveTab("description")}
+            style={[
+              styles.tabs__tab_btn_container,
+              activeTab === "description" && styles.tabs__tab_btn_active,
+            ]}
+          >
+            <Text
+              style={[
+                styles.tabs__tab_text,
+                activeTab === "description"
+                  ? styles.tabs__tab_text_active
+                  : styles.tabs__tab_text_inactive,
+              ]}
+            >
+              Опис
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setActiveTab("tasks")}
+            style={[
+              styles.tabs__tab_btn_container,
+              activeTab === "tasks" && styles.tabs__tab_btn_active,
+            ]}
+          >
+            <Text
+              style={[
+                styles.tabs__tab_text,
+                activeTab === "tasks"
+                  ? styles.tabs__tab_text_active
+                  : styles.tabs__tab_text_inactive,
+              ]}
+            >
+              Завдання
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {activeTab === "description" ?
+        <ScrollView
+          style={[styles.paddingWrapper, styles.stage__content_container]}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 110, gap: 20 }}
+        >
+          <View style={styles.stage__video_container}>
+            {isUnlocked ? (video_url && <video
+              ref={videoRef}
+              width="100%"
+              height="100%"
+              controls
+              playsInline
+              poster={preview || "https://placehold.co/600x400"}
+              style={{ objectFit: "cover" }}
+            >
+              <source src={video_url} type="video/mp4" />
+            </video>) : <Text style={[styles.no__access_text]}>Немає доступу</Text>}
+          </View>
+          <View style={[styles.stage__info_description_container]}>
+            <Text style={[styles.stage__info_description_title]}>{lessonTitle}</Text>
+            <Text style={[styles.stage__info_description_desc_text]}>
+              {isUnlocked ? lessonDesc : "Немає доступу"}
+            </Text>
+          </View>
+          <View style={{ gap: 10 }}>
+            {remainingLessons.map(lesson => (
+              <CourseProgressCard
+                key={lesson.id}
+                lessonId={lesson.id}
+                courseId={course.id}
+                user={user}
+                onPress={() =>
+                  router.push(`/courses/${courseId}/${encodeURIComponent(lesson?.position)}`)
+                }
+              />
+            ))}
+          </View>
+        </ScrollView>
+        :
+        (activeTab === "tasks" && homework.length > 0 && isUnlocked) ? homework.map((h, index) => {
+          return (
+            <TaskTab key={h.id} homework={h} hwId={lesson?.position} />
+          )
+        })
+          :
+          <View style={[styles.empty__tasks_container]}>
+            <Text style={[styles.empty__tasks_text]}>{"Завдання\nнемає"}</Text>
+            <Pressable style={[styles.empty__tasks_btn]} onPress={() => {
+              setActiveTab("description")
+            }}>
+              <Text style={[styles.empty__tasks_btn_text]}>
+                До уроку
+              </Text>
+            </Pressable>
+          </View>
+      }
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FBFBFB",
+  },
+  paddingWrapper: {
+    paddingHorizontal: 15,
+  },
+  header__container: {
+    backgroundColor: "#094174",
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    height: 126,
+    paddingVertical: 20,
+  },
+  topBlurCircle: {
+    pointerEvents: "none",
+    width: 500,
+    height: 500,
+    position: "absolute",
+    left: "50%",
+    transform: [{ translateX: -250 }, { translateY: -300 }],
+    opacity: 0.1,
+  },
+  header__content_container: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  header__left_arrow_icon: {
+    height: 30,
+    width: 30,
+  },
+  header__content_title: {
+    fontFamily: "MontserratSemiBold",
+    fontSize: 18,
+    color: Colors.white,
+  },
+  header__bell_icon_btn: {
+    padding: 10,
+    borderRadius: 31,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  header__bell_icon: {
+    width: 25,
+    height: 25,
+  },
+  tabs__container: {
+    flexDirection: "row",
+    gap: 5,
+    padding: 5,
+    borderRadius: 15,
+    backgroundColor: Colors.white,
+    boxShadow: "0 3px 5px rgba(0,0,0,0.05)",
+    marginTop: -25,
+  },
+  tabs__tab_btn_container: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  tabs__tab_btn_active: {
+    backgroundColor: "#001E3A",
+  },
+  tabs__tab_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 15,
+  },
+  tabs__tab_text_active: {
+    color: Colors.white,
+  },
+  tabs__tab_text_inactive: {
+    color: "#B3B3B3",
+  },
+  stage__content_container: {
+    marginTop: 20,
+  },
+  stage__video_container: {
+    maxHeight: 700,
+    borderRadius: 10,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  stage__info_description_container: {
+    gap: 16,
+  },
+  stage__info_description_title: {
+    fontFamily: "MontserratSemiBold",
+    fontSize: 16,
+    color: "#0A0A0A",
+  },
+  stage__info_description_desc_text: {
+    fontFamily: "MontserratMedium",
+    fontSize: 13,
+    color: "#717171",
+  },
+  scripts__tab_wrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 110,
+  },
+  scripts__tab_container: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 14,
+  },
+  scripts__tab_title: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: 100,
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+  },
+  scripts__tab_text_container: {
+    gap: 6,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  scripts__tab_text_title: {
+    fontFamily: "MontserratSemiBold",
+    fontSize: 16,
+    color: "#000000",
+  },
+  scripts__tab_text_description: {
+    fontFamily: "MontserratMedium",
+    fontSize: 13,
+    color: "#717171",
+    textAlign: "center",
+  },
+  scripts__tab_btn_container: {
+    paddingVertical: 11,
+    paddingHorizontal: 15,
+    borderRadius: 31,
+    backgroundColor: Colors.btnsPrimary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  scripts__tab_btn_text: {
+    color: Colors.white,
+    fontFamily: "MontserratMedium",
+    fontSize: 15,
+  },
+  tasks__tab_wrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 110,
+  },
+  tasks__tab_container: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tasks__tab_title: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: 60,
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+  },
+  empty__tasks_container: {
+    flex: 1,
+    paddingBottom: 110,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+  },
+  empty__tasks_text: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: "10vw",
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+    textAlign: "center",
+  },
+  empty__tasks_btn: {
+    backgroundColor: "#001E3A",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 11,
+    paddingHorizontal: 15,
+    borderRadius: 31,
+  },
+  empty__tasks_btn_text: {
+    color: Colors.white,
+    fontFamily: "MontserratMedium",
+    fontSize: 15,
+  },
+  no__access_text: {
+    fontFamily: "MontserratAlternatesBold",
+    fontSize: "10vw",
+    backgroundImage: "linear-gradient(180deg, #094174 0%, #FBFBFB 100%)",
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+    textAlign: "center",
+  }
+});

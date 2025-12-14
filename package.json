@@ -1,0 +1,39 @@
+{
+  "name": "infohub",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "vercel-build": "expo export -p web"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~5.0.5",
+    "@react-native-async-storage/async-storage": "~2.1.2",
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
+    "expo": "~53.0.23",
+    "expo-blur": "~14.1.5",
+    "expo-clipboard": "^7.1.5",
+    "expo-constants": "~17.1.7",
+    "expo-file-system": "^19.0.17",
+    "expo-image-picker": "^16.1.4",
+    "expo-router": "~5.1.7",
+    "expo-status-bar": "~2.2.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-native": "^0.79.6",
+    "react-native-dotenv": "^3.4.11",
+    "react-native-modal": "^14.0.0-rc.1",
+    "react-native-svg": "^15.15.0",
+    "react-native-web": "^0.20.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "dotenv-webpack": "^8.1.1",
+    "react-native-svg-transformer": "^1.5.2"
+  },
+  "private": true
+}
