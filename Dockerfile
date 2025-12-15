@@ -10,7 +10,7 @@ RUN npm install; npm run vercel-build
 
 FROM nginx:alpine
 
-COPY --from=builder ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80
