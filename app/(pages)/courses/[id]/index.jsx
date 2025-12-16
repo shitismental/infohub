@@ -138,6 +138,8 @@ export default function CourseDetails() {
             height="100%"
             controls
             playsInline
+            controlsList="nodownload"
+            onContextMenu={(e) => e.preventDefault()}
             style={{ objectFit: "cover" }}
           >
             <source src={preview_video + "#t=0.001"} type="video/mp4" />
